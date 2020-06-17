@@ -9,7 +9,7 @@ import telebot
 import asyncio
 
 WEBHOOK_HOST = 'www.scriptlab.net'
-WEBHOOK_PORT = 88  # 443, 80, 88 or 8443 (port need to be 'open')
+WEBHOOK_PORT = 8443  # 443, 80, 88 or 8443 (port need to be 'open')
 WEBHOOK_LISTEN = '0.0.0.0'  # In some VPS you may need to put here the IP addr
 
 SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_bot_server/'
