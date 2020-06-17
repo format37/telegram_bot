@@ -12,10 +12,12 @@ WEBHOOK_HOST = 'www.scriptlab.net'
 WEBHOOK_PORT = 88  # 443, 80, 88 or 8443 (port need to be 'open')
 WEBHOOK_LISTEN = '0.0.0.0'  # In some VPS you may need to put here the IP addr
 
+SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_bot_server/'
+
 #WEBHOOK_SSL_CERT = '/home/format37_gmail_com/cert/fullchain.pem'  # Path to the ssl certificate
 #WEBHOOK_SSL_PRIV = '/home/format37_gmail_com/cert/privkey.pem'  # Path to the ssl private key
-WEBHOOK_SSL_CERT = 'webhook_cert.pem'  # Path to the ssl certificate
-WEBHOOK_SSL_PRIV = 'webhook_pkey.pem'  # Path to the ssl private key
+WEBHOOK_SSL_CERT = SCRIPT_PATH+'webhook_cert.pem'  # Path to the ssl certificate
+WEBHOOK_SSL_PRIV = SCRIPT_PATH+'webhook_pkey.pem'  # Path to the ssl private key
 
 # Quick'n'dirty SSL certificate generation:
 #
@@ -28,7 +30,7 @@ WEBHOOK_SSL_PRIV = 'webhook_pkey.pem'  # Path to the ssl private key
 logger = telebot.logger
 telebot.logger.setLevel(logging.INFO)
 
-with open('/home/format37_gmail_com/projects/telegram_bot_server/token.key','r') as file:
+with open(SCRIPT_PATH+'token.key','r') as file:
 	API_TOKEN=file.read().replace('\n', '')
 	file.close()
 bot = telebot.TeleBot(API_TOKEN)
