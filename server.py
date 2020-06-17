@@ -8,14 +8,19 @@ from aiohttp import web
 import telebot
 import asyncio
 
+SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_bot_server/'
+
+#load from parallel paths
+import sys
+sys.path.append(SCRIPT_PATH+'f37t1')
+from f37t1 import test
+
+test()
+
 WEBHOOK_HOST = 'www.scriptlab.net'
 WEBHOOK_PORT = 8443  # 443, 80, 88 or 8443 (port need to be 'open')
 WEBHOOK_LISTEN = '0.0.0.0'  # In some VPS you may need to put here the IP addr
 
-SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_bot_server/'
-
-#WEBHOOK_SSL_CERT = '/home/format37_gmail_com/cert/fullchain.pem'  # Path to the ssl certificate
-#WEBHOOK_SSL_PRIV = '/home/format37_gmail_com/cert/privkey.pem'  # Path to the ssl private key
 WEBHOOK_SSL_CERT = SCRIPT_PATH+'webhook_cert.pem'  # Path to the ssl certificate
 WEBHOOK_SSL_PRIV = SCRIPT_PATH+'webhook_pkey.pem'  # Path to the ssl private key
 
@@ -68,8 +73,6 @@ def send_user(message):
 		
 
 app.router.add_post('/{token}/', handle)
-#app.router.add_route('POST', '/{token}/', handle)
-#app.router.add_route('GET', '/relay', get_relay_text)
 
 # Remove webhook, it fails sometimes the set if there is a previous webhook
 bot.remove_webhook()
