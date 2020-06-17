@@ -12,7 +12,7 @@ SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_bot_server/'
 
 #load from parallel paths
 import sys
-sys.path.append(SCRIPT_PATH+'f37t1')
+sys.path.append('/home/format37_gmail_com/projects/f37t1')
 from f37t1 import test
 
 test()
