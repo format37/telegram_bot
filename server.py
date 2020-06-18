@@ -62,8 +62,8 @@ bots.append( calcubot )
 @calcubot.inline_handler(func=lambda chosen_inline_result: True)
 def query_text(inline_query):
 	try:
-		print(str(inline_query.query))
-		answer	= calcubot_eval(True, inline_query.query)
+		#print(str(inline_query.query))
+		answer	= calcubot_eval(True, inline_query.query,False)
 		calcubot.answer_inline_query(inline_query.id, answer)
 	except Exception as e:
 		print(e)
@@ -74,14 +74,14 @@ def send_welcome(message):
 
 @calcubot.message_handler(commands=['cl'])
 def send_user(message):
-	if message.from_user.id==106129214:
-		answer	= calcubot_eval(False, str(message.text)[3:])
-		calcubot.reply_to(message, answer)
+	#if message.from_user.id==106129214:
+	answer	= calcubot_eval(False, str(message.text)[3:],message.from_user.id==106129214)
+	calcubot.reply_to(message, answer)
 
 @calcubot.message_handler()
 def send_pm(message):
-	if message.from_user.id==106129214 and message.chat.id==message.from_user.id:
-		answer	= calcubot_eval(False, str(message.text))
+	if message.chat.id==message.from_user.id:
+		answer	= calcubot_eval(False, str(message.text),message.from_user.id==106129214)
 		calcubot.reply_to(message, answer)
 	
 # === === === calcubot --
