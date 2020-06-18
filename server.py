@@ -73,8 +73,6 @@ def send_user(message):
 
 app.router.add_post('/{token}/', handle)
 
-# Remove webhook, it fails sometimes the set if there is a previous webhook
-bot_t1.remove_webhook()
 '''
 # Set webhook
 wh_res = bot_t1.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
