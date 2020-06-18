@@ -6,6 +6,7 @@ import logging
 import ssl
 from aiohttp import web
 import telebot
+from telebot import types
 import asyncio
 import sys
 
