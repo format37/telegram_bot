@@ -62,6 +62,7 @@ bots.append( calcubot )
 @calcubot.inline_handler(func=lambda chosen_inline_result: True)
 def query_text(inline_query):
 	try:
+		print(str(inline_query.query))
 		answer	= calcubot_eval(True, inline_query.query)
 		calcubot.answer_inline_query(inline_query.id, answer)
 	except Exception as e:
