@@ -13,7 +13,7 @@ SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_bot_server/'
 #load from parallel paths
 import sys
 sys.path.append('/home/format37_gmail_com/projects/f37t1')
-import f37t1
+import f37t1 as bot_t1
 
 #test()
 
@@ -40,8 +40,8 @@ with open(SCRIPT_PATH+'token.key','r') as file:
 	file.close()
 bot = telebot.TeleBot(API_TOKEN)
 '''
-bots=[]
-bots.append( f37t1_bot )
+#bots=[]
+#bots.append( f37t1_bot )
 
 WEBHOOK_URL_BASE = "https://{}:{}".format(WEBHOOK_HOST, WEBHOOK_PORT)
 WEBHOOK_URL_PATH = "/{}/".format(API_TOKEN)
@@ -50,36 +50,34 @@ app = web.Application()
 
 # Process webhook calls
 async def handle(request):
-    #print('request',request)
-	for bot in bots:
-		if request.match_info.get('token') == bot.token:
-			request_body_dict = await request.json()
-			update = telebot.types.Update.de_json(request_body_dict)
-			bot.process_new_updates([update])
-			return web.Response()
-#		else:
+    #print('request',request)	
+	if request.match_info.get('token') == bot_t1.token:
+		request_body_dict = await request.json()
+		update = telebot.types.Update.de_json(request_body_dict)
+		bot_t1.process_new_updates([update])
+		return web.Response()
+	#else:
 	return web.Response(status=403)
 
 # Handle '/start' and '/help'
-@bot.message_handler(commands=['help', 'start'])
+@bot_t1.message_handler(commands=['help', 'start'])
 def send_welcome(message):
-	bots[0].reply_to(message,"t1")
+	bot_t1.reply_to(message,"t1")
 	
 # Handle '/group'
-@bot.message_handler(commands=['group'])
+@bot_t1.message_handler(commands=['group'])
 def send_user(message):
-	bots[0].reply_to(message,   str(message.chat.id) )
-		
+	bot_t1.reply_to(message,   str(message.chat.id) )
 
 app.router.add_post('/{token}/', handle)
 
 # Remove webhook, it fails sometimes the set if there is a previous webhook
-bots[0].remove_webhook()
+bot_t1.remove_webhook()
 
 # Set webhook
-wh_res = bots[0].set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
+wh_res = bot_t1.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
                 certificate=open(WEBHOOK_SSL_CERT, 'r'))
-print('webhook set',wh_res)
+print('bot_t1 webhook set',wh_res)
 print(WEBHOOK_URL_BASE + WEBHOOK_URL_PATH)
 
 # Build ssl context
