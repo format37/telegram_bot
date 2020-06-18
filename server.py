@@ -12,10 +12,6 @@ SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_bot_server/'
 
 #load from parallel paths
 import sys
-sys.path.append('/home/format37_gmail_com/projects/f37t1')
-from f37t1 import bot as f37t1_bot
-
-#test()
 
 WEBHOOK_HOST = 'www.scriptlab.net'
 WEBHOOK_PORT = 8443  # 443, 80, 88 or 8443 (port need to be 'open')
@@ -30,34 +26,27 @@ WEBHOOK_SSL_PRIV = SCRIPT_PATH+'webhook_pkey.pem'  # Path to the ssl private key
 # openssl req -new -x509 -days 3650 -key webhook_pkey.pem -out webhook_cert.pem
 #
 # When asked for "Common Name (e.g. server FQDN or YOUR name)" you should reply
-# with the same value in you put in WEBHOOK_HOST
+# with the same value in you put in WEBHOOK_HOST with www
 
 logger = telebot.logger
 telebot.logger.setLevel(logging.INFO)
-'''
-with open(SCRIPT_PATH+'token.key','r') as file:
-	API_TOKEN=file.read().replace('\n', '')
-	file.close()
-bot = telebot.TeleBot(API_TOKEN)
-'''
-#bots=[]
-#bots.append( f37t1_bot )
-
-#WEBHOOK_URL_BASE = "https://{}:{}".format(WEBHOOK_HOST, WEBHOOK_PORT)
-#WEBHOOK_URL_PATH = "/{}/".format(API_TOKEN)
-
-bot_t1	= f37t1_bot(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT)
 
 app = web.Application()
+bots	= []
+
+sys.path.append('/home/format37_gmail_com/projects/f37t1')
+from f37t1 import bot as f37t1_bot
+bot_t1	= f37t1_bot(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT)
+bots.append( bot_t1 )
 
 # Process webhook calls
 async def handle(request):
-    #print('request',request)	
-	if request.match_info.get('token') == bot_t1.token:
-		request_body_dict = await request.json()
-		update = telebot.types.Update.de_json(request_body_dict)
-		bot_t1.process_new_updates([update])
-		return web.Response()
+	for bot in bots:
+		if request.match_info.get('token') == bot.token:
+			request_body_dict = await request.json()
+			update = telebot.types.Update.de_json(request_body_dict)
+			bot.process_new_updates([update])
+			return web.Response()
 	#else:
 	return web.Response(status=403)
 
