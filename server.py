@@ -13,7 +13,7 @@ SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_bot_server/'
 #load from parallel paths
 import sys
 sys.path.append('/home/format37_gmail_com/projects/f37t1')
-from f37t1 import bot as bot_t1
+from f37t1 import bot as f37t1_bot
 
 #test()
 
@@ -45,6 +45,8 @@ bot = telebot.TeleBot(API_TOKEN)
 
 #WEBHOOK_URL_BASE = "https://{}:{}".format(WEBHOOK_HOST, WEBHOOK_PORT)
 #WEBHOOK_URL_PATH = "/{}/".format(API_TOKEN)
+
+bot_t1	= f37t1_bot()
 
 app = web.Application()
 
