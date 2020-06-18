@@ -6,7 +6,6 @@ import logging
 import ssl
 from aiohttp import web
 import telebot
-from telebot import types
 import asyncio
 import sys
 
@@ -60,10 +59,9 @@ from calcubot import calcubot_init, calcubot_eval
 calcubot	= calcubot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT)
 bots.append( calcubot )
 
-@calcubot.inline_handler(lambda query: query.query == 'text')
+@calcubot.inline_handler()
 def query_text(inline_query):
-	r = types.InlineQueryResultArticle('1', 'Result', types.InputTextMessageContent('Result message.'))
-	r2 = types.InlineQueryResultArticle('2', 'Result2', types.InputTextMessageContent('Result message2.'))
+	answer	= calcubot_eval(inline=True, inline_query.query)
 	calcubot.answer_inline_query(inline_query.id, [r, r2])
 
 @calcubot.message_handler(commands=['help', 'start'])
@@ -73,13 +71,13 @@ def send_welcome(message):
 @calcubot.message_handler(commands=['cl'])
 def send_user(message):
 	if message.from_user.id==106129214:
-		answer	= calcubot_eval(str(message.text)[3:])
+		answer	= calcubot_eval(inline=False, str(message.text)[3:])
 		calcubot.reply_to(message, answer)
 
 @calcubot.message_handler()
 def send_pm(message):
 	if message.from_user.id==106129214 and message.chat.id==message.from_user.id:
-		answer	= calcubot_eval(str(message.text))
+		answer	= calcubot_eval(inline=False, str(message.text))
 		calcubot.reply_to(message, answer)
 	
 # === === === calcubot --
