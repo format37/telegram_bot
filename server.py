@@ -63,7 +63,7 @@ bots.append( calcubot )
 def send_welcome(message):
 	calcubot.reply_to(message,"t1")
 
-@calcubot.message_handler(commands=[])
+@calcubot.message_handler()
 def send_pm(message):
 	calcubot.reply_to(message,   'all' ) # str(message.chat.id)
 
