@@ -63,15 +63,15 @@ bots.append( calcubot )
 def send_welcome(message):
 	calcubot.reply_to(message,"t1")
 
+@calcubot.message_handler(commands=['cl'])
+def send_user(message):
+	calcubot.reply_to(message,   str(message.text)[3:] )
+
 @calcubot.message_handler()
 def send_pm(message):
 	if message.chat.id==message.from_user.id:
 		calcubot.reply_to(message,   str(message.from_user) )
-
-@calcubot.message_handler(commands=['cl'])
-def send_user(message):
-	calcubot.reply_to(message,   str(message.text) )
-
+	
 # === === === calcubot --
 
 
