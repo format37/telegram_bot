@@ -46,7 +46,7 @@ bot = telebot.TeleBot(API_TOKEN)
 #WEBHOOK_URL_BASE = "https://{}:{}".format(WEBHOOK_HOST, WEBHOOK_PORT)
 #WEBHOOK_URL_PATH = "/{}/".format(API_TOKEN)
 
-bot_t1	= f37t1_bot()
+bot_t1	= f37t1_bot(WEBHOOK_HOST,WEBHOOK_PORT)
 
 app = web.Application()
 
