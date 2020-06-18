@@ -54,7 +54,7 @@ def send_user(message):
 
 # === === === calcubot ++
 
-sys.path.append('/home/format37_gmail_com/projects/calcubot')
+sys.path.append('/home/format37_gmail_com/projects/calcubot_python')
 from calcubot import calcubot_init
 calcubot	= calcubot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT)
 bots.append( calcubot )
