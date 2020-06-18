@@ -64,8 +64,12 @@ def send_welcome(message):
 	calcubot.reply_to(message,"t1")
 
 @calcubot.message_handler()
-def send_user(message):
+def send_pm(message):
 	calcubot.reply_to(message,   str(message.chat.id) )
+
+@calcubot.message_handler(commands=['cl'])
+def send_user(message):
+	calcubot.reply_to(message,   str(message.text) )
 
 # === === === calcubot --
 
