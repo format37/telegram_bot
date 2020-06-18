@@ -65,12 +65,13 @@ def send_welcome(message):
 
 @calcubot.message_handler(commands=['cl'])
 def send_user(message):
-	answer	= calcubot_eval(str(message.text)[3:])
-	calcubot.reply_to(message, answer)
+	if message.from_user.id=='106129214':
+		answer	= calcubot_eval(str(message.text)[3:])
+		calcubot.reply_to(message, answer)
 
 @calcubot.message_handler()
 def send_pm(message):
-	if message.chat.id==message.from_user.id:
+	if message.from_user.id=='106129214' and message.chat.id==message.from_user.id:
 		answer	= calcubot_eval(str(message.text))
 		calcubot.reply_to(message, answer)
 	
