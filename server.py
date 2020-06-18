@@ -59,13 +59,11 @@ from calcubot import calcubot_init
 calcubot	= calcubot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT)
 bots.append( calcubot )
 
-# Handle '/start' and '/help'
 @calcubot.message_handler(commands=['help', 'start'])
 def send_welcome(message):
-	calcubot.reply_to(message,"t1")	
+	calcubot.reply_to(message,"t1")
 
-# Handle '/group'
-@calcubot.message_handler(commands=['group'])
+@calcubot.message_handler(commands!=['help','start'])
 def send_user(message):
 	calcubot.reply_to(message,   str(message.chat.id) )
 
