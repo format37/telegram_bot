@@ -59,7 +59,7 @@ from calcubot import calcubot_init, calcubot_eval
 calcubot	= calcubot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT)
 bots.append( calcubot )
 
-@bot.inline_handler(lambda query: query.query == 'text')
+@calcubot.inline_handler(lambda query: query.query == 'text')
 def query_text(inline_query):
 	if message.from_user.id==106129214:
 		r = types.InlineQueryResultArticle('1', 'Result', types.InputTextMessageContent('Result message.'))
