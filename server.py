@@ -13,7 +13,7 @@ SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_bot_server/'
 #load from parallel paths
 import sys
 sys.path.append('/home/format37_gmail_com/projects/f37t1')
-import f37t1 as bot_t1
+from f37t1 import bot as bot_t1
 
 #test()
 
@@ -43,8 +43,8 @@ bot = telebot.TeleBot(API_TOKEN)
 #bots=[]
 #bots.append( f37t1_bot )
 
-WEBHOOK_URL_BASE = "https://{}:{}".format(WEBHOOK_HOST, WEBHOOK_PORT)
-WEBHOOK_URL_PATH = "/{}/".format(API_TOKEN)
+#WEBHOOK_URL_BASE = "https://{}:{}".format(WEBHOOK_HOST, WEBHOOK_PORT)
+#WEBHOOK_URL_PATH = "/{}/".format(API_TOKEN)
 
 app = web.Application()
 
@@ -73,13 +73,13 @@ app.router.add_post('/{token}/', handle)
 
 # Remove webhook, it fails sometimes the set if there is a previous webhook
 bot_t1.remove_webhook()
-
+'''
 # Set webhook
 wh_res = bot_t1.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
                 certificate=open(WEBHOOK_SSL_CERT, 'r'))
 print('bot_t1 webhook set',wh_res)
 print(WEBHOOK_URL_BASE + WEBHOOK_URL_PATH)
-
+'''
 # Build ssl context
 context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
 context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
