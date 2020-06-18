@@ -55,7 +55,7 @@ def send_user(message):
 # === === === calcubot ++
 
 sys.path.append('/home/format37_gmail_com/projects/calcubot_python')
-from calcubot import calcubot_init
+from calcubot import calcubot_init, calcubot_eval
 calcubot	= calcubot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT)
 bots.append( calcubot )
 
@@ -65,12 +65,14 @@ def send_welcome(message):
 
 @calcubot.message_handler(commands=['cl'])
 def send_user(message):
-	calcubot.reply_to(message,   str(message.text)[3:] )
+	answer	= calcubot_eval(str(message.text)[3:])
+	calcubot.reply_to(message, answer)
 
 @calcubot.message_handler()
 def send_pm(message):
 	if message.chat.id==message.from_user.id:
-		calcubot.reply_to(message,   str(message.from_user) )
+		answer	= calcubot_eval(str(message.text))
+		calcubot.reply_to(message, answer)
 	
 # === === === calcubot --
 
