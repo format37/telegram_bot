@@ -63,8 +63,8 @@ bots.append( calcubot )
 def query_text(inline_query):
     if message.from_user.id==106129214:
 		r = types.InlineQueryResultArticle('1', 'Result', types.InputTextMessageContent('Result message.'))
-        r2 = types.InlineQueryResultArticle('2', 'Result2', types.InputTextMessageContent('Result message2.'))
-        bot.answer_inline_query(inline_query.id, [r, r2])
+		r2 = types.InlineQueryResultArticle('2', 'Result2', types.InputTextMessageContent('Result message2.'))
+		bot.answer_inline_query(inline_query.id, [r, r2])
 
 @calcubot.message_handler(commands=['help', 'start'])
 def send_welcome(message):
