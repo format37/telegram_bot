@@ -31,7 +31,7 @@ telebot.logger.setLevel(logging.INFO)
 
 app = web.Application()
 bots	= []
-
+'''
 # === === === f37t1 ++
 
 sys.path.append('/home/format37_gmail_com/projects/f37t1')
@@ -50,7 +50,7 @@ def send_user(message):
 	bot_t1.reply_to(message,   str(message.chat.id) )
 
 # === === === f37t1 --
-
+'''
 
 # === === === calcubot ++
 
@@ -63,7 +63,7 @@ bots.append( calcubot )
 def send_welcome(message):
 	calcubot.reply_to(message,"t1")
 
-@calcubot.message_handler(commands!=['help','start'])
+@calcubot.message_handler()
 def send_user(message):
 	calcubot.reply_to(message,   str(message.chat.id) )
 
