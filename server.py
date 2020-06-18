@@ -65,8 +65,8 @@ def send_welcome(message):
 
 @calcubot.message_handler()
 def send_pm(message):
-	if message.chat.id==message.from.id:
-		calcubot.reply_to(message,   'all' )
+	#if message.chat.id==message.from.id:
+	calcubot.reply_to(message,   text(message.from) )
 
 @calcubot.message_handler(commands=['cl'])
 def send_user(message):
