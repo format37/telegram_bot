@@ -65,24 +65,25 @@ def send_welcome(message):
 
 @calcubot.message_handler()
 def send_pm(message):
-	calcubot.reply_to(message,   str(message.chat.id) )
+	calcubot.reply_to(message,   'all' ) # str(message.chat.id)
 
 @calcubot.message_handler(commands=['cl'])
 def send_user(message):
-	calcubot.reply_to(message,   str(message.text) )
+	calcubot.reply_to(message,   'cl' ) #str(message.text)
 
 # === === === calcubot --
 
 
 # Process webhook calls
 async def handle(request):
+	
 	for bot in bots:
 		if request.match_info.get('token') == bot.token:
 			request_body_dict = await request.json()
 			update = telebot.types.Update.de_json(request_body_dict)
 			bot.process_new_updates([update])
 			return web.Response()
-	#else:
+		
 	return web.Response(status=403)
 
 app.router.add_post('/{token}/', handle)
