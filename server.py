@@ -62,7 +62,7 @@ bots.append( calcubot )
 @calcubot.inline_handler(func=lambda chosen_inline_result: True)
 def query_text(inline_query):
 	answer	= calcubot_eval(True, inline_query.query)
-	calcubot.answer_inline_query(inline_query.id, [r, r2])
+	calcubot.answer_inline_query(inline_query.id, answer)
 
 @calcubot.message_handler(commands=['help', 'start'])
 def send_welcome(message):
