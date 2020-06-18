@@ -61,8 +61,11 @@ bots.append( calcubot )
 
 @calcubot.inline_handler(func=lambda chosen_inline_result: True)
 def query_text(inline_query):
-	answer	= calcubot_eval(True, inline_query.query)
-	calcubot.answer_inline_query(inline_query.id, answer)
+	try:
+		answer	= calcubot_eval(True, inline_query.query)
+		calcubot.answer_inline_query(inline_query.id, answer)
+	except Exception as e:
+        print(e)
 
 @calcubot.message_handler(commands=['help', 'start'])
 def send_welcome(message):
@@ -85,15 +88,15 @@ def send_pm(message):
 
 # Process webhook calls
 async def handle(request):
-	
 	for bot in bots:
 		if request.match_info.get('token') == bot.token:
 			request_body_dict = await request.json()
 			update = telebot.types.Update.de_json(request_body_dict)
 			bot.process_new_updates([update])
 			return web.Response()
-		
+
 	return web.Response(status=403)
+	
 
 app.router.add_post('/{token}/', handle)
 
