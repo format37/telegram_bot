@@ -66,7 +66,7 @@ def query_text(inline_query):
 		answer	= calcubot_eval(True, inline_query.query,False)
 		calcubot.answer_inline_query(inline_query.id, answer)
 	except Exception as e:
-		print(e)
+		print(str(e)+': '+inline_query.query)
 
 @calcubot.message_handler(commands=['help', 'start'])
 def send_welcome(message):
@@ -74,7 +74,6 @@ def send_welcome(message):
 
 @calcubot.message_handler(commands=['cl'])
 def send_user(message):
-	#if message.from_user.id==106129214:
 	answer	= calcubot_eval(False, str(message.text)[3:],message.from_user.id==106129214)
 	calcubot.reply_to(message, answer)
 
