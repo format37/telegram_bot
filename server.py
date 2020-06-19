@@ -55,7 +55,7 @@ def send_user(message):
 # === === === calcubot ++
 
 sys.path.append('/home/format37_gmail_com/projects/calcubot_python')
-from calcubot import calcubot_init, calcubot_eval
+from calcubot import calcubot_init, calcubot_about, calcubot_eval
 calcubot	= calcubot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT)
 bots.append( calcubot )
 
@@ -70,7 +70,8 @@ def query_text(inline_query):
 
 @calcubot.message_handler(commands=['help', 'start'])
 def send_welcome(message):
-	calcubot.reply_to(message,"t1")
+	answer = calcubot_about()
+	calcubot.reply_to(message, answer)
 
 @calcubot.message_handler(commands=['cl'])
 def send_user(message):
