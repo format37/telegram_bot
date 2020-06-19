@@ -55,21 +55,25 @@ def send_user(message):
 # === === === calcubot ++
 
 sys.path.append('/home/format37_gmail_com/projects/calcubot_python')
-from calcubot import calcubot_init, calcubot_about, calcubot_eval
+from calcubot import calcubot_init, calcubot_about, calcubot_help, calcubot_eval
 calcubot	= calcubot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT)
 bots.append( calcubot )
 
 @calcubot.inline_handler(func=lambda chosen_inline_result: True)
 def query_text(inline_query):
 	try:
-		#print(str(inline_query.query))
 		answer	= calcubot_eval(True, inline_query.query,False)
 		calcubot.answer_inline_query(inline_query.id, answer)
 	except Exception as e:
-		print(str(e)+': '+inline_query.query)
+		print(str(e))
 
 @calcubot.message_handler(commands=['help', 'start'])
-def send_welcome(message):
+def send_help(message):
+	answer = calcubot_help()
+	calcubot.reply_to(message, answer)
+	
+@calcubot.message_handler(commands=['about'])
+def send_about(message):
 	answer = calcubot_about()
 	calcubot.reply_to(message, answer)
 
