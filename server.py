@@ -67,7 +67,7 @@ CALCUBOT_WORDS = calcubot_words(SCRIPT_PATH)
 def query_text(inline_query):
 	try:
 		god_mode	= inline_query.from_user.id==106129214
-		print(inline_query.from_user.id,'==',106129214,'is',god_mode)
+		print(str(inline_query.from_user),'==',106129214,'is',god_mode)
 		answer	= calcubot_eval(True, inline_query.query,god_mode,CALCUBOT_WORDS)
 		calcubot.answer_inline_query(inline_query.id, answer)
 	except Exception as e:
