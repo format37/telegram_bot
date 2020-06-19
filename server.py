@@ -55,14 +55,16 @@ def send_user(message):
 # === === === calcubot ++
 
 sys.path.append('/home/format37_gmail_com/projects/calcubot_python')
-from calcubot import calcubot_init, calcubot_about, calcubot_help, calcubot_eval
+from calcubot import calcubot_init, calcubot_about, calcubot_help, calcubot_eval, calcubot_words
 calcubot	= calcubot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT)
 bots.append( calcubot )
+
+CALCUBOT_WORDS = calcubot_words()
 
 @calcubot.inline_handler(func=lambda chosen_inline_result: True)
 def query_text(inline_query):
 	try:
-		answer	= calcubot_eval(True, inline_query.query,False)
+		answer	= calcubot_eval(True, inline_query.query,False,CALCUBOT_WORDS)
 		calcubot.answer_inline_query(inline_query.id, answer)
 	except Exception as e:
 		print(str(e))
@@ -79,17 +81,16 @@ def send_about(message):
 
 @calcubot.message_handler(commands=['cl'])
 def send_user(message):
-	answer	= calcubot_eval(False, str(message.text)[3:],message.from_user.id==106129214)
+	answer	= calcubot_eval(False, str(message.text)[3:],message.from_user.id==106129214,CALCUBOT_WORDS)
 	calcubot.reply_to(message, answer)
 
 @calcubot.message_handler()
 def send_pm(message):
 	if message.chat.id==message.from_user.id:
-		answer	= calcubot_eval(False, str(message.text),message.from_user.id==106129214)
+		answer	= calcubot_eval(False, str(message.text),message.from_user.id==106129214,CALCUBOT_WORDS)
 		calcubot.reply_to(message, answer)
 	
 # === === === calcubot --
-
 
 # Process webhook calls
 async def handle(request):
