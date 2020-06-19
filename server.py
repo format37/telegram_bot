@@ -66,8 +66,8 @@ CALCUBOT_WORDS = calcubot_words(SCRIPT_PATH)
 @calcubot.inline_handler(func=lambda chosen_inline_result: True)
 def query_text(inline_query):
 	try:
-		print(inline_query)
-		god_mode	= inline_query.query.from.id==106129214
+		print(str(inline_query))
+		god_mode	= False #inline_query.from.id==106129214
 		answer	= calcubot_eval(True, inline_query.query,god_mode,CALCUBOT_WORDS)
 		calcubot.answer_inline_query(inline_query.id, answer)
 	except Exception as e:
