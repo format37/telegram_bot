@@ -54,14 +54,14 @@ def send_user(message):
 
 # === === === calcubot ++
 
-SCRIPT_PATH     = '/home/format37_gmail_com/projects/calcubot_python/'
+CALCUBOT_SCRIPT_PATH     = '/home/format37_gmail_com/projects/calcubot_python/'
 
 sys.path.append('/home/format37_gmail_com/projects/calcubot_python')
-from calcubot import calcubot_init, calcubot_about, calcubot_help, calcubot_eval, calcubot_words
-calcubot	= calcubot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT, SCRIPT_PATH)
+from calcubot import calcubot_init, calcubot_about, calcubot_help, calcubot_eval, calcubot_words, calcubot_plot
+calcubot	= calcubot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT, CALCUBOT_SCRIPT_PATH)
 bots.append( calcubot )
 
-CALCUBOT_WORDS = calcubot_words(SCRIPT_PATH)
+CALCUBOT_WORDS = calcubot_words(CALCUBOT_SCRIPT_PATH)
 
 @calcubot.inline_handler(func=lambda chosen_inline_result: True)
 def query_text(inline_query):
@@ -87,6 +87,11 @@ def send_about(message):
 def send_user(message):
 	answer	= calcubot_eval(False, str(message.text)[3:],message.from_user.id==106129214,CALCUBOT_WORDS)
 	calcubot.reply_to(message, answer)
+
+@calcubot.message_handler(commands=['plot'])
+def send_plot(message):
+	answer,filepath	= calcubot_plot(CALCUBOT_SCRIPT_PATH, str(message.text)[5:],message.from_user.id==106129214,CALCUBOT_WORDS)
+	calcubot.reply_to(message, 'plot '+filepath+' : '+answer)
 
 @calcubot.message_handler()
 def send_pm(message):
