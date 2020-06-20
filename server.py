@@ -91,7 +91,13 @@ def send_user(message):
 @calcubot.message_handler(commands=['plot'])
 def send_plot(message):
 	answer,filepath	= calcubot_plot(CALCUBOT_SCRIPT_PATH, str(message.text)[5:],message.from_user.id==106129214,CALCUBOT_WORDS)
-	calcubot.reply_to(message, 'plot '+filepath+' : '+answer)
+	if filepath=='':
+		calcubot.reply_to(message, 'Decline. '+answer)
+	else:
+		photo = open(filepath, 'rb')
+		#calcubot.send_photo(message.chat.id, photo, reply_to_message_id = message.id)
+		calcubot.send_photo(message.chat.id, photo, reply_to_message_id = message.id)
+		#calcubot.send_photo(message.chat.id, "FILEID")
 
 @calcubot.message_handler()
 def send_pm(message):
