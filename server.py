@@ -67,7 +67,6 @@ CALCUBOT_WORDS = calcubot_words(CALCUBOT_SCRIPT_PATH)
 def query_text(inline_query):
 	try:
 		god_mode	= inline_query.from_user.id==106129214
-		#print(str(inline_query.from_user),'==',106129214,'is',god_mode)
 		answer	= calcubot_eval(True, inline_query.query,god_mode,CALCUBOT_WORDS)
 		calcubot.answer_inline_query(inline_query.id, answer)
 	except Exception as e:
@@ -95,9 +94,7 @@ def send_plot(message):
 		calcubot.reply_to(message, 'Decline. '+answer)
 	else:
 		photo = open(filepath, 'rb')
-		#calcubot.send_photo(message.chat.id, photo, reply_to_message_id = str(message))
-		calcubot.send_photo(message.chat.id, photo)
-		#calcubot.send_photo(message.chat.id, "FILEID")
+		calcubot.send_photo(message.chat.id, photo, reply_to_message_id = str(message), caption = str(message.text)[5:])
 
 @calcubot.message_handler()
 def send_pm(message):
