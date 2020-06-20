@@ -95,8 +95,8 @@ def send_plot(message):
 		calcubot.reply_to(message, 'Decline. '+answer)
 	else:
 		photo = open(filepath, 'rb')
-		#calcubot.send_photo(message.chat.id, photo, reply_to_message_id = message.id)
-		calcubot.send_photo(message.chat.id, photo, reply_to_message_id = message.id)
+		#calcubot.send_photo(message.chat.id, photo, reply_to_message_id = str(message))
+		calcubot.send_photo(message.chat.id, photo)
 		#calcubot.send_photo(message.chat.id, "FILEID")
 
 @calcubot.message_handler()
