@@ -8,6 +8,7 @@ from aiohttp import web
 import telebot
 import asyncio
 import sys
+import os
 
 SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_bot_server/'
 
@@ -84,22 +85,27 @@ def send_about(message):
 
 @calcubot.message_handler(commands=['cl'])
 def send_user(message):
-	answer	= calcubot_eval(False, str(message.text)[3:],message.from_user.id==106129214,CALCUBOT_WORDS)
+	god_mode	= message.from_user.id==106129214
+	answer	= calcubot_eval(False, str(message.text)[3:],god_mode,CALCUBOT_WORDS)
 	calcubot.reply_to(message, answer)
 
 @calcubot.message_handler(commands=['plot'])
 def send_plot(message):
-	answer,filepath	= calcubot_plot(CALCUBOT_SCRIPT_PATH, str(message.text)[5:],message.from_user.id==106129214,CALCUBOT_WORDS)
+	god_mode = message.from_user.id==106129214
+	answer,filepath = calcubot_plot(CALCUBOT_SCRIPT_PATH, str(message.text)[5:],god_mode,CALCUBOT_WORDS)
 	if filepath=='':
-		calcubot.reply_to(message, 'Decline. '+answer)
+		calcubot.reply_to(message, 'Declined. '+answer)
 	else:
 		photo = open(filepath, 'rb')
 		calcubot.send_photo(message.chat.id, photo, reply_to_message_id = str(message), caption = str(message.text)[5:])
+		os.remove(filepath)
+		
 
 @calcubot.message_handler()
 def send_pm(message):
 	if message.chat.id==message.from_user.id:
-		answer	= calcubot_eval(False, str(message.text),message.from_user.id==106129214,CALCUBOT_WORDS)
+		god_mode = message.from_user.id==106129214
+		answer	= calcubot_eval(False, str(message.text),god_mode,CALCUBOT_WORDS)
 		calcubot.reply_to(message, answer)
 	
 # === === === calcubot --
