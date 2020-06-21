@@ -84,7 +84,9 @@ def query_text(inline_query):
 def send_help(message):
 	link = calcubot_help(CALCUBOT_SCRIPT_PATH)
 	#gif = open(filepath, 'rb')
-	calcubot.send_document(message.chat.id, link, reply_to_message_id = str(message))
+	#calcubot.send_animation(message.chat.id, link, reply_to_message_id = str(message))
+	#calcubot.send_document(message.chat.id, link, reply_to_message_id = str(message))
+	calcubot.send_video(message.chat.id, link, reply_to_message_id = str(message))
 	
 @calcubot.message_handler(commands=['about'])
 def send_about(message):
