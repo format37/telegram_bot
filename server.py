@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # https://github.com/eternnoir/pyTelegramBotAPI/tree/master/examples/webhook_examples
+# https://core.telegram.org/bots/api
 
 import logging
 import ssl
@@ -81,8 +82,9 @@ def query_text(inline_query):
 
 @calcubot.message_handler(commands=['help', 'start'])
 def send_help(message):
-	answer = calcubot_help()
-	calcubot.reply_to(message, answer)
+	filepath = calcubot_help(CALCUBOT_SCRIPT_PATH)
+	gif = open(filepath, 'rb')
+	calcubot.send_animation(message.chat.id, gif, reply_to_message_id = str(message))
 	
 @calcubot.message_handler(commands=['about'])
 def send_about(message):
