@@ -82,9 +82,9 @@ def query_text(inline_query):
 
 @calcubot.message_handler(commands=['help', 'start'])
 def send_help(message):
-	filepath = calcubot_help(CALCUBOT_SCRIPT_PATH)
-	gif = open(filepath, 'rb')
-	print ('doc', calcubot.send_document(message.chat.id, gif, reply_to_message_id = str(message)) )
+	link = calcubot_help(CALCUBOT_SCRIPT_PATH)
+	#gif = open(filepath, 'rb')
+	calcubot.send_document(message.chat.id, link, reply_to_message_id = str(message))
 	
 @calcubot.message_handler(commands=['about'])
 def send_about(message):
