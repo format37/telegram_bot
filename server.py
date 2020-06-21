@@ -95,20 +95,27 @@ def send_about(message):
 
 @calcubot.message_handler(commands=['cl'])
 def send_user(message):
-	god_mode	= message.from_user.id==106129214
-	answer	= calcubot_eval(False, str(message.text)[3:],god_mode,CALCUBOT_WORDS)
+	if message.text=='/cl':
+		answer = 'Try this, for example:\n/cl 2+2'
+	else:
+		god_mode	= message.from_user.id==106129214
+		answer	= calcubot_eval(False, str(message.text)[3:],god_mode,CALCUBOT_WORDS)
 	calcubot.reply_to(message, answer)
 
 @calcubot.message_handler(commands=['plot'])
 def send_plot(message):
-	god_mode = message.from_user.id==106129214
-	answer,filepath = calcubot_plot(CALCUBOT_SCRIPT_PATH, str(message.text)[5:],god_mode,CALCUBOT_WORDS)
-	if filepath=='':
-		calcubot.reply_to(message, 'Declined. '+answer)
+	if message.text=='/plot':
+		answer = 'Try this, for example:\n/plot [ [math.sin(i)*pow(i,4) for i in range(10,30)] , [math.sin(-i)*pow(i,4) for i in range(10,30)] ]'
+		calcubot.reply_to(message, answer)
 	else:
-		photo = open(filepath, 'rb')
-		calcubot.send_photo(message.chat.id, photo, reply_to_message_id = str(message), caption = str(message.text)[5:])
-		os.remove(filepath)
+		god_mode = message.from_user.id==106129214
+		answer,filepath = calcubot_plot(CALCUBOT_SCRIPT_PATH, str(message.text)[5:],god_mode,CALCUBOT_WORDS)
+		if filepath=='':
+			calcubot.reply_to(message, 'Declined. '+answer)
+		else:
+			photo = open(filepath, 'rb')
+			calcubot.send_photo(message.chat.id, photo, reply_to_message_id = str(message), caption = str(message.text)[5:])
+			os.remove(filepath)
 		
 
 @calcubot.message_handler()
