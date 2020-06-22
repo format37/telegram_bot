@@ -33,16 +33,16 @@ telebot.logger.setLevel(logging.INFO)
 
 app = web.Application()
 bots	= []
-'''
-# === === === f37t1 ++
 
-sys.path.append('/home/format37_gmail_com/projects/f37t1')
-from f37t1 import bot as f37t1_bot
+# === === === rover ++
+'''
+sys.path.append('/home/format37_gmail_com/projects/telegram_rover')
+from telegram_rover import bot_init as rover
 bot_t1	= f37t1_bot(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT)
 bots.append( bot_t1 )
 
 # Handle '/start' and '/help'
-@bot_t1.message_handler(commands=['help', 'start'])
+@bot_t1.message_handler(commands=['cmd'])
 def send_welcome(message):
 	bot_t1.reply_to(message,"t1")	
 
@@ -50,9 +50,8 @@ def send_welcome(message):
 @bot_t1.message_handler(commands=['group'])
 def send_user(message):
 	bot_t1.reply_to(message,   str(message.chat.id) )
-
-# === === === f37t1 --
 '''
+# === === === rover --
 
 # === === === calcubot ++
 
