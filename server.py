@@ -35,29 +35,31 @@ app = web.Application()
 bots	= []
 
 # === === === rover ++
-'''
-sys.path.append('/home/format37_gmail_com/projects/telegram_rover')
-from telegram_rover import bot_init as rover
-bot_t1	= f37t1_bot(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT)
-bots.append( bot_t1 )
 
-# Handle '/start' and '/help'
-@bot_t1.message_handler(commands=['cmd'])
-def send_welcome(message):
-	bot_t1.reply_to(message,"t1")	
+try:
+	ROVER_SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_rover'
+	sys.path.append(ROVER_SCRIPT_PATH)
+	from telegram_rover import bot_init as rover_init
+	rover	= rover_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT)
+	bots.append( rover )
 
-# Handle '/group'
-@bot_t1.message_handler(commands=['group'])
-def send_user(message):
-	bot_t1.reply_to(message,   str(message.chat.id) )
-'''
+	@rover.message_handler(commands=['mv'])
+	def send_welcome(message):
+		bot_t1.reply_to(message,"mv")
+
+	@rover.message_handler(commands=['ph'])
+	def send_user(message):
+		bot_t1.reply_to(message,'ph')
+except Exception as e:
+		print('rover',str(e))
+
 # === === === rover --
 
 # === === === calcubot ++
 
 CALCUBOT_SCRIPT_PATH     = '/home/format37_gmail_com/projects/calcubot_python/'
 
-sys.path.append('/home/format37_gmail_com/projects/calcubot_python')
+sys.path.append(CALCUBOT_SCRIPT_PATH)
 from calcubot import calcubot_init, calcubot_about, calcubot_help, calcubot_eval, calcubot_words, calcubot_plot
 calcubot	= calcubot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT, CALCUBOT_SCRIPT_PATH)
 bots.append( calcubot )
