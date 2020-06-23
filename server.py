@@ -37,7 +37,7 @@ bots	= []
 # === === === rover ++
 
 try:
-	ROVER_SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_rover'
+	ROVER_SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_rover/'
 	sys.path.append(ROVER_SCRIPT_PATH)
 	from telegram_rover import bot_init as rover_init
 	rover	= rover_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT)
