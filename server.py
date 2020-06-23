@@ -49,7 +49,7 @@ try:
 		if god_mode:
 			move_cmd(str(message.text)[2:])
 			rover.reply_to(message,"m")
-		else
+		else:
 			rover.reply_to(message,"unavailable for. u")
 
 	'''
