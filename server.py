@@ -44,13 +44,19 @@ try:
 	bots.append( rover )
 
 	@rover.message_handler(commands=['m'])
-	def send_welcome(message):
-		move_cmd(str(message.text)[2:])
-		rover.reply_to(message,"m")
+	def call_move_cmd(message):
+		god_mode	= message.from_user.id==106129214
+		if god_mode:
+			move_cmd(str(message.text)[2:])
+			rover.reply_to(message,"m")
+		else
+			rover.reply_to(message,"unavailable for. u")
 
+	'''
 	@rover.message_handler(commands=['p'])
 	def send_user(message):
 		rover.reply_to(message,'p')
+	'''
 except Exception as e:
 		print('rover',str(e))
 
