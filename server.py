@@ -45,11 +45,11 @@ try:
 
 	@rover.message_handler(commands=['mv'])
 	def send_welcome(message):
-		bot_t1.reply_to(message,"mv")
+		rover.reply_to(message,"mv")
 
 	@rover.message_handler(commands=['ph'])
 	def send_user(message):
-		bot_t1.reply_to(message,'ph')
+		rover.reply_to(message,'ph')
 except Exception as e:
 		print('rover',str(e))
 
