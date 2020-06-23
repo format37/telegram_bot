@@ -39,17 +39,18 @@ bots	= []
 try:
 	ROVER_SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_rover/'
 	sys.path.append(ROVER_SCRIPT_PATH)
-	from telegram_rover import bot_init as rover_init
+	from telegram_rover import bot_init as rover_init, move_cmd
 	rover	= rover_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,ROVER_SCRIPT_PATH)
 	bots.append( rover )
 
-	@rover.message_handler(commands=['mv'])
+	@rover.message_handler(commands=['m'])
 	def send_welcome(message):
-		rover.reply_to(message,"mv")
+		move_cmd(str(message.text)[2:])
+		rover.reply_to(message,"m")
 
-	@rover.message_handler(commands=['ph'])
+	@rover.message_handler(commands=['p'])
 	def send_user(message):
-		rover.reply_to(message,'ph')
+		rover.reply_to(message,'p')
 except Exception as e:
 		print('rover',str(e))
 
