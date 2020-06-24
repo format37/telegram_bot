@@ -37,26 +37,54 @@ bots	= []
 # === === === rover ++
 
 try:
+	ROVER_DELAY = 5
+	ROVER_SPEED = 10
 	ROVER_SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_rover/'
 	sys.path.append(ROVER_SCRIPT_PATH)
-	from telegram_rover import bot_init as rover_init, move_cmd
+	from telegram_rover import bot_init as rover_init, move_cmd, move_f, move_b, move_l, move_r
 	rover	= rover_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,ROVER_SCRIPT_PATH)
 	bots.append( rover )
 
-	@rover.message_handler(commands=['m'])
-	def call_move_cmd(message):
+	@rover.message_handler(commands=['cmd'])
+	def rover_move_cmd(message):
+		rover.reply_to(message, move_cmd(message.from_user.id,str(message.text)[4:]) )
+		'''
 		god_mode	= message.from_user.id==106129214
 		if god_mode:
-			move_cmd(str(message.text)[2:])
+			move_cmd(message.from_user.id,str(message.text)[4:])
+			rover.reply_to(message,"cmd")
+		else:
+			rover.reply_to(message,"unavailable for. u")
+		'''
+	@rover.message_handler(commands=['f'])
+	def rover_move_f(message):
+		rover.reply_to(message, move_f(message.from_user.id,ROVER_DELAY,ROVER_SPEED)
+		'''
+		god_mode	= message.from_user.id==106129214
+		if god_mode:
+			move_f(message.from_user.id, ROVER_DELAY,ROVER_SPEED)
 			rover.reply_to(message,"m")
 		else:
 			rover.reply_to(message,"unavailable for. u")
 
-	'''
+		'''
+		
+	@rover.message_handler(commands=['b'])
+	def rover_move_b(message):
+		rover.reply_to(message, move_b(message.from_user.id,ROVER_DELAY,ROVER_SPEED)		
+		
+	@rover.message_handler(commands=['l'])
+	def rover_move_l(message):
+		rover.reply_to(message, move_b(message.from_user.id,ROVER_DELAY,ROVER_SPEED)
+		
+	@rover.message_handler(commands=['r'])
+	def rover_move_r(message):
+		rover.reply_to(message, move_b(message.from_user.id,ROVER_DELAY,ROVER_SPEED)
+
 	@rover.message_handler(commands=['p'])
-	def send_user(message):
+	def rover_photo(message):
 		rover.reply_to(message,'p')
-	'''
+		
 except Exception as e:
 		print('rover',str(e))
 
