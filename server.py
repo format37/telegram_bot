@@ -58,7 +58,7 @@ try:
 		'''
 	@rover.message_handler(commands=['f'])
 	def rover_move_f(message):
-		rover.reply_to(message, move_f(message.from_user.id,ROVER_DELAY,ROVER_SPEED)
+		rover.reply_to( message, move_f(message.from_user.id,ROVER_DELAY,ROVER_SPEED) )
 		'''
 		god_mode	= message.from_user.id==106129214
 		if god_mode:
