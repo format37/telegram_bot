@@ -67,7 +67,11 @@ try:
 
 	@rover.message_handler(commands=['p'])
 	def rover_photo(message):
-		rover.reply_to(message, rover_photo(message.from_user.id) )
+		print(str(message))
+		print(str(message.from_user))
+		print(str(message.from_user.id))
+		user_id	= message.from_user.id
+		rover.reply_to(message, rover_photo(user_id) )
 		
 except Exception as e:
 		print('rover',str(e))
