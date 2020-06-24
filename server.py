@@ -37,8 +37,8 @@ bots	= []
 # === === === rover ++
 
 try:
-	ROVER_DELAY = 5
-	ROVER_SPEED = 10
+	ROVER_DELAY = 4
+	ROVER_SPEED = 100
 	ROVER_SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_rover/'
 	sys.path.append(ROVER_SCRIPT_PATH)
 	from telegram_rover import bot_init as rover_init, move_cmd, move_f, move_b, move_l, move_r, rover_photo
@@ -67,10 +67,6 @@ try:
 
 	@rover.message_handler(commands=['p'])
 	def rover_get_photo(message):
-		#print(str(message))
-		#print(str(message.from_user))
-		#print(str(message.from_user.id))
-		#user_id	= 106129214
 		rover.reply_to(message, rover_photo(message.from_user.id) )
 		
 except Exception as e:
