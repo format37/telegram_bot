@@ -71,15 +71,15 @@ try:
 		
 	@rover.message_handler(commands=['b'])
 	def rover_move_b(message):
-		rover.reply_to(message, move_b(message.from_user.id,ROVER_DELAY,ROVER_SPEED)		
+		rover.reply_to(message, move_b(message.from_user.id,ROVER_DELAY,ROVER_SPEED)	)	
 		
 	@rover.message_handler(commands=['l'])
 	def rover_move_l(message):
-		rover.reply_to(message, move_b(message.from_user.id,ROVER_DELAY,ROVER_SPEED)
+		rover.reply_to(message, move_b(message.from_user.id,ROVER_DELAY,ROVER_SPEED) )
 		
 	@rover.message_handler(commands=['r'])
 	def rover_move_r(message):
-		rover.reply_to(message, move_b(message.from_user.id,ROVER_DELAY,ROVER_SPEED)
+		rover.reply_to(message, move_b(message.from_user.id,ROVER_DELAY,ROVER_SPEED) )
 
 	@rover.message_handler(commands=['p'])
 	def rover_photo(message):
