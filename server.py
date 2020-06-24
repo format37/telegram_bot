@@ -35,7 +35,7 @@ app = web.Application()
 bots	= []
 
 # === === === rover ++
-'''
+
 try:
 	ROVER_DELAY = 5
 	ROVER_SPEED = 10
@@ -71,7 +71,7 @@ try:
 		
 except Exception as e:
 		print('rover',str(e))
-'''
+		
 # === === === rover --
 
 # === === === calcubot ++
