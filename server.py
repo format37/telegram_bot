@@ -48,26 +48,10 @@ try:
 	@rover.message_handler(commands=['cmd'])
 	def rover_move_cmd(message):
 		rover.reply_to(message, move_cmd(message.from_user.id,str(message.text)[4:]) )
-		'''
-		god_mode	= message.from_user.id==106129214
-		if god_mode:
-			move_cmd(message.from_user.id,str(message.text)[4:])
-			rover.reply_to(message,"cmd")
-		else:
-			rover.reply_to(message,"unavailable for. u")
-		'''
+
 	@rover.message_handler(commands=['f'])
 	def rover_move_f(message):
 		rover.reply_to( message, move_f(message.from_user.id,ROVER_DELAY,ROVER_SPEED) )
-		'''
-		god_mode	= message.from_user.id==106129214
-		if god_mode:
-			move_f(message.from_user.id, ROVER_DELAY,ROVER_SPEED)
-			rover.reply_to(message,"m")
-		else:
-			rover.reply_to(message,"unavailable for. u")
-
-		'''
 		
 	@rover.message_handler(commands=['b'])
 	def rover_move_b(message):
@@ -75,11 +59,11 @@ try:
 		
 	@rover.message_handler(commands=['l'])
 	def rover_move_l(message):
-		rover.reply_to(message, move_b(message.from_user.id,ROVER_DELAY,ROVER_SPEED) )
+		rover.reply_to(message, move_l(message.from_user.id,ROVER_DELAY,ROVER_SPEED) )
 		
 	@rover.message_handler(commands=['r'])
 	def rover_move_r(message):
-		rover.reply_to(message, move_b(message.from_user.id,ROVER_DELAY,ROVER_SPEED) )
+		rover.reply_to(message, move_r(message.from_user.id,ROVER_DELAY,ROVER_SPEED) )
 
 	@rover.message_handler(commands=['p'])
 	def rover_photo(message):
