@@ -95,7 +95,7 @@ def query_text(inline_query):
 		else:
 			expression = inline_query.query
 		'''
-		answer	= calcubot_eval(True,inline_query.query,god_mode,CALCUBOT_WORDS)
+		answer	= calcubot_eval(CALCUBOT_SCRIPT_PATH,True,inline_query.query,god_mode,CALCUBOT_WORDS)
 		calcubot.answer_inline_query(inline_query.id, answer)
 	except Exception as e:
 		print(str(e))
