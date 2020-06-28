@@ -119,7 +119,7 @@ def send_user(message):
 		answer = 'Try this, for example:\n/cl 2+2'
 	else:
 		god_mode	= message.from_user.id==106129214
-		answer	= calcubot_eval(False, str(message.text)[3:],god_mode,CALCUBOT_WORDS)
+		answer	= calcubot_eval(CALCUBOT_SCRIPT_PATH,False, str(message.text)[3:],god_mode,CALCUBOT_WORDS)
 	calcubot.reply_to(message, answer)
 
 @calcubot.message_handler(commands=['plot'])
@@ -142,7 +142,7 @@ def send_plot(message):
 def send_pm(message):
 	if message.chat.id==message.from_user.id:
 		god_mode = message.from_user.id==106129214
-		answer	= calcubot_eval(False, str(message.text),god_mode,CALCUBOT_WORDS)
+		answer	= calcubot_eval(CALCUBOT_SCRIPT_PATH,False, str(message.text),god_mode,CALCUBOT_WORDS)
 		calcubot.reply_to(message, answer)
 	
 # === === === calcubot --
