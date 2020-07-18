@@ -41,7 +41,7 @@ try:
 	ROVER_SPEED = 100
 	ROVER_SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_rover/'
 	sys.path.append(ROVER_SCRIPT_PATH)
-	from telegram_rover import bot_init as rover_init, move_cmd, move_f, move_b, move_l, move_r, rover_photo
+	from telegram_rover import bot_init as rover_init, move_cmd, move_f, move_b, move_l, move_r, rover_photo, rover_photo_night
 	rover	= rover_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,ROVER_SCRIPT_PATH)
 	bots.append( rover )
 
