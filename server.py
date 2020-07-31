@@ -68,10 +68,16 @@ def idbot_user(message):
 @idbot.inline_handler(func=lambda chosen_inline_result: True)
 def query_text(inline_query):
 	try:
-		a=1
-		answer	= [str(inline_query.from_user.id)]
-		r0 = types.InlineQueryResultArticle('0', answer[0], types.InputTextMessageContent( answer[0] ))
-		idbot.answer_inline_query(inline_query.id, [r0])
+		answer	= [
+			str(inline_query.from_user.id),
+			str(inline_query.from_user.id)+'_'
+		]
+		responce = 
+		[
+			types.InlineQueryResultArticle('id', answer[0], types.InputTextMessageContent( answer[0] )),
+			types.InlineQueryResultArticle('full', answer[1], types.InputTextMessageContent( answer[1] ))
+		]
+		idbot.answer_inline_query(inline_query.id, responce)
 		
 	except Exception as e:
 		print(str(e))
