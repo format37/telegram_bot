@@ -84,8 +84,7 @@ def query_text(inline_query):
 			'first_name: '		+ str(inline_query.from_user.first_name)+ '\n'+
 			'last_name: '		+ str(inline_query.from_user.last_name)	+ '\n'+
 			'username: '		+ str(inline_query.from_user.username)	+ '\n'+
-			'language_code: '	+ str(inline_query.from_user.language_code)+ '\n'+
-			'first_name: '		+ str(inline_query.from_user.first_name)
+			'language_code: '	+ str(inline_query.from_user.language_code)
 		]
 		responce = [
 			types.InlineQueryResultArticle('id', answer[0], types.InputTextMessageContent( answer[0] )),
