@@ -68,7 +68,7 @@ def idbot_user(message):
 def query_text(inline_query):
 	try:
 		a=1
-		answer	= str(inline_query.from.id)
+		answer	= str(inline_query.from_user.id)
 		idbot.answer_inline_query(inline_query.id, answer)
 		
 	except Exception as e:
