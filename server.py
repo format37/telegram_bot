@@ -65,13 +65,18 @@ bots.append( idbot )
 def idbot_user(message):
 	idbot.reply_to(message, str(message.from_user.id))
 	
+@idbot.message_handler(commands=['group'])
+def idbot_group(message):
+	idbot.reply_to(message, str(message.from_chat.id))
+
+	
 @idbot.inline_handler(func=lambda chosen_inline_result: True)
 def query_text(inline_query):
 	try:		
 		answer	= [
 			str(inline_query.from_user.id),
 			
-			'id: ```'				+ str(inline_query.from_user.id) 		+ '```\n'+
+			'id: '				+ str(inline_query.from_user.id) 		+ '\n'+
 			'is_bot: '			+ str(inline_query.from_user.is_bot) 	+ '\n'+
 			'first_name: '		+ str(inline_query.from_user.first_name)+ '\n'+
 			'last_name: '		+ str(inline_query.from_user.last_name)	+ '\n'+
