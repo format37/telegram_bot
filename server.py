@@ -72,8 +72,7 @@ def query_text(inline_query):
 			str(inline_query.from_user.id),
 			str(inline_query.from_user.id)+'_'
 		]
-		responce = 
-		[
+		responce = [
 			types.InlineQueryResultArticle('id', answer[0], types.InputTextMessageContent( answer[0] )),
 			types.InlineQueryResultArticle('full', answer[1], types.InputTextMessageContent( answer[1] ))
 		]
