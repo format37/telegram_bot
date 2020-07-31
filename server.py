@@ -71,9 +71,13 @@ def query_text(inline_query):
 		answer	= [
 			str(inline_query.from_user.id),
 			
-			'id: '			+ str(inline_query.from_user.id) + '\n'+
-			'is_bot: '		+ str(inline_query.from_user.is_bot) + '\n'+
-			'first_name: '	+ str(inline_query.from_user.first_name)
+			'id: `'				+ str(inline_query.from_user.id) 		+ '`\n'+
+			'is_bot: '			+ str(inline_query.from_user.is_bot) 	+ '\n'+
+			'first_name: '		+ str(inline_query.from_user.first_name)+ '\n'+
+			'last_name: '		+ str(inline_query.from_user.last_name)	+ '\n'+
+			'username: '		+ str(inline_query.from_user.username)	+ '\n'+
+			'language_code: '	+ str(inline_query.from_user.language_code)+ '\n'+
+			'first_name: '		+ str(inline_query.from_user.first_name)
 		]
 		responce = [
 			types.InlineQueryResultArticle('id', answer[0], types.InputTextMessageContent( answer[0] )),
