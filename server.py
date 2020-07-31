@@ -7,6 +7,7 @@ import logging
 import ssl
 from aiohttp import web
 import telebot
+from telebot import types
 import asyncio
 import sys
 import os
@@ -68,8 +69,9 @@ def idbot_user(message):
 def query_text(inline_query):
 	try:
 		a=1
-		answer	= str(inline_query.from_user.id)
-		idbot.answer_inline_query(inline_query.id, answer)
+		answer	= [str(inline_query.from_user.id)]
+		r0 = types.InlineQueryResultArticle('0', answer[0], types.InputTextMessageContent( answer[0] ))
+		idbot.answer_inline_query(inline_query.id, [r0])
 		
 	except Exception as e:
 		print(str(e))
