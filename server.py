@@ -56,18 +56,22 @@ def default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT, SCRIPT_PATH):
 
 # === === === id37bot ++
 
-try:
-	IDBOT_SCRIPT_PATH	= '/home/format37_gmail_com/projects/id37bot/'
-	#sys.path.append(IDBOT_SCRIPT_PATH)	
-	idbot	= default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,IDBOT_SCRIPT_PATH)
-	bots.append( idbot )
-	
-	@idbot.message_handler(commands=['user'])
-	def idbot_user(message):
-		idbot.reply_to(message, str(message.from_user.id))
+IDBOT_SCRIPT_PATH	= '/home/format37_gmail_com/projects/id37bot/'
+idbot	= default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,IDBOT_SCRIPT_PATH)
+bots.append( idbot )
 
-except Exception as e:
-		print('idbot',str(e))
+@idbot.message_handler(commands=['user'])
+def idbot_user(message):
+	idbot.reply_to(message, str(message.from_user.id))
+	
+@idbot.inline_handler(func=lambda chosen_inline_result: True)
+def query_text(inline_query):
+	try:
+		answer	= inline_query.from.id
+		idbot.answer_inline_query(inline_query.id, answer)
+	except Exception as e:
+		print(str(e))
+
 		
 # === === === id37bot --
 		
