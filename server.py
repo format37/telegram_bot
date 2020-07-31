@@ -67,7 +67,7 @@ def idbot_user(message):
 	
 @idbot.message_handler(commands=['group'])
 def idbot_group(message):
-	idbot.reply_to(message, str(message.from_chat.id))
+	idbot.reply_to(message, str(message.chat.id))
 
 	
 @idbot.inline_handler(func=lambda chosen_inline_result: True)
