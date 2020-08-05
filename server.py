@@ -156,15 +156,15 @@ CALCUBOT_WORDS = calcubot_words(CALCUBOT_SCRIPT_PATH)
 @calcubot.inline_handler(func=lambda chosen_inline_result: True)
 def query_text(inline_query):
 	try:
-		god_mode	= inline_query.from_user.id==106129214
-		'''
-		if inline_query.query[:5] = '/plot':
-			expression = expression[5:]
+		message_text_prepared = inline_query.query.strip()
+		if message_text_prepared!=''
+			god_mode	= inline_query.from_user.id==106129214
+			answer	= calcubot_eval(CALCUBOT_SCRIPT_PATH,True,inline_query.query,god_mode,CALCUBOT_WORDS)
+			calcubot.answer_inline_query(inline_query.id, answer)
 		else:
-			expression = inline_query.query
-		'''
-		answer	= calcubot_eval(CALCUBOT_SCRIPT_PATH,True,inline_query.query,god_mode,CALCUBOT_WORDS)
-		calcubot.answer_inline_query(inline_query.id, answer)
+			answer	= ['Empty expression..']
+			responce = [types.InlineQueryResultArticle('Result: ', answer[0], types.InputTextMessageContent( answer[0] ))] 
+			calcubot.answer_inline_query(inline_query.id, answer)
 	except Exception as e:
 		print(str(e))
 
