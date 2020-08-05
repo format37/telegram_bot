@@ -183,7 +183,7 @@ def send_about(message):
 
 @calcubot.message_handler(commands=['cl'])
 def send_user(message):
-	if message.text=='/cl' or message.text=='/cl@CalcuBot':
+	if message.text=='/cl' or message.text[:12]=='/cl@CalcuBot':
 		answer = 'Try this, for example:\n/cl 2+2'
 	else:
 		god_mode	= message.from_user.id==106129214
@@ -192,7 +192,7 @@ def send_user(message):
 
 @calcubot.message_handler(commands=['plot'])
 def send_plot(message):
-	if message.text=='/plot' or message.text=='/plot@CalcuBot':
+	if message.text=='/plot' or message.text[:14]=='/plot@CalcuBot':
 		answer = 'Try this, for example:\n/plot [ [math.sin(i)*pow(i,4) for i in range(10,30)] ]'
 		calcubot.reply_to(message, answer)
 	else:
