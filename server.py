@@ -185,13 +185,13 @@ def send_about(message):
 def send_user(message):
 	if message.text=='/cl':
 		answer = 'Try this, for example:\n/cl 2+2'
-	elif message.text=='/cl@CalcuBot':
+	elif message.text.lower()=='/cl@calcubot':
 		answer = 'Try this, for example:\n/cl@CalcuBot 2+2'
-	elif message.text[:4]=='/cl@' and message.text[:12]!='/cl@CalcuBot':
+	elif message.text[:4]=='/cl@' and message.text[:12].lower()!='/cl@calcubot':
 		answer = ''
 		pass
 	else:
-		message_text_prepared = str(message.text)[12:] if message.text[:12]=='/cl@CalcuBot' else str(message.text)[3:]
+		message_text_prepared = str(message.text)[12:] if message.text[:12].lower()=='/cl@calcubot' else str(message.text)[3:]
 		god_mode	= message.from_user.id==106129214
 		answer	= calcubot_eval(CALCUBOT_SCRIPT_PATH,False, message_text_prepared,god_mode,CALCUBOT_WORDS)
 	if answer != '':
