@@ -199,7 +199,7 @@ def send_user(message):
 
 @calcubot.message_handler(commands=['plot'])
 def send_plot(message):
-	if message.text=='/plot'
+	if message.text=='/plot':
 		answer = 'Try this, for example:\n/plot [ [math.sin(i)*pow(i,4) for i in range(10,30)] ]'
 		calcubot.reply_to(message, answer)
 	elif message.text.lower()=='/plot@calcubot':
