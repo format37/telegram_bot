@@ -199,17 +199,21 @@ def send_user(message):
 
 @calcubot.message_handler(commands=['plot'])
 def send_plot(message):
-	if message.text=='/plot' or message.text[:14]=='/plot@CalcuBot':
+	if message.text=='/plot'
 		answer = 'Try this, for example:\n/plot [ [math.sin(i)*pow(i,4) for i in range(10,30)] ]'
 		calcubot.reply_to(message, answer)
+	elif message.text.lower()=='/plot@calcubot':
+		answer = 'Try this, for example:\n/plot@CalcuBot [ [math.sin(i)*pow(i,4) for i in range(10,30)] ]'
+		calcubot.reply_to(message, answer)
 	else:
+		message_text_prepared = str(message.text)[14:] if message.text[:14].lower()=='/plot@calcubot' else str(message.text)[5:]
 		god_mode = message.from_user.id==106129214
-		answer,filepath = calcubot_plot(CALCUBOT_SCRIPT_PATH, str(message.text)[5:],god_mode,CALCUBOT_WORDS)
+		answer,filepath = calcubot_plot(CALCUBOT_SCRIPT_PATH, message_text_prepared,god_mode,CALCUBOT_WORDS)
 		if filepath=='':
 			calcubot.reply_to(message, 'Declined. '+answer)
 		else:
 			photo = open(filepath, 'rb')
-			calcubot.send_photo(message.chat.id, photo, reply_to_message_id = str(message), caption = str(message.text)[5:])
+			calcubot.send_photo(message.chat.id, photo, reply_to_message_id = str(message), caption = message_text_prepared)
 			os.remove(filepath)
 		
 
