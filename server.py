@@ -157,7 +157,7 @@ CALCUBOT_WORDS = calcubot_words(CALCUBOT_SCRIPT_PATH)
 def query_text(inline_query):
 	try:
 		message_text_prepared = inline_query.query.strip()
-		if message_text_prepared!=''
+		if message_text_prepared!='':
 			god_mode	= inline_query.from_user.id==106129214
 			answer	= calcubot_eval(CALCUBOT_SCRIPT_PATH,True,inline_query.query,god_mode,CALCUBOT_WORDS)
 			calcubot.answer_inline_query(inline_query.id, answer)
