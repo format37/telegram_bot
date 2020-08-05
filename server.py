@@ -164,7 +164,7 @@ def query_text(inline_query):
 		else:
 			answer	= ['Empty expression..']
 			responce = [types.InlineQueryResultArticle('Result: ', answer[0], types.InputTextMessageContent( answer[0] ))] 
-			calcubot.answer_inline_query(inline_query.id, answer)
+			calcubot.answer_inline_query(inline_query.id, responce)
 	except Exception as e:
 		print(str(e))
 
