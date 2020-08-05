@@ -205,6 +205,8 @@ def send_plot(message):
 	elif message.text.lower()=='/plot@calcubot':
 		answer = 'Try this, for example:\n/plot@CalcuBot [ [math.sin(i)*pow(i,4) for i in range(10,30)] ]'
 		calcubot.reply_to(message, answer)
+	elif message.text[:6]=='/plot@' and message.text[:14].lower()!='/plot@calcubot':
+		pass
 	else:
 		message_text_prepared = str(message.text)[14:] if message.text[:14].lower()=='/plot@calcubot' else str(message.text)[5:]
 		god_mode = message.from_user.id==106129214
