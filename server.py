@@ -105,7 +105,7 @@ try:
 	ROVER_SPEED = 100
 	ROVER_SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_rover/'
 	sys.path.append(ROVER_SCRIPT_PATH)
-	from telegram_rover import bot_init as rover_init, move_cmd, move_f, move_b, move_l, move_r, rover_photo, rover_photo_night
+	from telegram_rover import bot_init as rover_init, move_cmd, move_f, move_b, move_l, move_r, rover_photo, rover_photo_night, rover_send_video_merged
 	rover	= rover_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,ROVER_SCRIPT_PATH)
 	bots.append( rover )
 
@@ -136,6 +136,10 @@ try:
 	@rover.message_handler(commands=['n'])
 	def rover_get_photo_night(message):
 		rover.reply_to(message, rover_photo_night(message.from_user.id) )
+		
+	@rover.message_handler(commands=['v'])
+	def rover_send_video(message):
+		rover.reply_to(message, rover_send_video_merged(message.from_user.id) )
 		
 except Exception as e:
 		print('rover',str(e))
