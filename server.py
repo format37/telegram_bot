@@ -12,7 +12,8 @@ import asyncio
 import sys
 import os
 
-SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_bot_server/'
+#SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_bot_server/'
+SCRIPT_PATH	= '/home/dvasilev/projects/telegram_bot_server/'
 
 #WEBHOOK_HOST = 'www.scriptlab.net'
 WEBHOOK_HOST = 'www.service.icecorp.ru'
