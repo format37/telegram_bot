@@ -12,9 +12,11 @@ import asyncio
 import sys
 import os
 
-SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_bot_server/'
+#SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_bot_server/'
+SCRIPT_PATH	= '/home/dvasilev/projects/telegram_bot_server/'
 
-WEBHOOK_HOST = 'www.scriptlab.net'
+#WEBHOOK_HOST = 'www.scriptlab.net'
+WEBHOOK_HOST = 'www.service.icecorp.ru'
 WEBHOOK_PORT = 8443  # 443, 80, 88 or 8443 (port need to be 'open')
 WEBHOOK_LISTEN = '0.0.0.0'  # In some VPS you may need to put here the IP addr
 
@@ -56,7 +58,7 @@ def default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT, SCRIPT_PATH):
 	return bot
 
 # === === === id37bot ++
-
+'''
 IDBOT_SCRIPT_PATH	= '/home/format37_gmail_com/projects/id37bot/'
 idbot	= default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,IDBOT_SCRIPT_PATH)
 bots.append( idbot )
@@ -94,12 +96,12 @@ def query_text(inline_query):
 		
 	except Exception as e:
 		print(str(e))
-		
+'''		
 # === === === id37bot --
 		
 		
 # === === === rover ++
-
+'''
 try:
 	ROVER_DELAY = 4
 	ROVER_SPEED = 100
@@ -147,12 +149,13 @@ try:
 		
 except Exception as e:
 		print('rover',str(e))
-		
+'''		
 # === === === rover --
 
 # === === === calcubot ++
 
-CALCUBOT_SCRIPT_PATH     = '/home/format37_gmail_com/projects/calcubot_python/'
+#CALCUBOT_SCRIPT_PATH     = '/home/format37_gmail_com/projects/calcubot_python/'
+CALCUBOT_SCRIPT_PATH     = '/home/dvasilev/projects/calcubot_python/'
 
 sys.path.append(CALCUBOT_SCRIPT_PATH)
 from calcubot import calcubot_init, calcubot_about, calcubot_help, calcubot_eval, calcubot_words, calcubot_plot
