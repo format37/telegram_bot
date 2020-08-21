@@ -12,11 +12,11 @@ import asyncio
 import sys
 import os
 
-#SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_bot_server/'
-SCRIPT_PATH	= '/home/dvasilev/projects/telegram_bot_server/'
+SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_bot_server/'
+#SCRIPT_PATH	= '/home/dvasilev/projects/telegram_bot_server/'
 
-#WEBHOOK_HOST = 'www.scriptlab.net'
-WEBHOOK_HOST = 'www.service.icecorp.ru'
+WEBHOOK_HOST = 'www.scriptlab.net'
+#WEBHOOK_HOST = 'www.service.icecorp.ru'
 WEBHOOK_PORT = 8443  # 443, 80, 88 or 8443 (port need to be 'open')
 WEBHOOK_LISTEN = '0.0.0.0'  # In some VPS you may need to put here the IP addr
 
@@ -150,8 +150,8 @@ except Exception as e:
 
 # === === === calcubot ++
 
-#CALCUBOT_SCRIPT_PATH     = '/home/format37_gmail_com/projects/calcubot_python/'
-CALCUBOT_SCRIPT_PATH     = '/home/dvasilev/projects/calcubot_python/'
+CALCUBOT_SCRIPT_PATH     = '/home/format37_gmail_com/projects/calcubot_python/'
+#CALCUBOT_SCRIPT_PATH     = '/home/dvasilev/projects/calcubot_python/'
 
 sys.path.append(CALCUBOT_SCRIPT_PATH)
 from calcubot import calcubot_init, calcubot_about, calcubot_help, calcubot_eval, calcubot_words, calcubot_plot
