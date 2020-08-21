@@ -111,39 +111,39 @@ try:
 
 	@rover.message_handler(commands=['cmd'])
 	def rover_move_cmd(message):
-		rover.reply_to(message, move_cmd(message.from_user.id,str(message.text)[4:]) )
+		rover.reply_to(message, move_cmd(message.chat.id,str(message.text)[4:]) )
 
 	@rover.message_handler(commands=['f'])
 	def rover_move_f(message):
-		rover.reply_to( message, move_f(message.from_user.id,ROVER_DELAY,ROVER_SPEED) )
+		rover.reply_to( message, move_f(message.chat.id,ROVER_DELAY,ROVER_SPEED) )
 		
 	@rover.message_handler(commands=['b'])
 	def rover_move_b(message):
-		rover.reply_to(message, move_b(message.from_user.id,ROVER_DELAY,ROVER_SPEED)	)	
+		rover.reply_to(message, move_b(message.chat.id,ROVER_DELAY,ROVER_SPEED)	)	
 		
 	@rover.message_handler(commands=['l'])
 	def rover_move_l(message):
-		rover.reply_to(message, move_l(message.from_user.id,ROVER_DELAY,ROVER_SPEED) )
+		rover.reply_to(message, move_l(message.chat.id,ROVER_DELAY,ROVER_SPEED) )
 		
 	@rover.message_handler(commands=['r'])
 	def rover_move_r(message):
-		rover.reply_to(message, move_r(message.from_user.id,ROVER_DELAY,ROVER_SPEED) )
+		rover.reply_to(message, move_r(message.chat.id,ROVER_DELAY,ROVER_SPEED) )
 
 	@rover.message_handler(commands=['p'])
 	def rover_get_photo(message):
-		rover.reply_to(message, rover_photo(message.from_user.id) )
+		rover.reply_to(message, rover_photo(message.chat.id) )
 	
 	@rover.message_handler(commands=['n'])
 	def rover_get_photo_night(message):
-		rover.reply_to(message, rover_photo_night(message.from_user.id) )
+		rover.reply_to(message, rover_photo_night(message.chat.id) )
 		
 	@rover.message_handler(commands=['c'])
 	def rover_set_charge_mode(message):
-		rover.reply_to(message, rover_charge_mode(message.from_user.id) )
+		rover.reply_to(message, rover_charge_mode(message.chat.id) )
 		
 	@rover.message_handler(commands=['v'])
 	def rover_send_video(message):
-		rover.reply_to(message, rover_send_video_merged(message.from_user.id) )
+		rover.reply_to(message, rover_send_video_merged(message.chat.id) )
 		
 except Exception as e:
 		print('rover',str(e))
