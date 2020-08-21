@@ -12,9 +12,11 @@ import asyncio
 import sys
 import os
 
-SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_bot_server/'
+#SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_bot_server/'
+SCRIPT_PATH	= '/home/dvasilev/projects/telegram_bot_server/'
 
-WEBHOOK_HOST = 'www.scriptlab.net'
+#WEBHOOK_HOST = 'www.scriptlab.net'
+WEBHOOK_HOST = 'www.service.icecorp.ru'
 WEBHOOK_PORT = 8443  # 443, 80, 88 or 8443 (port need to be 'open')
 WEBHOOK_LISTEN = '0.0.0.0'  # In some VPS you may need to put here the IP addr
 
@@ -56,7 +58,6 @@ def default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT, SCRIPT_PATH):
 	return bot
 
 # === === === id37bot ++
-
 IDBOT_SCRIPT_PATH	= '/home/format37_gmail_com/projects/id37bot/'
 idbot	= default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,IDBOT_SCRIPT_PATH)
 bots.append( idbot )
@@ -93,13 +94,11 @@ def query_text(inline_query):
 		idbot.answer_inline_query(inline_query.id, responce)
 		
 	except Exception as e:
-		print(str(e))
-		
+		print(str(e))		
 # === === === id37bot --
 		
 		
 # === === === rover ++
-
 try:
 	ROVER_DELAY = 4
 	ROVER_SPEED = 100
@@ -111,48 +110,48 @@ try:
 
 	@rover.message_handler(commands=['cmd'])
 	def rover_move_cmd(message):
-		rover.reply_to(message, move_cmd(message.from_user.id,str(message.text)[4:]) )
+		rover.reply_to(message, move_cmd(message.chat.id,str(message.text)[4:]) )
 
 	@rover.message_handler(commands=['f'])
 	def rover_move_f(message):
-		rover.reply_to( message, move_f(message.from_user.id,ROVER_DELAY,ROVER_SPEED) )
+		rover.reply_to( message, move_f(message.chat.id,ROVER_DELAY,ROVER_SPEED) )
 		
 	@rover.message_handler(commands=['b'])
 	def rover_move_b(message):
-		rover.reply_to(message, move_b(message.from_user.id,ROVER_DELAY,ROVER_SPEED)	)	
+		rover.reply_to(message, move_b(message.chat.id,ROVER_DELAY,ROVER_SPEED)	)	
 		
 	@rover.message_handler(commands=['l'])
 	def rover_move_l(message):
-		rover.reply_to(message, move_l(message.from_user.id,ROVER_DELAY,ROVER_SPEED) )
+		rover.reply_to(message, move_l(message.chat.id,ROVER_DELAY,ROVER_SPEED) )
 		
 	@rover.message_handler(commands=['r'])
 	def rover_move_r(message):
-		rover.reply_to(message, move_r(message.from_user.id,ROVER_DELAY,ROVER_SPEED) )
+		rover.reply_to(message, move_r(message.chat.id,ROVER_DELAY,ROVER_SPEED) )
 
 	@rover.message_handler(commands=['p'])
 	def rover_get_photo(message):
-		rover.reply_to(message, rover_photo(message.from_user.id) )
+		rover.reply_to(message, rover_photo(message.chat.id) )
 	
 	@rover.message_handler(commands=['n'])
 	def rover_get_photo_night(message):
-		rover.reply_to(message, rover_photo_night(message.from_user.id) )
+		rover.reply_to(message, rover_photo_night(message.chat.id) )
 		
 	@rover.message_handler(commands=['c'])
 	def rover_set_charge_mode(message):
-		rover.reply_to(message, rover_charge_mode(message.from_user.id) )
+		rover.reply_to(message, rover_charge_mode(message.chat.id) )
 		
 	@rover.message_handler(commands=['v'])
 	def rover_send_video(message):
-		rover.reply_to(message, rover_send_video_merged(message.from_user.id) )
+		rover.reply_to(message, rover_send_video_merged(message.chat.id) )
 		
 except Exception as e:
 		print('rover',str(e))
-		
 # === === === rover --
 
 # === === === calcubot ++
 
-CALCUBOT_SCRIPT_PATH     = '/home/format37_gmail_com/projects/calcubot_python/'
+#CALCUBOT_SCRIPT_PATH     = '/home/format37_gmail_com/projects/calcubot_python/'
+CALCUBOT_SCRIPT_PATH     = '/home/dvasilev/projects/calcubot_python/'
 
 sys.path.append(CALCUBOT_SCRIPT_PATH)
 from calcubot import calcubot_init, calcubot_about, calcubot_help, calcubot_eval, calcubot_words, calcubot_plot
