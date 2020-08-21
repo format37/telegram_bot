@@ -58,7 +58,6 @@ def default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT, SCRIPT_PATH):
 	return bot
 
 # === === === id37bot ++
-'''
 IDBOT_SCRIPT_PATH	= '/home/format37_gmail_com/projects/id37bot/'
 idbot	= default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,IDBOT_SCRIPT_PATH)
 bots.append( idbot )
@@ -95,13 +94,11 @@ def query_text(inline_query):
 		idbot.answer_inline_query(inline_query.id, responce)
 		
 	except Exception as e:
-		print(str(e))
-'''		
+		print(str(e))		
 # === === === id37bot --
 		
 		
 # === === === rover ++
-'''
 try:
 	ROVER_DELAY = 4
 	ROVER_SPEED = 100
@@ -149,7 +146,6 @@ try:
 		
 except Exception as e:
 		print('rover',str(e))
-'''		
 # === === === rover --
 
 # === === === calcubot ++
