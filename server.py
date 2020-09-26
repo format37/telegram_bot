@@ -61,20 +61,20 @@ def default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT, SCRIPT_PATH):
 try:
 	HCWB_SCRIPT_PATH	= '/home/format37_gmail_com/projects/cleaner_bot/'
 	sys.path.append(HCWB_SCRIPT_PATH)
-	from cleaner_bot_script import cleaner_bot_unauthorized
+	from cleaner_bot_script import cleaner_bot_user_authorized
 	from cleaner_bot_script import cleaner_bot_stats
+	
 	cleaner_bot	= default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,HCWB_SCRIPT_PATH)
 	bots.append( cleaner_bot )	
-
-	@cleaner_bot.message_handler(commands=['start'])
-	def cleaner_bot_start(message):		
-		cleaner_bot.reply_to(message, cleaner_bot_unauthorized())
 		
 	@cleaner_bot.message_handler(commands=['stat'])
 	def cleaner_bot_start(message):
-		filepath = cleaner_bot_stats()
-		photo = open(filepath, 'rb')
-		cleaner_bot.send_photo(message.chat.id, photo, reply_to_message_id = str(message), caption = 'data')
+		if cleaner_bot_user_authorized(message.from_user.id):
+			filepath = cleaner_bot_stats()
+			photo = open(filepath, 'rb')
+			cleaner_bot.send_photo(message.chat.id, photo, reply_to_message_id = str(message), caption = 'data')
+		else:
+			idbot.reply_to(message, 'unauthorized')
 		
 except Exception as e:
 	print('home_cleaners_watcher_bot',str(e))
