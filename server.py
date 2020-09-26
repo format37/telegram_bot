@@ -61,7 +61,6 @@ def default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT, SCRIPT_PATH):
 try:
 	HCWB_SCRIPT_PATH	= '/home/format37_gmail_com/projects/cleaner_bot/'
 	sys.path.append(HCWB_SCRIPT_PATH)
-	#from cleaner_bot_script import cleaner_bot_init
 	from cleaner_bot_script import cleaner_bot_unauthorized	
 	cleaner_bot	= default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,HCWB_SCRIPT_PATH)
 	bots.append( cleaner_bot )	
