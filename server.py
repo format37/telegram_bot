@@ -74,7 +74,7 @@ try:
 	def cleaner_bot_start(message):
 		filepath = cleaner_bot_stats()
 		photo = open(filepath, 'rb')
-		calcubot.send_photo(message.chat.id, photo, reply_to_message_id = str(message), caption = message_text_prepared)
+		calcubot.send_photo(message.chat.id, photo, reply_to_message_id = str(message), caption = 'data')
 		
 except Exception as e:
 	print('home_cleaners_watcher_bot',str(e))
