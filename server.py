@@ -69,6 +69,12 @@ try:
 	def cleaner_bot_start(message):		
 		cleaner_bot.reply_to(message, cleaner_bot_unauthorized())
 		
+	@cleaner_bot.message_handler(commands=['stat'])
+	def cleaner_bot_start(message):
+		filepath = cleaner_bot_stats()
+		photo = open(filepath, 'rb')
+		calcubot.send_photo(message.chat.id, photo, reply_to_message_id = str(message), caption = message_text_prepared)
+		
 except Exception as e:
 	print('home_cleaners_watcher_bot',str(e))
 # === === === home_cleaners_watcher_bot --
