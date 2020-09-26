@@ -57,6 +57,22 @@ def default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT, SCRIPT_PATH):
 
 	return bot
 
+# === === === home_cleaners_watcher_bot ++
+try:
+	HCWB_SCRIPT_PATH	= '/home/format37_gmail_com/projects/cleaner_bot/'
+	sys.path.append(HCWB_SCRIPT_PATH)
+	from cleaner_bot_script import cleaner_bot_unauthorized	
+	cleaner_bot	= default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,HCWB_SCRIPT_PATH)
+	bots.append( cleaner_bot )	
+
+	@cleaner_bot.message_handler(commands=['start'])
+	def cleaner_bot_start(message):		
+		idbot.reply_to(message, cleaner_bot_unauthorized())
+		
+except Exception as e:
+	print('home_cleaners_watcher_bot',str(e))
+# === === === home_cleaners_watcher_bot --
+
 # === === === id37bot ++
 IDBOT_SCRIPT_PATH	= '/home/format37_gmail_com/projects/id37bot/'
 idbot	= default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,IDBOT_SCRIPT_PATH)
@@ -95,8 +111,7 @@ def query_text(inline_query):
 		
 	except Exception as e:
 		print(str(e))		
-# === === === id37bot --
-		
+# === === === id37bot --		
 		
 # === === === rover ++
 try:
