@@ -73,8 +73,6 @@ try:
 			filepath = cleaner_bot_stats()
 			photo = open(filepath, 'rb')
 			cleaner_bot.send_photo(message.chat.id, photo, reply_to_message_id = str(message), caption = 'data')
-		else:
-			idbot.reply_to(message, 'unauthorized')
 		
 except Exception as e:
 	print('home_cleaners_watcher_bot',str(e))
