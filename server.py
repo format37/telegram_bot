@@ -86,7 +86,7 @@ try:
 				answer = cleaner_bot_alert(message.from_user.id,script_path,task)
 				cleaner_bot.send_message(cleaning_group_id, answer)
 			else:
-				answer = cleaner_bot_counter_plus(user_id,script_path,task)
+				answer = cleaner_bot_counter_plus(message.from_user.id,script_path,task)
 				cleaner_bot.reply_to(message, answer)
 
 except Exception as e:
