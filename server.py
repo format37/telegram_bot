@@ -94,7 +94,7 @@ try:
 	@cleaner_bot.message_handler(commands=['отмена'])
 	def cleaner_bot_task_cancel(message):
 		if cleaner_bot_user_authorized(message.from_user.id,script_path):
-			if message.text[:4]=='/отмена ':
+			if message.text[:8]=='/отмена ':
 				task = str(message.text)[8:]
 				answer = cleaner_bot_counter_minus(message.from_user.id,script_path,task)
 			else:
