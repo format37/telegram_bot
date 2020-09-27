@@ -83,7 +83,7 @@ try:
 		if cleaner_bot_user_authorized(message.from_user.id,script_path):
 			task = 'посуда'
 			if message.chat.id == message.from_user.id:
-				answer = cleaner_bot_alert(message.from_user.id,script_path,task)
+				answer = cleaner_bot_alert(script_path,task)
 				cleaner_bot.send_message(cleaning_group_id, answer)
 			else:
 				answer = cleaner_bot_counter_plus(message.from_user.id,script_path,task)
