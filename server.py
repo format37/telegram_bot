@@ -64,13 +64,14 @@ try:
 	from cleaner_bot_script import cleaner_bot_user_authorized
 	from cleaner_bot_script import cleaner_bot_stat
 	from cleaner_bot_script import cleaner_bot_alert
+	from cleaner_bot_script import cleaner_bot_counter_plus
 	
 	cleaner_bot	= default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,HCWB_SCRIPT_PATH)
 	bots.append( cleaner_bot )	
 	script_path = '/home/format37_gmail_com/projects/cleaner_bot/'
 	cleaning_group_id = '-440064142'
 	
-	@cleaner_bot.message_handler(commands=['stat'])
+	@cleaner_bot.message_handler(commands=['статистика'])
 	def cleaner_bot_stat_func(message):
 		if cleaner_bot_user_authorized(message.from_user.id,script_path):
 			filepath = cleaner_bot_stat(script_path)
