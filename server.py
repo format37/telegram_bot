@@ -82,6 +82,12 @@ try:
 			filepath = cleaner_bot_alert(script_path)
 			cleaner_bot.reply_to(message, cleaner_bot_alert(script_path))
 			
+	@cleaner_bot.message_handler(commands=['posuda'])
+	def cleaner_bot_alert(message):
+		if cleaner_bot_user_authorized(message.from_user.id,script_path):
+			filepath = cleaner_bot_alert(script_path)
+			cleaner_bot.reply_to(message, cleaner_bot_alert(script_path))
+			
 		
 except Exception as e:
 	print('home_cleaners_watcher_bot',str(e))
