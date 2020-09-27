@@ -68,6 +68,7 @@ try:
 	cleaner_bot	= default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,HCWB_SCRIPT_PATH)
 	bots.append( cleaner_bot )	
 	script_path = '/home/format37_gmail_com/projects/cleaner_bot/'
+	cleaning_group_id = '-440064142'
 		
 	@cleaner_bot.message_handler(commands=['stat'])
 	def cleaner_bot_stat_func(message):
@@ -75,24 +76,17 @@ try:
 			filepath = cleaner_bot_stat(script_path)
 			photo = open(filepath, 'rb')
 			cleaner_bot.send_photo(message.chat.id, photo, reply_to_message_id = str(message))
-		else:
-			cleaner_bot.reply_to(message, 'unauthorized: '+str(message.from_user.id))
-	'''			
+
 	@cleaner_bot.message_handler(commands=['посуда'])
-	def cleaner_bot_alert(message):
+	def cleaner_bot_alert_dishes(message):
 		if cleaner_bot_user_authorized(message.from_user.id,script_path):
-			#filepath = cleaner_bot_alert(script_path)
-			cleaner_bot.reply_to(message, str(message.from_user))
-	'''
-	@cleaner_bot.message_handler(commands=['посуда'])
-	def cleaner_bot_alert_func(message):
-		if cleaner_bot_user_authorized(message.from_user.id,script_path):
-			#filepath = cleaner_bot_alert(script_path)
-			cleaner_bot.reply_to(message, cleaner_bot_alert(message.from_user.id,script_path))
-		else:
-			cleaner_bot.reply_to(message, 'unauthorized: '+str(message.from_user.id))
-			
-		
+			task = 'посуда'
+			if message.chat.id == message.from_user.id:
+				cleaner_bot.reply_to(message, task+' counter++')
+			else:
+				answer = cleaner_bot_alert(message.from_user.id,script_path,task)
+				cleaner_bot.send_message(message, answer)
+
 except Exception as e:
 	print('home_cleaners_watcher_bot',str(e))
 # === === === home_cleaners_watcher_bot --
