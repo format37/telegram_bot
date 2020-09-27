@@ -62,7 +62,7 @@ try:
 	HCWB_SCRIPT_PATH	= '/home/format37_gmail_com/projects/cleaner_bot/'
 	sys.path.append(HCWB_SCRIPT_PATH)
 	from cleaner_bot_script import cleaner_bot_user_authorized
-	from cleaner_bot_script import cleaner_bot_stats
+	from cleaner_bot_script import cleaner_bot_stat
 	from cleaner_bot_script import cleaner_bot_alert
 	
 	cleaner_bot	= default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,HCWB_SCRIPT_PATH)
@@ -70,9 +70,9 @@ try:
 	script_path = '/home/format37_gmail_com/projects/cleaner_bot/'
 		
 	@cleaner_bot.message_handler(commands=['stat'])
-	def cleaner_bot_stat(message):
+	def cleaner_bot_stat_func(message):
 		if cleaner_bot_user_authorized(message.from_user.id,script_path):
-			filepath = cleaner_bot_stats(script_path)
+			filepath = cleaner_bot_stat(script_path)
 			photo = open(filepath, 'rb')
 			cleaner_bot.send_photo(message.chat.id, photo, reply_to_message_id = str(message), caption = 'data')
 	'''			
@@ -82,8 +82,8 @@ try:
 			filepath = cleaner_bot_alert(script_path)
 			cleaner_bot.reply_to(message, str(message.from_user))
 	'''
-	@cleaner_bot.message_handler(commands=['posuda'])
-	def cleaner_bot_alert(message):
+	@cleaner_bot.message_handler(commands=['посуда'])
+	def cleaner_bot_alert_func(message):
 		if cleaner_bot_user_authorized(message.from_user.id,script_path):
 			filepath = cleaner_bot_alert(script_path)
 			cleaner_bot.reply_to(message, cleaner_bot_alert(script_path))
