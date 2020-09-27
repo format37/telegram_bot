@@ -72,40 +72,28 @@ try:
 	script_path = '/home/format37_gmail_com/projects/cleaner_bot/'
 	cleaning_group_id = '-440064142'
 	
-	@cleaner_bot.message_handler(commands=['статистика'])
+	@cleaner_bot.message_handler(commands=['stat'])
 	def cleaner_bot_stat_func(message):
 		if cleaner_bot_user_authorized(message.from_user.id,script_path):
 			filepath = cleaner_bot_stat(script_path)
 			photo = open(filepath, 'rb')
-			cleaner_bot.send_photo(message.chat.id, photo, reply_to_message_id = str(message))
+			cleaner_bot.send_photo(message.chat.id, photo, reply_to_message_id = str(message))	
 			
-	'''
-	if message.text=='/cl':
-		answer = 'Try this, for example:\n/cl 2+2'
-	elif message.text.lower()=='/cl@calcubot':
-		answer = 'Try this, for example:\n/cl@CalcuBot 2+2'
-	elif message.text[:4]=='/cl@' and message.text[:12].lower()!='/cl@calcubot':
-		answer = ''
-		pass
-	else:
-		message_text_prepared = str(message.text)[12:]
-	'''			
-			
-	@cleaner_bot.message_handler(commands=['отмена'])
+	@cleaner_bot.message_handler(commands=['cancel'])
 	def cleaner_bot_task_cancel(message):
 		if cleaner_bot_user_authorized(message.from_user.id,script_path):
-			if message.text[:8]=='/отмена ':
+			if message.text[:8]=='/cancel ':
 				task = str(message.text)[8:]
 				answer = cleaner_bot_counter_minus(message.from_user.id,script_path,task)
 			else:
-				answer = 'Ошибка в команде: '+message.text[:8]
+				answer = 'Command error: "'+message.text[:8]+'"'
 			cleaner_bot.reply_to(message, answer)
 			
 			
-	@cleaner_bot.message_handler(commands=['посуда'])
+	@cleaner_bot.message_handler(commands=['dish'])
 	def cleaner_bot_alert_dishes(message):
 		if cleaner_bot_user_authorized(message.from_user.id,script_path):
-			task = 'посуда'
+			task = 'dish'
 			if message.chat.id == message.from_user.id:
 				answer = cleaner_bot_alert(script_path,task)
 				cleaner_bot.send_message(cleaning_group_id, answer)
@@ -113,10 +101,10 @@ try:
 				answer = cleaner_bot_counter_plus(message.from_user.id,script_path,task)
 				cleaner_bot.reply_to(message, answer)
 				
-	@cleaner_bot.message_handler(commands=['мусор'])
+	@cleaner_bot.message_handler(commands=['garbage'])
 	def cleaner_bot_alert_garbage(message):
 		if cleaner_bot_user_authorized(message.from_user.id,script_path):
-			task = 'мусор'
+			task = 'garbage'
 			if message.chat.id == message.from_user.id:
 				answer = cleaner_bot_alert(script_path,task)
 				cleaner_bot.send_message(cleaning_group_id, answer)
@@ -124,10 +112,10 @@ try:
 				answer = cleaner_bot_counter_plus(message.from_user.id,script_path,task)
 				cleaner_bot.reply_to(message, answer)
 				
-	@cleaner_bot.message_handler(commands=['туалет'])
+	@cleaner_bot.message_handler(commands=['toilet'])
 	def cleaner_bot_alert_toilet(message):
 		if cleaner_bot_user_authorized(message.from_user.id,script_path):
-			task = 'туалет'
+			task = 'toilet'
 			if message.chat.id == message.from_user.id:
 				answer = cleaner_bot_alert(script_path,task)
 				cleaner_bot.send_message(cleaning_group_id, answer)
