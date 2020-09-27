@@ -65,6 +65,7 @@ try:
 	from cleaner_bot_script import cleaner_bot_stat
 	from cleaner_bot_script import cleaner_bot_alert
 	from cleaner_bot_script import cleaner_bot_counter_plus
+	from cleaner_bot_script import cleaner_bot_counter_minus
 	
 	cleaner_bot	= default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,HCWB_SCRIPT_PATH)
 	bots.append( cleaner_bot )	
@@ -77,7 +78,30 @@ try:
 			filepath = cleaner_bot_stat(script_path)
 			photo = open(filepath, 'rb')
 			cleaner_bot.send_photo(message.chat.id, photo, reply_to_message_id = str(message))
-
+			
+	'''
+	if message.text=='/cl':
+		answer = 'Try this, for example:\n/cl 2+2'
+	elif message.text.lower()=='/cl@calcubot':
+		answer = 'Try this, for example:\n/cl@CalcuBot 2+2'
+	elif message.text[:4]=='/cl@' and message.text[:12].lower()!='/cl@calcubot':
+		answer = ''
+		pass
+	else:
+		message_text_prepared = str(message.text)[12:]
+	'''			
+			
+	@cleaner_bot.message_handler(commands=['отмена'])
+	def cleaner_bot_task_cancel(message):
+		if cleaner_bot_user_authorized(message.from_user.id,script_path):
+			if message.text[:4]=='/отмена ':
+				task = str(message.text)[8:]
+				answer = cleaner_bot_counter_minus(message.from_user.id,script_path,task)
+			else:
+				answer = 'Ошибка в команде'
+			cleaner_bot.reply_to(message, answer)
+			
+			
 	@cleaner_bot.message_handler(commands=['посуда'])
 	def cleaner_bot_alert_dishes(message):
 		if cleaner_bot_user_authorized(message.from_user.id,script_path):
