@@ -88,6 +88,28 @@ try:
 			else:
 				answer = cleaner_bot_counter_plus(message.from_user.id,script_path,task)
 				cleaner_bot.reply_to(message, answer)
+				
+	@cleaner_bot.message_handler(commands=['мусор'])
+	def cleaner_bot_alert_garbage(message):
+		if cleaner_bot_user_authorized(message.from_user.id,script_path):
+			task = 'мусор'
+			if message.chat.id == message.from_user.id:
+				answer = cleaner_bot_alert(script_path,task)
+				cleaner_bot.send_message(cleaning_group_id, answer)
+			else:
+				answer = cleaner_bot_counter_plus(message.from_user.id,script_path,task)
+				cleaner_bot.reply_to(message, answer)
+				
+	@cleaner_bot.message_handler(commands=['туалет'])
+	def cleaner_bot_alert_toilet(message):
+		if cleaner_bot_user_authorized(message.from_user.id,script_path):
+			task = 'туалет'
+			if message.chat.id == message.from_user.id:
+				answer = cleaner_bot_alert(script_path,task)
+				cleaner_bot.send_message(cleaning_group_id, answer)
+			else:
+				answer = cleaner_bot_counter_plus(message.from_user.id,script_path,task)
+				cleaner_bot.reply_to(message, answer)
 
 except Exception as e:
 	print('home_cleaners_watcher_bot',str(e))
