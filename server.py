@@ -69,7 +69,7 @@ try:
 	bots.append( cleaner_bot )	
 	script_path = '/home/format37_gmail_com/projects/cleaner_bot/'
 	cleaning_group_id = '-440064142'
-		
+	
 	@cleaner_bot.message_handler(commands=['stat'])
 	def cleaner_bot_stat_func(message):
 		if cleaner_bot_user_authorized(message.from_user.id,script_path):
@@ -84,8 +84,9 @@ try:
 			if message.chat.id == message.from_user.id:
 				answer = cleaner_bot_alert(message.from_user.id,script_path,task)
 				cleaner_bot.send_message(cleaning_group_id, answer)
-			else:				
-				cleaner_bot.reply_to(message, task+' counter++')
+			else:
+				answer = cleaner_bot_counter_plus(user_id,script_path,task)
+				cleaner_bot.reply_to(message, answer)
 
 except Exception as e:
 	print('home_cleaners_watcher_bot',str(e))
