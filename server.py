@@ -70,7 +70,7 @@ try:
 	cleaner_bot	= default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,HCWB_SCRIPT_PATH)
 	bots.append( cleaner_bot )	
 	script_path = '/home/format37_gmail_com/projects/cleaner_bot/'
-	cleaning_group_id = '-440064142'
+	cleaning_group_id = '-37549110'
 	
 	@cleaner_bot.message_handler(commands=['stat'])
 	def cleaner_bot_stat_func(message):
