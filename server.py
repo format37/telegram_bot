@@ -78,13 +78,13 @@ try:
 			
 	@cleaner_bot.message_handler(commands=['посуда'])
 	def cleaner_bot_alert(message):
-		if cleaner_bot_user_authorized(message.from_user.id,script_path):
+		if cleaner_bot_user_authorized(message.from_user,script_path):
 			filepath = cleaner_bot_alert(script_path)
 			cleaner_bot.reply_to(message, cleaner_bot_alert(script_path))
 			
 	@cleaner_bot.message_handler(commands=['posuda'])
 	def cleaner_bot_alert(message):
-		if cleaner_bot_user_authorized(message.from_user.id,script_path):
+		if cleaner_bot_user_authorized(message.from_user,script_path):
 			filepath = cleaner_bot_alert(script_path)
 			cleaner_bot.reply_to(message, cleaner_bot_alert(script_path))
 			
