@@ -98,7 +98,7 @@ try:
 				task = str(message.text)[8:]
 				answer = cleaner_bot_counter_minus(message.from_user.id,script_path,task)
 			else:
-				answer = 'Ошибка в команде'
+				answer = 'Ошибка в команде: '+message.text[:8]
 			cleaner_bot.reply_to(message, answer)
 			
 			
