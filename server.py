@@ -63,16 +63,25 @@ try:
 	sys.path.append(HCWB_SCRIPT_PATH)
 	from cleaner_bot_script import cleaner_bot_user_authorized
 	from cleaner_bot_script import cleaner_bot_stats
+	from cleaner_bot_script import cleaner_bot_alert
 	
 	cleaner_bot	= default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,HCWB_SCRIPT_PATH)
 	bots.append( cleaner_bot )	
+	script_path = '/home/format37_gmail_com/projects/cleaner_bot/'
 		
 	@cleaner_bot.message_handler(commands=['stat'])
-	def cleaner_bot_start(message):
-		if cleaner_bot_user_authorized(message.from_user.id):
-			filepath = cleaner_bot_stats()
+	def cleaner_bot_stat(message):
+		if cleaner_bot_user_authorized(message.from_user.id,script_path):
+			filepath = cleaner_bot_stats(script_path)
 			photo = open(filepath, 'rb')
 			cleaner_bot.send_photo(message.chat.id, photo, reply_to_message_id = str(message), caption = 'data')
+			
+	@cleaner_bot.message_handler(commands=['посуда'])
+	def cleaner_bot_alert(message):
+		if cleaner_bot_user_authorized(message.from_user.id,script_path):
+			filepath = cleaner_bot_alert(script_path)
+			cleaner_bot.reply_to(message, cleaner_bot_alert(script_path))
+			
 		
 except Exception as e:
 	print('home_cleaners_watcher_bot',str(e))
