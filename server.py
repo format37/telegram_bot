@@ -82,10 +82,10 @@ try:
 		if cleaner_bot_user_authorized(message.from_user.id,script_path):
 			task = 'посуда'
 			if message.chat.id == message.from_user.id:
-				cleaner_bot.reply_to(message, task+' counter++')
-			else:
 				answer = cleaner_bot_alert(message.from_user.id,script_path,task)
-				cleaner_bot.send_message(message, answer)
+				cleaner_bot.send_message(cleaning_group_id, answer)
+			else:				
+				cleaner_bot.reply_to(message, task+' counter++')
 
 except Exception as e:
 	print('home_cleaners_watcher_bot',str(e))
