@@ -177,6 +177,8 @@ bots.append( pplbackupbot )
 def pplbackupbot_user(message):
 	if message.chat.id==106129214:
 		pplbackupbot.reply_to(message, 'ok')
+	else:
+		pplbackupbot.reply_to(message, 'i dont know u ppl. '+str(message.chat.id))
 
 '''
 @calcubot.message_handler()
