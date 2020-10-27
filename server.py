@@ -170,7 +170,7 @@ def query_text(inline_query):
 # === === === pplbackupbot ++
 # experiment
 PPLBACKUP_SCRIPT_PATH	= '/home/format37_gmail_com/projects/deeppavlov_rugpt3/'
-pplbackupbot	= default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,IDBOT_SCRIPT_PATH)
+pplbackupbot	= default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,PPLBACKUP_SCRIPT_PATH)
 bots.append( pplbackupbot )
 
 @pplbackupbot.message_handler()
