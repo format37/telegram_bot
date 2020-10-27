@@ -179,20 +179,12 @@ bots.append( pplbackupbot )
 
 @pplbackupbot.message_handler()
 def pplbackupbot_user(message):
-	if message.chat.id==106129214:
-		pplbackupbot_url = 'http://95.165.139.53/talk?question='+urllib.parse.quote_plus(str(message.text))
-		pplbackupbot.reply_to(message, str(requests.get(pplbackupbot_url).text))
-	else:
-		pplbackupbot.reply_to(message, 'i dont know u ppl. '+str(message.chat.id))
-
-'''
-@calcubot.message_handler()
-def send_pm(message):
-	if message.chat.id==message.from_user.id:
-		god_mode = message.from_user.id==106129214
-		answer	= calcubot_eval(CALCUBOT_SCRIPT_PATH,False, str(message.text),god_mode,CALCUBOT_WORDS)
-		calcubot.reply_to(message, answer)
-'''
+	if message.chat.id==106129214 or message.chat.id==-160046375:
+		question = str(message.text)
+		if '??' in question:
+			question = question.replace('??','?')
+			pplbackupbot_url = 'http://95.165.139.53/talk?question='+urllib.parse.quote_plus(question)
+			pplbackupbot.reply_to(message, str(requests.get(pplbackupbot_url).text))
 # === === === pplbackupbot --
 		
 # === === === rover ++
