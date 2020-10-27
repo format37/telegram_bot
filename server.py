@@ -13,6 +13,9 @@ import sys
 import os
 import requests
 
+import urllib.parse
+from urllib.parse import urlparse
+
 SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_bot_server/'
 #SCRIPT_PATH	= '/home/dvasilev/projects/telegram_bot_server/'
 
@@ -177,7 +180,7 @@ bots.append( pplbackupbot )
 @pplbackupbot.message_handler()
 def pplbackupbot_user(message):
 	if message.chat.id==106129214:
-		pplbackupbot_url = 'http://95.165.139.53/talk?question='+str(message.text)
+		pplbackupbot_url = 'http://95.165.139.53/talk?question='+urllib.parse.quote_plus(str(message.text))
 		pplbackupbot.reply_to(message, str(requests.get(pplbackupbot_url).text))
 	else:
 		pplbackupbot.reply_to(message, 'i dont know u ppl. '+str(message.chat.id))
