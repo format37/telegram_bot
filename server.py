@@ -175,8 +175,17 @@ bots.append( pplbackupbot )
 
 @pplbackupbot.message_handler()
 def pplbackupbot_user(message):
-	if message.chat.id=='106129214':
+	if message.chat.id==106129214:
 		pplbackupbot.reply_to(message, 'ok')
+
+'''
+@calcubot.message_handler()
+def send_pm(message):
+	if message.chat.id==message.from_user.id:
+		god_mode = message.from_user.id==106129214
+		answer	= calcubot_eval(CALCUBOT_SCRIPT_PATH,False, str(message.text),god_mode,CALCUBOT_WORDS)
+		calcubot.reply_to(message, answer)
+'''
 # === === === pplbackupbot --
 		
 # === === === rover ++
