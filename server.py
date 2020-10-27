@@ -179,7 +179,7 @@ bots.append( pplbackupbot )
 
 @pplbackupbot.message_handler()
 def pplbackupbot_user(message):
-	#if message.chat.id==106129214 or message.chat.id==-160046375:
+	if message.chat.id==106129214 or message.chat.id==-160046375:
 	question = str(message.text)
 	if '??' in question:
 		question = question.replace('??','?')
