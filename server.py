@@ -166,8 +166,21 @@ def query_text(inline_query):
 	except Exception as e:
 		print(str(e))		
 # === === === id37bot --		
+
+# === === === pplbackupbot ++
+# experiment
+PPLBACKUP_SCRIPT_PATH	= '/home/format37_gmail_com/projects/deeppavlov_rugpt3/'
+pplbackupbot	= default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,IDBOT_SCRIPT_PATH)
+bots.append( pplbackupbot )
+
+@pplbackupbot.message_handler()
+def pplbackupbot_user(message):
+	if message.chat.id=='106129214'
+		pplbackupbot.reply_to(message, 'ok')
+# === === === pplbackupbot --
 		
 # === === === rover ++
+'''
 try:
 	ROVER_DELAY = 4
 	ROVER_SPEED = 100
@@ -215,6 +228,7 @@ try:
 		
 except Exception as e:
 		print('rover',str(e))
+'''
 # === === === rover --
 
 # === === === calcubot ++
