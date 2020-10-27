@@ -172,19 +172,19 @@ def query_text(inline_query):
 # === === === id37bot --		
 
 # === === === pplbackupbot ++
-# experiment x
+# experiment
 PPLBACKUP_SCRIPT_PATH	= '/home/format37_gmail_com/projects/deeppavlov_rugpt3/'
 pplbackupbot	= default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,PPLBACKUP_SCRIPT_PATH)
 bots.append( pplbackupbot )
 
 @pplbackupbot.message_handler()
 def pplbackupbot_user(message):
-	#if message.chat.id==106129214 or message.chat.id==-160046375:
-	question = str(message.text)
-	if '??' in question:
-		question = question.replace('??','?')
-		pplbackupbot_url = 'http://95.165.139.53/talk?question='+urllib.parse.quote_plus(question)
-		pplbackupbot.reply_to(message, str(requests.get(pplbackupbot_url).text))
+	if message.chat.id==106129214 or message.chat.id==-160046375:
+		question = str(message.text)
+		if '??' in question:
+			question = question.replace('??','?')
+			pplbackupbot_url = 'http://95.165.139.53/talk?question='+urllib.parse.quote_plus(question)
+			pplbackupbot.reply_to(message, str(requests.get(pplbackupbot_url).text))
 # === === === pplbackupbot --
 		
 # === === === rover ++
