@@ -181,9 +181,9 @@ bots.append( pplbackupbot )
 def pplbackupbot_user(message):
 	if message.chat.id==106129214 or message.chat.id==-160046375:
 		question = str(message.text)
-		if '??' in question:
+		if '??' in question or '/cmd ' in question:
 			group_id	= str(message.chat.id)
-			user_id		= str(4420223003) #vova
+			user_id		= str(message.from_user.id) #vova
 			question = question.replace('??','?')
 			pplbackupbot_url = 'http://95.165.139.53/talk?group_id='+group_id+'&user_id='+user_id+'&question='+urllib.parse.quote_plus(question)
 			pplbackupbot.reply_to(message, str(requests.get(pplbackupbot_url).text))
