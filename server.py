@@ -187,6 +187,7 @@ def pplbackupbot_user(message):
 				user_id		= str(message.from_user.id)
 				question = question.replace('??','?')
 				pplbackupbot_url = 'http://95.165.139.53/talk?group_id='+group_id+'&user_id='+user_id+'&question='+urllib.parse.quote_plus(question)
+				print(pplbackupbot_url)
 				pplbackupbot.reply_to(message, str(requests.get(pplbackupbot_url).text))
 	except Exception as e:
 		print('catch:',str(e))
