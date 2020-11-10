@@ -179,16 +179,15 @@ bots.append( pplbackupbot )
 
 @pplbackupbot.message_handler()
 def pplbackupbot_user(message):
-	try:
-		if message.chat.id==106129214 or message.chat.id==-160046375:
-			question = str(message.text)
-			if '??' in question or '/set ' in question:
-				group_id	= str(message.chat.id)
-				user_id		= str(message.from_user.id)
-				question = question.replace('??','?')
-				pplbackupbot_url = 'http://95.165.139.53/talk?group_id='+group_id+'&user_id='+user_id+'&question='+urllib.parse.quote_plus(question)
-				#print(pplbackupbot_url)
-				pplbackupbot.reply_to(message, str(requests.get(pplbackupbot_url).text))
+	try:		
+		question = str(message.text)
+		if '??' in question or '/set ' in question:
+			group_id	= str(message.chat.id)
+			user_id		= str(message.from_user.id)
+			question = question.replace('??','?')
+			pplbackupbot_url = 'http://95.165.139.53/talk?group_id='+group_id+'&user_id='+user_id+'&question='+urllib.parse.quote_plus(question)
+			#print(pplbackupbot_url)
+			pplbackupbot.reply_to(message, str(requests.get(pplbackupbot_url).text))
 	except Exception as e:
 		print('catch:',str(e))
 # === === === pplbackupbot --
