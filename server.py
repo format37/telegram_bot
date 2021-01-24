@@ -77,17 +77,19 @@ try:
 	#script_path = '/home/dvasilev/projects/telegram_bots/cleaner_bot/'
 	cleaning_group_id = '-37549110'
 
-	@cleaner_bot.message_handler()
+	"""@cleaner_bot.message_handler()
 	def cleaner_bot_any(message):
 		print('k')
-		cleaner_bot.reply_to(message, 'answer')
+		cleaner_bot.reply_to(message, 'answer')"""
 
 	@cleaner_bot.message_handler(commands=['stat'])
 	def cleaner_bot_stat_func(message):
 		if cleaner_bot_user_authorized(message.from_user.id,HCWB_SCRIPT_PATH):
 			filepath = cleaner_bot_stat(HCWB_SCRIPT_PATH)
 			photo = open(filepath, 'rb')
-			cleaner_bot.send_photo(message.chat.id, photo, reply_to_message_id = str(message))	
+			cleaner_bot.send_photo(message.chat.id, photo, reply_to_message_id = str(message))
+		else:
+			print('unauthorized', message.from_user.id, HCWB_SCRIPT_PATH)
 			
 	@cleaner_bot.message_handler(commands=['cancel'])
 	def cleaner_bot_task_cancel(message):
