@@ -74,22 +74,22 @@ try:
 	cleaner_bot	= default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,HCWB_SCRIPT_PATH)
 	bots.append( cleaner_bot )	
 	#script_path = '/home/format37_gmail_com/projects/cleaner_bot/'
-	script_path = '/home/dvasilev/projects/telegram_bots/cleaner_bot/'
+	#script_path = '/home/dvasilev/projects/telegram_bots/cleaner_bot/'
 	cleaning_group_id = '-37549110'
 	
 	@cleaner_bot.message_handler(commands=['stat'])
 	def cleaner_bot_stat_func(message):
-		if cleaner_bot_user_authorized(message.from_user.id,script_path):
-			filepath = cleaner_bot_stat(script_path)
+		if cleaner_bot_user_authorized(message.from_user.id,HCWB_SCRIPT_PATH):
+			filepath = cleaner_bot_stat(HCWB_SCRIPT_PATH)
 			photo = open(filepath, 'rb')
 			cleaner_bot.send_photo(message.chat.id, photo, reply_to_message_id = str(message))	
 			
 	@cleaner_bot.message_handler(commands=['cancel'])
 	def cleaner_bot_task_cancel(message):
-		if cleaner_bot_user_authorized(message.from_user.id,script_path):
+		if cleaner_bot_user_authorized(message.from_user.id,HCWB_SCRIPT_PATH):
 			if message.text[:8]=='/cancel ':
 				task = str(message.text)[8:]
-				answer = cleaner_bot_counter_minus(message.from_user.id,script_path,task)
+				answer = cleaner_bot_counter_minus(message.from_user.id,HCWB_SCRIPT_PATH,task)
 			else:
 				answer = 'Command error: "'+message.text[:8]+'"'
 			cleaner_bot.reply_to(message, answer)
@@ -97,46 +97,46 @@ try:
 			
 	@cleaner_bot.message_handler(commands=['dish'])
 	def cleaner_bot_alert_dishes(message):
-		if cleaner_bot_user_authorized(message.from_user.id,script_path):
+		if cleaner_bot_user_authorized(message.from_user.id,HCWB_SCRIPT_PATH):
 			task = 'dish'
 			if message.chat.id == message.from_user.id:
-				answer = cleaner_bot_alert(script_path,task)
+				answer = cleaner_bot_alert(HCWB_SCRIPT_PATH,task)
 				cleaner_bot.send_message(cleaning_group_id, answer)
 			else:
-				answer = cleaner_bot_counter_plus(message.from_user.id,script_path,task)
+				answer = cleaner_bot_counter_plus(message.from_user.id,HCWB_SCRIPT_PATH,task)
 				cleaner_bot.reply_to(message, answer)
 				
 	@cleaner_bot.message_handler(commands=['garbage'])
 	def cleaner_bot_alert_garbage(message):
-		if cleaner_bot_user_authorized(message.from_user.id,script_path):
+		if cleaner_bot_user_authorized(message.from_user.id,HCWB_SCRIPT_PATH):
 			task = 'garbage'
 			if message.chat.id == message.from_user.id:
-				answer = cleaner_bot_alert(script_path,task)
+				answer = cleaner_bot_alert(HCWB_SCRIPT_PATH,task)
 				cleaner_bot.send_message(cleaning_group_id, answer)
 			else:
-				answer = cleaner_bot_counter_plus(message.from_user.id,script_path,task)
+				answer = cleaner_bot_counter_plus(message.from_user.id,HCWB_SCRIPT_PATH,task)
 				cleaner_bot.reply_to(message, answer)
 
 	@cleaner_bot.message_handler(commands=['toilet'])
 	def cleaner_bot_alert_toilet(message):
-		if cleaner_bot_user_authorized(message.from_user.id,script_path):
+		if cleaner_bot_user_authorized(message.from_user.id,HCWB_SCRIPT_PATH):
 			task = 'toilet'
 			if message.chat.id == message.from_user.id:
-				answer = cleaner_bot_alert(script_path,task)
+				answer = cleaner_bot_alert(HCWB_SCRIPT_PATH,task)
 				cleaner_bot.send_message(cleaning_group_id, answer)
 			else:
-				answer = cleaner_bot_counter_plus(message.from_user.id,script_path,task)
+				answer = cleaner_bot_counter_plus(message.from_user.id,HCWB_SCRIPT_PATH,task)
 				cleaner_bot.reply_to(message, answer)
 
 	@cleaner_bot.message_handler(commands=['dry'])
 	def cleaner_bot_alert_dry(message):
-		if cleaner_bot_user_authorized(message.from_user.id,script_path):
+		if cleaner_bot_user_authorized(message.from_user.id,HCWB_SCRIPT_PATH):
 			task = 'dry'
 			if message.chat.id == message.from_user.id:
-				answer = cleaner_bot_alert(script_path,task)
+				answer = cleaner_bot_alert(HCWB_SCRIPT_PATH,task)
 				cleaner_bot.send_message(cleaning_group_id, answer)
 			else:
-				answer = cleaner_bot_counter_plus(message.from_user.id,script_path,task)
+				answer = cleaner_bot_counter_plus(message.from_user.id,HCWB_SCRIPT_PATH,task)
 				cleaner_bot.reply_to(message, answer)
 
 except Exception as e:
