@@ -17,7 +17,7 @@ import urllib.parse
 from urllib.parse import urlparse
 
 #SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_bot_server/'
-SCRIPT_PATH	= '/home/dvasilev/projects/telegram_bot_server/'
+SCRIPT_PATH	= '/home/dvasilev/projects/telegram_bots/telegram_bot_server/'
 
 WEBHOOK_HOST = 'service.icecorp.ru'
 WEBHOOK_PORT = 8443  # 443, 80, 88 or 8443 (port need to be 'open')
@@ -62,7 +62,8 @@ def default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT, SCRIPT_PATH):
 
 # === === === home_cleaners_watcher_bot ++
 try:
-	HCWB_SCRIPT_PATH	= '/home/format37_gmail_com/projects/cleaner_bot/'
+	#HCWB_SCRIPT_PATH	= '/home/format37_gmail_com/projects/cleaner_bot/'
+	HCWB_SCRIPT_PATH = '/home/dvasilev/projects/telegram_bots/cleaner_bot/'
 	sys.path.append(HCWB_SCRIPT_PATH)
 	from cleaner_bot_script import cleaner_bot_user_authorized
 	from cleaner_bot_script import cleaner_bot_stat
@@ -72,7 +73,8 @@ try:
 	
 	cleaner_bot	= default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,HCWB_SCRIPT_PATH)
 	bots.append( cleaner_bot )	
-	script_path = '/home/format37_gmail_com/projects/cleaner_bot/'
+	#script_path = '/home/format37_gmail_com/projects/cleaner_bot/'
+	script_path = '/home/dvasilev/projects/telegram_bots/cleaner_bot/'
 	cleaning_group_id = '-37549110'
 	
 	@cleaner_bot.message_handler(commands=['stat'])
@@ -142,7 +144,8 @@ except Exception as e:
 # === === === home_cleaners_watcher_bot --
 
 # === === === id37bot ++
-IDBOT_SCRIPT_PATH	= '/home/format37_gmail_com/projects/id37bot/'
+#IDBOT_SCRIPT_PATH	= '/home/format37_gmail_com/projects/id37bot/'
+IDBOT_SCRIPT_PATH	=  '/home/dvasilev/projects/telegram_bots/id37bot/'
 idbot	= default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,IDBOT_SCRIPT_PATH)
 bots.append( idbot )
 
@@ -154,10 +157,10 @@ def idbot_user(message):
 def idbot_group(message):
 	idbot.reply_to(message, str(message.chat.id))
 
-@idbot.message_handler(commands=['link'])
+"""@idbot.message_handler(commands=['link'])
 def idbot_group(message):
 	idbot.reply_to(message, 'https://scriptlab.net/telegram/bots/relaybot/relaylocked.php?chat='+str(message.chat.id)+'&text=example')
-	
+"""
 @idbot.inline_handler(func=lambda chosen_inline_result: True)
 def query_text(inline_query):
 	try:		
@@ -257,8 +260,8 @@ except Exception as e:
 
 # === === === calcubot ++
 
-CALCUBOT_SCRIPT_PATH     = '/home/format37_gmail_com/projects/calcubot_python/'
-#CALCUBOT_SCRIPT_PATH     = '/home/dvasilev/projects/calcubot_python/'
+#CALCUBOT_SCRIPT_PATH     = '/home/format37_gmail_com/projects/calcubot_python/'
+CALCUBOT_SCRIPT_PATH     = '/home/dvasilev/projects/telegram_bots/calcubot_python/'
 
 sys.path.append(CALCUBOT_SCRIPT_PATH)
 from calcubot import calcubot_init, calcubot_about, calcubot_help, calcubot_eval, calcubot_words, calcubot_plot
