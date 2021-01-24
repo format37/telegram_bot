@@ -114,11 +114,22 @@ try:
 			else:
 				answer = cleaner_bot_counter_plus(message.from_user.id,script_path,task)
 				cleaner_bot.reply_to(message, answer)
-				
+
 	@cleaner_bot.message_handler(commands=['toilet'])
 	def cleaner_bot_alert_toilet(message):
 		if cleaner_bot_user_authorized(message.from_user.id,script_path):
 			task = 'toilet'
+			if message.chat.id == message.from_user.id:
+				answer = cleaner_bot_alert(script_path,task)
+				cleaner_bot.send_message(cleaning_group_id, answer)
+			else:
+				answer = cleaner_bot_counter_plus(message.from_user.id,script_path,task)
+				cleaner_bot.reply_to(message, answer)
+
+	@cleaner_bot.message_handler(commands=['dry'])
+	def cleaner_bot_alert_dry(message):
+		if cleaner_bot_user_authorized(message.from_user.id,script_path):
+			task = 'dry'
 			if message.chat.id == message.from_user.id:
 				answer = cleaner_bot_alert(script_path,task)
 				cleaner_bot.send_message(cleaning_group_id, answer)
