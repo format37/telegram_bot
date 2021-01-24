@@ -76,7 +76,12 @@ try:
 	#script_path = '/home/format37_gmail_com/projects/cleaner_bot/'
 	#script_path = '/home/dvasilev/projects/telegram_bots/cleaner_bot/'
 	cleaning_group_id = '-37549110'
-	
+
+	@cleaner_bot.message_handler()
+	def cleaner_bot_any(message):
+		print('k')
+		cleaner_bot.reply_to(message, 'answer')
+
 	@cleaner_bot.message_handler(commands=['stat'])
 	def cleaner_bot_stat_func(message):
 		if cleaner_bot_user_authorized(message.from_user.id,HCWB_SCRIPT_PATH):
