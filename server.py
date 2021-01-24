@@ -19,8 +19,7 @@ from urllib.parse import urlparse
 SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_bot_server/'
 #SCRIPT_PATH	= '/home/dvasilev/projects/telegram_bot_server/'
 
-WEBHOOK_HOST = 'www.scriptlab.net'
-#WEBHOOK_HOST = 'www.service.icecorp.ru'
+WEBHOOK_HOST = 'service.icecorp.ru'
 WEBHOOK_PORT = 8443  # 443, 80, 88 or 8443 (port need to be 'open')
 WEBHOOK_LISTEN = '0.0.0.0'  # In some VPS you may need to put here the IP addr
 
@@ -172,6 +171,7 @@ def query_text(inline_query):
 # === === === id37bot --		
 
 # === === === pplbackupbot ++
+"""
 # experiment
 PPLBACKUP_SCRIPT_PATH	= '/home/format37_gmail_com/projects/deeppavlov_rugpt3/'
 pplbackupbot	= default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT,PPLBACKUP_SCRIPT_PATH)
@@ -189,7 +189,7 @@ def pplbackupbot_user(message):
 			#print(pplbackupbot_url)
 			pplbackupbot.reply_to(message, str(requests.get(pplbackupbot_url).text))
 	except Exception as e:
-		print('catch:',str(e))
+		print('catch:',str(e))"""
 # === === === pplbackupbot --
 		
 # === === === rover ++
