@@ -16,8 +16,8 @@ import requests
 import urllib.parse
 from urllib.parse import urlparse
 
-SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_bot_server/'
-#SCRIPT_PATH	= '/home/dvasilev/projects/telegram_bot_server/'
+#SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_bot_server/'
+SCRIPT_PATH	= '/home/dvasilev/projects/telegram_bot_server/'
 
 WEBHOOK_HOST = 'service.icecorp.ru'
 WEBHOOK_PORT = 8443  # 443, 80, 88 or 8443 (port need to be 'open')
