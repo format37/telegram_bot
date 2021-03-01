@@ -189,7 +189,31 @@ def query_text(inline_query):
 		
 	except Exception as e:
 		print(str(e))		
-# === === === id37bot --		
+# === === === id37bot --
+
+# === === === mrmsupport_bot ++
+mrmsupport_bot_SCRIPT_PATH = '/home/dvasilev/projects/telegram_bots/mrmsupport_bot/'
+mrmsupport_bot = default_bot_init(WEBHOOK_HOST, WEBHOOK_PORT, WEBHOOK_SSL_CERT, mrmsupport_bot_SCRIPT_PATH)
+bots.append(mrmsupport_bot)
+
+
+@mrmsupport_bot.message_handler(commands=['user'])
+def idbot_user(message):
+	mrmsupport_bot.reply_to(message, str(message.from_user.id))
+
+
+@mrmsupport_bot.message_handler(commands=['group'])
+def idbot_group(message):
+	mrmsupport_bot.reply_to(message, str(message.chat.id))
+
+
+"""@idbot.message_handler(commands=['link'])
+def idbot_group(message):
+	idbot.reply_to(message, 'https://scriptlab.net/telegram/bots/relaybot/relaylocked.php?chat='+str(message.chat.id)+'&text=example')
+"""
+# === === === mrmsupport_bot --
+
+
 
 # === === === pplbackupbot ++
 """
