@@ -1,1 +1,1 @@
-sudo systemctl restart telegram_bot
+sudo systemctl restart telegram_bot_server.service

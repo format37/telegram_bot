@@ -8,6 +8,8 @@ import ssl
 from aiohttp import web
 import telebot
 from telebot import types
+from telebot import apihelper
+#from apihelper import _make_request
 import asyncio
 import sys
 import os
@@ -15,7 +17,11 @@ import requests
 
 import urllib.parse
 from urllib.parse import urlparse
-
+from requests.auth import HTTPBasicAuth  # or HTTPDigestAuth, or OAuth1, etc.
+from requests import Session
+from zeep import Client
+from zeep.transports import Transport
+from pprint import pprint
 #SCRIPT_PATH	= '/home/format37_gmail_com/projects/telegram_bot_server/'
 SCRIPT_PATH	= '/home/dvasilev/projects/telegram_bots/telegram_bot_server/'
 
@@ -39,7 +45,11 @@ telebot.logger.setLevel(logging.INFO)
 
 app = web.Application()
 bots	= []
-
+def get_token(SCRIPT_PATH):
+	with open(SCRIPT_PATH+'token.key','r') as file:
+		API_TOKEN=file.read().replace('\n', '')
+		file.close()
+	return API_TOKEN
 def default_bot_init(WEBHOOK_HOST,WEBHOOK_PORT,WEBHOOK_SSL_CERT, SCRIPT_PATH):
 
 	with open(SCRIPT_PATH+'token.key','r') as file:
@@ -186,7 +196,7 @@ def query_text(inline_query):
 			types.InlineQueryResultArticle('full', answer[1], types.InputTextMessageContent( answer[1] ))
 		]
 		idbot.answer_inline_query(inline_query.id, responce)
-		
+
 	except Exception as e:
 		print(str(e))		
 # === === === id37bot --
@@ -195,16 +205,78 @@ def query_text(inline_query):
 mrmsupport_bot_SCRIPT_PATH = '/home/dvasilev/projects/telegram_bots/mrmsupport_bot/'
 mrmsupport_bot = default_bot_init(WEBHOOK_HOST, WEBHOOK_PORT, WEBHOOK_SSL_CERT, mrmsupport_bot_SCRIPT_PATH)
 bots.append(mrmsupport_bot)
-
+sys.path.append(mrmsupport_bot_SCRIPT_PATH)
+from Telegram_phoneConfirmation import mrmsupport_bot_confirmphone
+from Telegram_phoneConfirmation import mrmsupport_bot_writelink
 
 @mrmsupport_bot.message_handler(commands=['user'])
 def idbot_user(message):
 	mrmsupport_bot.reply_to(message, str(message.from_user.id))
 
+@mrmsupport_bot.message_handler(commands=['start'])
+def idbot_user(message):
+	#mrmsupport_bot.reply_to(message, 'qwerty')
+	#keyboard = telebot.types.ReplyKeyboardMarkup(True)
+	#keyboard.row('Привет', 'Пока')
+	#mrmsupport_bot.send_message(message.chat.id, 'Привет!', reply_markup=keyboard)
+	keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)  # Подключаем клавиатуру
+	button_phone = types.KeyboardButton(text="☎ Нажмите чтобы отправить Ваш контакт",request_contact=True)  # Указываем название кнопки, которая появится у пользователя
+	keyboard.add(button_phone)  # Добавляем эту кнопку
+	mrmsupport_bot.send_message(message.chat.id, 'Нажмите на кнопку ниже',reply_markup=keyboard)  # Дублируем сообщением о том, что пользователь сейчас отправит боту свой номер телефона (на всякий случай, но это не обязательно)
+
+@mrmsupport_bot.message_handler(content_types=['contact']) #Объявили ветку, в которой прописываем логику на тот случай, если пользователь решит прислать номер телефона :)
+def idbot_user(message):
+	if message.contact is not None: #Если присланный объект <strong>contact</strong> не равен нулю
+		#        print(message.contact) #Выводим у себя в панели контактные данные. А вообщем можно их, например, сохранить или сделать что-то еще.
+		#mrmsupport_bot.reply_to(message, message.contact)
+		idfrom=message.from_user.id
+		#idfrom='222'
+		idcontact = message.contact.user_id
+
+		if not idcontact==idfrom:
+			mrmsupport_bot.reply_to(message, 'Подтвердить можно только свой номер телефона!')
+		else:
+			#mrmsupport_bot.reply_to(message, message.contact.phone_number)
+			try:
+				res=mrmsupport_bot_confirmphone(message.contact.phone_number, message.chat.id, mrmsupport_bot_SCRIPT_PATH)
+
+				if res:
+					if res['result']:
+						if res['link'] and not res['link']=='':
+							mrmsupport_bot.reply_to(message,
+													'Вы успешно прошли авторизацию, вот ссылка для вступления в группу ' +
+													res['link'])
+						else:
+							method_url = 'createChatInviteLink'
+							payload = {'chat_id': res['chat_id'],'member_limit':1}
+							link= apihelper._make_request(get_token(mrmsupport_bot_SCRIPT_PATH), method_url, params=payload, method='post')
+							mrmsupport_bot_writelink(message.contact.phone_number,link['invite_link'],mrmsupport_bot_SCRIPT_PATH)
+							#mrmsupport_bot.reply_to(message,res2)
+							mrmsupport_bot.reply_to(message,'Вы успешно прошли авторизацию, вот ссылка для вступления в группу '+link['invite_link'])
+
+					else:
+						mrmsupport_bot.reply_to(message, 'Ваш контакт не найден, обратитесь к администратору')
+				else:
+					mrmsupport_bot.reply_to(message, 'Ваш контакт не найден, обратитесь к администратору')
+			except Exception as e:
+				mrmsupport_bot.reply_to(message, str(e))
+
+
+
+
+#idcontact=message.contact.user_id
+#mrmsupport_bot.reply_to(message,idcontact )
+#mrmsupport_bot.reply_to(message, idfrom)
+
+
+
+
+
 
 @mrmsupport_bot.message_handler(commands=['group'])
 def idbot_group(message):
 	mrmsupport_bot.reply_to(message, str(message.chat.id))
+	#mrmsupport_bot.reply_to(message, '1221321321321')
 
 
 """@idbot.message_handler(commands=['link'])
