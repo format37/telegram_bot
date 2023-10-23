@@ -1,10 +1,9 @@
-version: '3'
+version: '3.8'
 services:
   server:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      - ./langteabot/data:/server/data
     build: server
     logging:
       options:
