@@ -12,7 +12,7 @@ services:
     network_mode: "host"
     environment:
       - TZ=America/Los_Angeles
-      - WEBHOOK_HOST=www.scriptlab.us.to
+      - WEBHOOK_HOST=scriptlab.us.to
       - WEBHOOK_PORT=8443
       - DOCKER_PORT=8443
       - PANTHERABOT_TOKEN=
