@@ -2,18 +2,10 @@
 # -*- coding: utf-8 -*-
 import ssl
 import os
-import requests
 from aiohttp import web
 import telebot
 import json
 import logging
-import pandas as pd
-from datetime import datetime as dt
-import re
-import pickle
-import csv
-import tempfile
-import uuid
 
 # init logging
 logging.basicConfig(level=logging.INFO)
