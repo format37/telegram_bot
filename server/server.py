@@ -81,7 +81,9 @@ bots.append(pantherabot)
 
 @pantherabot.message_handler(commands=['help', 'start'])
 def pantherabot_help_start(message):
-    id37bot.reply_to(message, 'hello')
+    # log user
+    logger.info('pantherabot_help_start: %s', message.chat.id)
+    pantherabot.reply_to(message, 'hello')
 # === @pantherabot --
 
 def main():
