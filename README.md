@@ -1,6 +1,6 @@
 # Telegram bots python docker server
 Docker server, for a list of telegram bots, with aiohttp and webhooks  
-![Structure](assets/structure_v1.png)  
+![Structure](assets/structure.png)  
 The benefit of this structure is that it is possible to serve multiple bots without restarting all bots while working with a specific bot.
 #### installation
 * Clone the repo:
