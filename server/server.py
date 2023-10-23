@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""import ssl
+import ssl
 import os
 import requests
 from aiohttp import web
@@ -108,4 +108,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-"""
