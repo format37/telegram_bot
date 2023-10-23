@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  server:
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ./langteabot/data:/server/data
+    build: server
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    network_mode: "host"
+    environment:
+      - TZ=America/Los_Angeles
+      - WEBHOOK_HOST=www.scriptlab.us.to
+      - WEBHOOK_PORT=8443
+      - DOCKER_PORT=8443
+      - PANTHERABOT_TOKEN=
+      - PANTHERABOT_PORT=4220
