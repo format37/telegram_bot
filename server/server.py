@@ -78,5 +78,9 @@ pantherabot = default_bot_init('PANTHERABOT_TOKEN')
 @pantherabot.message_handler()
 def pantherabot_message(message):
     logger.info(f'pantherabot_message from: {message.chat.id}')
+    body = message.json
+    # Send message to via post and port PANTHERABOT_PORT
+    message_url = f'http://localhost:{os.environ.get('PANTHERABOT_PORT','')}/message'
+    result = requests.post(message_url, json=body)
     pantherabot.reply_to(message, 'hello')
 # === @pantherabot --
