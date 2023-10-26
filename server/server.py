@@ -73,14 +73,13 @@ async def handle(token: str, request: Request):
 
 # === @pantherabot ++
 pantherabot = default_bot_init('PANTHERABOT_TOKEN')
-# bots.append(pantherabot)
-
 @pantherabot.message_handler()
 def pantherabot_message(message):
     logger.info(f'pantherabot_message from: {message.chat.id}')
     body = message.json
-    # Send message to via post and port PANTHERABOT_PORT
-    message_url = f'http://localhost:{os.environ.get('PANTHERABOT_PORT','')}/message'
+    # Send message to server
+    BOT_PORT = os.environ.get('PANTHERABOT_PORT', '')
+    message_url = f'http://localhost:{BOT_PORT}/message'
     logger.info(f'message_url: {message_url}')
     result = requests.post(message_url, json=body)
     logger.info(f'result: {result}')
