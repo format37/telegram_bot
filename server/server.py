@@ -79,17 +79,8 @@ def pantherabot_message(message):
     logger.info(f'pantherabot_message from: {message.chat.id}')
     body = message.json
     BOT_PORT = os.environ.get('PANTHERABOT_PORT', '')
-    # Send get test to the server
-    message_url = f'http://localhost:{BOT_PORT}/test'
-    logger.info(f'message_url: {message_url}')
-    result = requests.get(message_url)
-    if result.status_code != 200:
-        logger.error(f"Failed to send test. Status code: {result.status_code}, Response: {result.content}")
-    else:
-        logger.info(f'result: {str(result)}')
     # Send message to the server    
     message_url = f'http://localhost:{BOT_PORT}/message'
-    logger.info(f'message_url: {message_url}')
     result = requests.post(message_url, json=body)
     if result.status_code != 200:
         logger.error(f"Failed to send message. Status code: {result.status_code}, Response: {result.content}")

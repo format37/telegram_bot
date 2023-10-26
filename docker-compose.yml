@@ -1,6 +1,7 @@
 version: '3.8'
 services:
   server:
+    restart: always
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
