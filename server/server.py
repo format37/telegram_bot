@@ -81,6 +81,8 @@ def pantherabot_message(message):
     body = message.json
     # Send message to via post and port PANTHERABOT_PORT
     message_url = f'http://localhost:{os.environ.get('PANTHERABOT_PORT','')}/message'
+    logger.info(f'message_url: {message_url}')
     result = requests.post(message_url, json=body)
+    logger.info(f'result: {result}')
     pantherabot.reply_to(message, 'hello')
 # === @pantherabot --
