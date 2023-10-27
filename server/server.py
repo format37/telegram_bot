@@ -85,6 +85,6 @@ def pantherabot_message(message):
     if result.status_code != 200:
         logger.error(f"Failed to send message. Status code: {result.status_code}, Response: {result.content}")
     else:
-        logger.info(f'result: {str(result)}')
+        logger.info(f'result: {str(result.text)}')
     pantherabot.reply_to(message, 'hello')
 # === @pantherabot --
