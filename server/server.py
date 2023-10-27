@@ -92,7 +92,7 @@ def pantherabot_message(message):
         # is a text:
         # '{"status":"ok","message":"test answer"}'
         # Need to convert it to dict:
-        # result_message = json.loads(result.text)
+        result_message = json.loads(result.text)
         # reply by result['message']
-        pantherabot.reply_to(message, result.message['message'])
+        pantherabot.reply_to(message, result_message['message'])
 # === @pantherabot --
