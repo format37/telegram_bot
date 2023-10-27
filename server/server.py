@@ -71,8 +71,6 @@ async def handle(token: str, request: Request):
         raise HTTPException(status_code=403, detail="Invalid token")
 
 
-# bots = []
-
 # === @pantherabot ++
 pantherabot = default_bot_init('PANTHERABOT_TOKEN')
 @pantherabot.message_handler()
@@ -87,12 +85,6 @@ def pantherabot_message(message):
         logger.error(f"Failed to send message. Status code: {result.status_code}, Response: {result.content}")
     else:
         logger.info(f'result: {str(result.text)}')
-        # INFO:server:result: {"status":"ok","message":"test answer"}
-        # result.text
-        # is a text:
-        # '{"status":"ok","message":"test answer"}'
-        # Need to convert it to dict:
         result_message = json.loads(result.text)
-        # reply by result['message']
         pantherabot.reply_to(message, result_message['message'])
 # === @pantherabot --
