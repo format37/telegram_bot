@@ -88,5 +88,5 @@ def pantherabot_message(message):
         logger.info(f'result: {str(result.text)}')
         # INFO:server:result: {"status":"ok","message":"test answer"}
         # reply by result['message']
-        pantherabot.reply_to(message, result['message'])
+        pantherabot.reply_to(message, result.text.['message'])
 # === @pantherabot --
