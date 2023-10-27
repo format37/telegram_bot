@@ -6,6 +6,7 @@ import os
 import logging
 import ssl
 import requests
+import json
 
 # Initialize FastAPI
 app = FastAPI()
@@ -87,6 +88,11 @@ def pantherabot_message(message):
     else:
         logger.info(f'result: {str(result.text)}')
         # INFO:server:result: {"status":"ok","message":"test answer"}
+        # result.text
+        # is a text:
+        # '{"status":"ok","message":"test answer"}'
+        # Need to convert it to dict:
+        # result_message = json.loads(result.text)
         # reply by result['message']
-        pantherabot.reply_to(message, result.text['message'])
+        pantherabot.reply_to(message, result.message['message'])
 # === @pantherabot --
