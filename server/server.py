@@ -105,9 +105,9 @@ def pantherabot_message(message):
                     text=button_definition['text'],
                     request_contact=button_definition['request_contact']
                     )
-                # logger.info(f'button: {button}')
+                logger.info(f'button: {button}')
                 keyboard.add(button)
-            # logger.info(f'keyboard: {keyboard}')
+            logger.info(f'keyboard 3: {keyboard}')
             # pantherabot.reply_to(message, result_message['message'], reply_markup=markup)
             # Send message with keyboard
             pantherabot.send_message(message.chat.id, keyboard_dict['message'], reply_markup=keyboard)
