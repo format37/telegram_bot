@@ -103,9 +103,9 @@ def pantherabot_message(message):
                 logger.info(f'button_definition: {button_definition}')
                 button = types.KeyboardButton(
                     text=button_definition['text'],
-                    request_contact=button_definition['request_contact']
+                    request_contact=bool(button_definition['request_contact'])
                     )
-                logger.info(f'button: {button}')
+                logger.info(f'button: {str(button)}')
                 keyboard.add(button)
             logger.info(f'keyboard 3: {keyboard}')
             # pantherabot.reply_to(message, result_message['message'], reply_markup=markup)
