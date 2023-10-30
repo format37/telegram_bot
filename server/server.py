@@ -91,14 +91,14 @@ def pantherabot_message(message):
             pantherabot.reply_to(message, result_message['body'])
 
         elif result_message['type'] == 'keyboard':
-            logger.info(f'keyboard: {result_message}')
+            # logger.info(f'keyboard: {result_message}')
             keyboard_dict = result_message['body']
-            logger.info(f'keyboard_dict: {keyboard_dict}')
+            # logger.info(f'keyboard_dict: {keyboard_dict}')
             keyboard = telebot.types.ReplyKeyboardMarkup(
                 row_width=keyboard_dict['row_width'], 
                 resize_keyboard=keyboard_dict['resize_keyboard']
                 )
-            logger.info(f'keyboard: {keyboard}')
+            # logger.info(f'keyboard: {keyboard}')
             for button_definition in keyboard_dict['buttons']:
                 logger.info(f'button_definition: {button_definition}')
                 button = types.KeyboardButton(
