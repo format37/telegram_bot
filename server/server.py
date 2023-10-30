@@ -101,9 +101,9 @@ def pantherabot_message(message):
             # logger.info(f'keyboard: {keyboard}')
             for button_definition in keyboard_dict['buttons']:
                 logger.info(f'button_definition: {button_definition}')
-                button = types.KeyboardButton(
+                button = telebot.types.KeyboardButton(
                     text=button_definition['text'],
-                    request_contact=False
+                    request_contact=button_definition['request_contact']
                     )
                 # request_contact=bool(button_definition['request_contact'])
                 logger.info(f'button: {str(button)}')
