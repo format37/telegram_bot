@@ -78,7 +78,7 @@ def pantherabot_message(message):
     logger.info(f'pantherabot_message from: {message.chat.id}')
     body = message.json
     BOT_PORT = os.environ.get('PANTHERABOT_PORT', '')
-    # Send message to the server    
+    # Send message to the server
     message_url = f'http://localhost:{BOT_PORT}/message'
     result = requests.post(message_url, json=body)
     if result.status_code != 200:
@@ -86,5 +86,21 @@ def pantherabot_message(message):
     else:
         logger.info(f'result: {str(result.text)}')
         result_message = json.loads(result.text)
-        pantherabot.reply_to(message, result_message['message'])
+
+        if result_message['type'] == 'text':
+            pantherabot.reply_to(message, result_message['body'])
+
+        elif result_message['type'] == 'keyboard':
+            keyboard_dict = result_message['body']
+            keyboard = telebot.types.ReplyKeyboardMarkup(
+                row_width=keyboard_dict['row_width'], 
+                resize_keyboard=keyboard_dict['resize_keyboard']
+                )
+            for button_definition in keyboard_dict['buttons']:
+                button = types.KeyboardButton(
+                    text=button_definition['text'],
+                    request_contact=button_definition['request_contact']
+                    )
+                keyboard.add(button)
+            pantherabot.reply_to(message, result_message['message'], reply_markup=markup)
 # === @pantherabot --
