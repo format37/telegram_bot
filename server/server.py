@@ -72,6 +72,7 @@ async def handle(token: str, request: Request):
     logger.info(f'Received request payload: {request_body_dict}')
     update = telebot.types.Update.de_json(request_body_dict)
 
+    logger.info(f'Available tokens: {list(bots.keys())}')
     # Get the bot instance based on the token
     bot = bots.get(token)
     if bot:
