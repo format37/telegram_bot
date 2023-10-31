@@ -64,6 +64,11 @@ bots = {
     'PANTHERABOT_TOKEN': default_bot_init('PANTHERABOT_TOKEN'),
 }
 
+def get_bot_by_token(token):
+    for bot_token, bot in bots.items():
+        if bot == token:
+            return bot
+    return None
 
 @app.post("/{token}/")
 async def handle(token: str, request: Request):
@@ -72,10 +77,12 @@ async def handle(token: str, request: Request):
     logger.info(f'Received request payload: {request_body_dict}')
     update = telebot.types.Update.de_json(request_body_dict)
 
-    logger.info(f'Available tokens: {list(bots.keys())}')
+    logger.info(f'Available bots: {list(bots.keys())}')
+    logger.info(f'Available tokens: {list(bots.values())}')
     # Get the bot instance based on the token
-    bot = bots.get(token)
-    if bot:
+    # bot = bots.get(token)
+    bot = get_bot_by_token(token)
+    if bot != None:
         logger.info(f'Bot object retrieved successfully.')
         if update.callback_query:
             handle_callback_query(bot, update.callback_query)
