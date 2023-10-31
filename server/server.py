@@ -79,16 +79,17 @@ def get_bot_feature_by_token(token, feature):
 async def handle(token: str, request: Request):
     # logger.info(f'handle. Received token: {token}')
     request_body_dict = await request.json()
-    # logger.info(f'Received request payload: {request_body_dict}')
+    logger.info(f'Received request payload: {request_body_dict}')
     update = telebot.types.Update.de_json(request_body_dict)
 
     bot = get_bot_feature_by_token(token, 'bot')
     if bot != None:
         # logger.info(f'Bot object retrieved successfully.')
         if update.callback_query:
+            logger.info(f'update.callback_query')
             handle_callback_query(bot, update.callback_query)
         else:
-            # logger.info('Before processing new updates.')
+            logger.info('update.message')
             bot.process_new_updates([update])
             # logger.info('After processing new updates.')
         return JSONResponse(content={"status": "ok"})
@@ -136,7 +137,8 @@ def generic_message_handler(bot, message):
             for button_definition in keyboard_dict['buttons']:
                 button = telebot.types.KeyboardButton(
                     text=button_definition['text'],
-                    request_contact=button_definition['request_contact']
+                    request_contact=button_definition['request_contact'],
+                    callback_data=button_definition['callback_data']
                 )
                 keyboard.add(button)
             bot.send_message(
