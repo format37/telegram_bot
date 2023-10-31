@@ -159,3 +159,6 @@ for bot_instance in bots:
     def message_handler(message, bot=bot_instance['bot']):  # Default to the current bot instance
         # logger.info('Inside message_handler.')
         generic_message_handler(bot_instance['bot'], message)
+    @bot_instance['bot'].callback_query_handler()
+    def callback_query(call):
+        logger.info(f'callback_query: {call}')
