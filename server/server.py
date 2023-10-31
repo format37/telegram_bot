@@ -87,6 +87,7 @@ bots = [
     bots[bot_token_env] = default_bot_init(f'{bot_token_env}_TOKEN')"""
 
 for bot in bots:
+    logger.info(f'Initializing bot: {bot} with token {bot["TOKEN"]}')
     bot['bot'] = default_bot_init(bot['TOKEN'])
 
 
