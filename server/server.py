@@ -8,10 +8,6 @@ import ssl
 import requests
 import json
 
-# Initialize bots
-bots = {
-    os.environ.get('PANTHERABOT_TOKEN'): default_bot_init('PANTHERABOT_TOKEN'),
-}
 
 # Initialize FastAPI
 app = FastAPI()
@@ -69,6 +65,12 @@ def default_bot_init(bot_token_env):
             return bot
     return None
 """
+
+
+# Initialize bots
+bots = {
+    os.environ.get('PANTHERABOT_TOKEN'): default_bot_init('PANTHERABOT_TOKEN'),
+}
 
 
 @app.post("/{token}/")
