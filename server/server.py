@@ -90,6 +90,7 @@ def handle_callback_query(bot, callback_query):
 
 # General message handler function
 def generic_message_handler(bot, message):
+    logger.info('generic_message_handler')
     logger.info(f'{bot.token[:5]}_message from: {message.chat.id}')  # Truncated token for identification
     body = message.json
     BOT_PORT = os.environ.get(f"{bot.token[:5]}_PORT", '')  # Using truncated token to get the appropriate port
@@ -122,12 +123,9 @@ def generic_message_handler(bot, message):
                 reply_markup=keyboard
             )
 
-# Initialize bots and set up message handlers
-"""bots = {
-    'PANTHERABOT_TOKEN': default_bot_init('PANTHERABOT_TOKEN')
-}"""
 
 for token, bot in bots.items():
+    logger.info(f'Initializing bot: {token}')
     @bot.message_handler()
     def message_handler(message, bot=bot):  # Default to the current bot instance
         generic_message_handler(bot, message)
