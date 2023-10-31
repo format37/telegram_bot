@@ -49,7 +49,7 @@ def default_bot_init(bot_token_env):
 
     # Set webhook
     WEBHOOK_URL_BASE = f"https://{WEBHOOK_HOST}:{WEBHOOK_PORT}"
-    WEBHOOK_URL_PATH = f"/{API_TOKEN}/"
+    WEBHOOK_URL_PATH = f"/{bot_token_env}/"
 
     logger.info(f'WEBHOOK_URL_BASE: {WEBHOOK_URL_BASE}')
     logger.info(f'WEBHOOK_URL_PATH: {WEBHOOK_URL_PATH}')
