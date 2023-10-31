@@ -25,15 +25,6 @@ WEBHOOK_LISTEN = '0.0.0.0'  # In some VPS you may need to put here the IP addr
 WEBHOOK_SSL_CERT = 'webhook_cert.pem'
 WEBHOOK_SSL_PRIV = 'webhook_pkey.pem'
 
-# Quick'n'dirty SSL certificate generation:
-#
-# openssl genrsa -out webhook_pkey.pem 2048
-# openssl req -new -x509 -days 3650 -key webhook_pkey.pem -out webhook_cert.pem
-#
-# When asked for "Common Name (e.g. server FQDN or YOUR name)" you should reply
-# with the same value in you put in WEBHOOK_HOST
-
-
 @app.get("/test")
 async def call_test():
     logger.info('call_test')
@@ -42,8 +33,6 @@ async def call_test():
 
 # Initialize bot
 def default_bot_init(bot_token_env):
-    # logger.info(f'default_bot_init. Initializing bot: {bot_token_env}')
-    # API_TOKEN = os.environ.get(bot_token_env, '')
     logger.info(f'default_bot_init. API_TOKEN: {bot_token_env}')
     bot = telebot.TeleBot(bot_token_env)
 
@@ -61,13 +50,6 @@ def default_bot_init(bot_token_env):
 
     return bot
 
-"""def get_bot_by_token(token):
-    for bot_token, bot in bots.items():
-        if bot_token == token:
-            return bot
-    return None
-"""
-
 
 # Initialize bots
 bots = [
@@ -78,18 +60,6 @@ bots = [
     }
 ]
 
-"""bots = {
-    os.environ.get('PANTHERABOT_TOKEN'): default_bot_init('PANTHERABOT_TOKEN'),
-}"""
-
-# bots = {}
-"""for bot_token_env in bot_list:
-    bots[bot_token_env] = default_bot_init(f'{bot_token_env}_TOKEN')"""
-
-for bot in bots:
-    logger.info(f'Initializing bot: {bot} with token {bot["TOKEN"]}')
-    bot['bot'] = default_bot_init(bot['TOKEN'])
-
 
 def get_bot_feature_by_token(token, feature):
     for bot in bots:
@@ -98,12 +68,6 @@ def get_bot_feature_by_token(token, feature):
     return None
 
 
-"""def get_port_by_token(token):
-    for bot in bots:
-        if bot['TOKEN'] == token:
-            return bot_entity['PORT']
-    return None"""
-
 @app.post("/{token}/")
 async def handle(token: str, request: Request):
     logger.info(f'handle. Received token: {token}')
@@ -111,10 +75,6 @@ async def handle(token: str, request: Request):
     logger.info(f'Received request payload: {request_body_dict}')
     update = telebot.types.Update.de_json(request_body_dict)
 
-    # logger.info(f'Available bots: {list(bots.keys())}')
-    # logger.info(f'Available tokens: {list(bots.values())}')
-    # Get the bot instance based on the token
-    # bot = bots.get(token)
     bot = get_bot_feature_by_token(token, 'bot')
     if bot != None:
         logger.info(f'Bot object retrieved successfully.')
@@ -178,8 +138,14 @@ def generic_message_handler(bot, message):
             )
 
 
+"""for bot in bots:
+    logger.info(f'Initializing bot: {bot} with token {bot["TOKEN"]}')
+    bot['bot'] = default_bot_init(bot['TOKEN'])"""
+
+
 for bot_instance in bots:
     logger.info(f'# Initializing bot: {bot_instance}')
+    bot_instance['bot'] = default_bot_init(bot_instance['TOKEN'])
     bot = bot_instance['bot']
     @bot.message_handler()
     def message_handler(message, bot=bot):  # Default to the current bot instance
