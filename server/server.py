@@ -65,14 +65,6 @@ def get_bot_feature_by_token(token, feature):
             return bot[feature]
     return None
 
-# General function to handle callback queries
-"""def handle_callback_query(bot, callback_query):
-    logger.info(f'handle_callback_query: {callback_query}')
-    if callback_query.data == 'choose_model':
-        bot.send_message(callback_query.message.chat.id, 'You pressed choose_model Button.')
-    elif callback_query.data == 'btn2':
-        bot.send_message(callback_query.message.chat.id, 'You pressed Button 2.')"""
-
 
 @app.post("/{token}/")
 async def handle(token: str, request: Request):
@@ -83,12 +75,6 @@ async def handle(token: str, request: Request):
 
     bot = get_bot_feature_by_token(token, 'bot')
     if bot != None:
-        # logger.info(f'Bot object retrieved successfully.')
-        # logger.info(f'=== update: {update}')
-        """if update.callback_query:
-            logger.info(f'update.callback_query')
-            handle_callback_query(bot, update.callback_query)
-        elif update.message:"""
         if update.message:
             logger.info('update.message')
             bot.process_new_updates([update])
@@ -108,8 +94,6 @@ def generic_message_handler(bot, message):
     bot_name = get_bot_feature_by_token(bot.token, 'name')
     # logger.info(f'{bot_name} message from: {message.chat.id}')  # Truncated token for identification
     body = message.json
-    # logger.info(f'Getting port from: {bot.token[:5]}_PORT')
-    # BOT_PORT = os.environ.get(f"{bot.token[:5]}_PORT", '')  # Using truncated token to get the appropriate port
     BOT_PORT = get_bot_feature_by_token(bot.token, 'PORT')
     message_url = f'http://localhost:{BOT_PORT}/message'
     # logger.info(f'message_url: {message_url}')
