@@ -178,8 +178,9 @@ def generic_message_handler(bot, message):
             )
 
 
-for token, bot in bots.items():
-    logger.info(f'Initializing bot: {token}')
+for bot_instance in bots:
+    logger.info(f'# Initializing bot: {bot_instance}')
+    bot = bot_instance['bot']
     @bot.message_handler()
     def message_handler(message, bot=bot):  # Default to the current bot instance
         logger.info('Inside message_handler.')
