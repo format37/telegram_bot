@@ -100,6 +100,7 @@ async def handle(token: str, request: Request):
 
 # General function to handle callback queries
 def handle_callback_query(bot, callback_query):
+    logger.info(f'handle_callback_query: {callback_query}')
     if callback_query.data == 'choose_model':
         bot.send_message(callback_query.message.chat.id, 'You pressed choose_model Button.')
     elif callback_query.data == 'btn2':
@@ -135,6 +136,7 @@ def generic_message_handler(bot, message):
                 resize_keyboard=keyboard_dict['resize_keyboard']
             )
             for button_definition in keyboard_dict['buttons']:
+                logger.info(f'button callback_data: {button_definition["callback_data"]}')
                 button = telebot.types.KeyboardButton(
                     text=button_definition['text'],
                     request_contact=button_definition['request_contact'],
