@@ -59,19 +59,6 @@ def default_bot_init(bot_token_env):
     return bot
 
 
-
-
-"""bots = [
-    {
-        'name': 'PANTHERABOT',
-        'PORT': os.environ.get('PANTHERABOT_PORT', ''),
-        'TOKEN': os.environ.get('PANTHERABOT_TOKEN', ''),
-        'bot': None
-    }
-]"""
-
-
-
 def get_bot_feature_by_token(token, feature):
     for bot in bots:
         if bot['TOKEN'] == token:
@@ -140,16 +127,17 @@ def generic_message_handler(bot, message):
             keyboard_dict = result_message['body']
             keyboard = telebot.types.ReplyKeyboardMarkup(
                 row_width=keyboard_dict['row_width'], 
-                resize_keyboard=keyboard_dict['resize_keyboard']
+                resize_keyboard=keyboard_dict['resize_keyboard'],
             )
             for button_definition in keyboard_dict['buttons']:
                 logger.info(f'button callback_data: {button_definition["callback_data"]}')
                 button = telebot.types.KeyboardButton(
                     text=button_definition['text'],
-                    request_contact=button_definition['request_contact'],
                     callback_data=button_definition['callback_data']
                 )
+                # request_contact=button_definition['request_contact'],
                 keyboard.add(button)
+                
             bot.send_message(
                 message.chat.id, 
                 keyboard_dict['message'], 
