@@ -157,5 +157,5 @@ for bot_instance in bots:
     bot_instance['bot'] = default_bot_init(bot_instance['TOKEN'])
     @bot_instance['bot'].message_handler()
     def message_handler(message, bot=bot_instance['bot']):  # Default to the current bot instance
-        logger.info('### message_handler: {message} ###')
+        logger.info(f'### message_handler: {message} ###')
         generic_message_handler(bot_instance['bot'], message)
