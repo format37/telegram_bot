@@ -123,7 +123,7 @@ def generic_message_handler(bot, message):
     if result.status_code != 200:
         logger.error(f"Failed to send message. Status code: {result.status_code}, Response: {result.content}")
     else:
-        # logger.info(f'result: {str(result.text)}')
+        logger.info(f'generic_message_handler result: {str(result.text)}')
         result_message = json.loads(result.text)
 
         if result_message['type'] == 'text':
