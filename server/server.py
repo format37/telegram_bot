@@ -84,7 +84,7 @@ async def handle(token: str, request: Request):
     bot = get_bot_feature_by_token(token, 'bot')
     if bot != None:
         # logger.info(f'Bot object retrieved successfully.')
-        logger.info(f'=== update: {update}')
+        # logger.info(f'=== update: {update}')
         """if update.callback_query:
             logger.info(f'update.callback_query')
             handle_callback_query(bot, update.callback_query)
