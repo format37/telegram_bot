@@ -145,4 +145,4 @@ for bot_instance in bots:
     @bot_instance['bot'].message_handler()
     def message_handler(message, bot=bot):  # Default to the current bot instance
         logger.info('Inside message_handler.')
-        generic_message_handler(bot, message)
+        generic_message_handler(bot_instance['bot'], message)
