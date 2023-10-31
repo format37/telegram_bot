@@ -8,6 +8,10 @@ import ssl
 import requests
 import json
 
+# Initialize bots
+bot_names = [
+    'PANTHERABOT'
+    ]
 
 # Initialize FastAPI
 app = FastAPI()
@@ -51,15 +55,17 @@ def default_bot_init(bot_token_env):
     return bot
 
 
-# Initialize bots
-bots = [
+
+
+"""bots = [
     {
-        'name': 'pantherabot',
+        'name': 'PANTHERABOT',
         'PORT': os.environ.get('PANTHERABOT_PORT', ''),
         'TOKEN': os.environ.get('PANTHERABOT_TOKEN', ''),
         'bot': None
     }
-]
+]"""
+
 
 
 def get_bot_feature_by_token(token, feature):
@@ -139,6 +145,14 @@ def generic_message_handler(bot, message):
                 reply_markup=keyboard
             )
 
+bots = []
+for bot_name in bot_names:
+    bots.append({
+        'name': bot_name,
+        'PORT': os.environ.get(f"{bot_name}_PORT", ''),
+        'TOKEN': os.environ.get(f"{bot_name}_TOKEN", ''),
+        'bot': None
+    })
 
 for bot_instance in bots:
     bot_instance['bot'] = default_bot_init(bot_instance['TOKEN'])
