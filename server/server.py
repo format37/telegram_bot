@@ -92,10 +92,13 @@ async def handle(token: str, request: Request):
         if update.callback_query:
             logger.info(f'update.callback_query')
             handle_callback_query(bot, update.callback_query)
-        else:
+        elif update.message:
             logger.info('update.message')
             bot.process_new_updates([update])
             # logger.info('After processing new updates.')
+        else:
+            logger.info(f'update have no candidate: {update}')
+
         return JSONResponse(content={"status": "ok"})
     else:
         logger.info(f'Failed to retrieve bot object.')
