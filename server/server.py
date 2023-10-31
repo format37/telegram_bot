@@ -58,14 +58,18 @@ def default_bot_init(bot_token_env):
 
     return bot
 
+
 # Initialize bots
 bots = {
     'PANTHERABOT_TOKEN': default_bot_init('PANTHERABOT_TOKEN'),
 }
 
+
 @app.post("/{token}/")
 async def handle(token: str, request: Request):
+    logger.info(f'handle. Received token: {token}')
     request_body_dict = await request.json()
+    logger.info(f'Received request payload: {request_body_dict}')
     update = telebot.types.Update.de_json(request_body_dict)
 
     # Get the bot instance based on the token
@@ -129,43 +133,3 @@ for token, bot in bots.items():
     @bot.message_handler()
     def message_handler(message, bot=bot):  # Default to the current bot instance
         generic_message_handler(bot, message)
-
-
-# === @pantherabot ++
-"""pantherabot = default_bot_init('PANTHERABOT_TOKEN')
-@pantherabot.message_handler()
-def pantherabot_message(message):
-    logger.info(f'pantherabot_message from: {message.chat.id}')
-    body = message.json
-    BOT_PORT = os.environ.get('PANTHERABOT_PORT', '')
-    # Send message to the server
-    message_url = f'http://localhost:{BOT_PORT}/message'
-    result = requests.post(message_url, json=body)
-    if result.status_code != 200:
-        logger.error(f"Failed to send message. Status code: {result.status_code}, Response: {result.content}")
-    else:
-        logger.info(f'result: {str(result.text)}')
-        result_message = json.loads(result.text)
-
-        if result_message['type'] == 'text':
-            pantherabot.reply_to(message, result_message['body'])
-
-        elif result_message['type'] == 'keyboard':
-            keyboard_dict = result_message['body']
-            keyboard = telebot.types.ReplyKeyboardMarkup(
-                row_width=keyboard_dict['row_width'], 
-                resize_keyboard=keyboard_dict['resize_keyboard']
-                )
-            for button_definition in keyboard_dict['buttons']:
-                button = telebot.types.KeyboardButton(
-                    text=button_definition['text'],
-                    request_contact=button_definition['request_contact']
-                    )
-                keyboard.add(button)
-            # Send message with keyboard
-            pantherabot.send_message(
-                message.chat.id, 
-                keyboard_dict['message'], 
-                reply_markup=keyboard
-                )"""
-# === @pantherabot --
