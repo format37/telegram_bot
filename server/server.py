@@ -138,16 +138,11 @@ def generic_message_handler(bot, message):
             )
 
 
-"""for bot in bots:
-    logger.info(f'Initializing bot: {bot} with token {bot["TOKEN"]}')
-    bot['bot'] = default_bot_init(bot['TOKEN'])"""
-
-
 for bot_instance in bots:
-    logger.info(f'# Initializing bot: {bot_instance}')
+    # logger.info(f'# Initializing bot: {bot_instance}')
     bot_instance['bot'] = default_bot_init(bot_instance['TOKEN'])
-    bot = bot_instance['bot']
-    @bot.message_handler()
+    # bot = bot_instance['bot']
+    @bot_instance['bot'].message_handler()
     def message_handler(message, bot=bot):  # Default to the current bot instance
         logger.info('Inside message_handler.')
         generic_message_handler(bot, message)
