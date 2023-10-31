@@ -102,7 +102,8 @@ def handle_callback_query(bot, callback_query):
 # General message handler function
 def generic_message_handler(bot, message):
     # logger.info('generic_message_handler')
-    logger.info(f'{get_bot_feature_by_token(bot.token, 'name')} message from: {message.chat.id}')  # Truncated token for identification
+    bot_name = get_bot_feature_by_token(bot.token, 'name')
+    logger.info(f'{bot_name} message from: {message.chat.id}')  # Truncated token for identification
     body = message.json
     # logger.info(f'Getting port from: {bot.token[:5]}_PORT')
     # BOT_PORT = os.environ.get(f"{bot.token[:5]}_PORT", '')  # Using truncated token to get the appropriate port
