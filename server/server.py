@@ -49,7 +49,11 @@ def default_bot_init(bot_token_env):
     logger.info(f'WEBHOOK_SSL_CERT: {WEBHOOK_SSL_CERT}')
 
     bot.remove_webhook()
-    wh_res = bot.set_webhook(url=f"{WEBHOOK_URL_BASE}{WEBHOOK_URL_PATH}", certificate=open(WEBHOOK_SSL_CERT, 'r'))
+    wh_res = bot.set_webhook(
+        url=f"{WEBHOOK_URL_BASE}{WEBHOOK_URL_PATH}", 
+        certificate=open(WEBHOOK_SSL_CERT, 'r'),
+        allowed_updates=['message', 'callback_query']
+        )
     logger.info(f'webhook set: {wh_res}')
 
     return bot
