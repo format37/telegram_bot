@@ -91,18 +91,18 @@ for bot in bots:
     bot['bot'] = default_bot_init(bot['TOKEN'])
 
 
-def get_bot_by_token(token):
-    for bot_entity in bot_list:
-        if bot_entity['TOKEN'] == token:
-            return bot_entity['bot']
+def get_feature_by_token(token, feature):
+    for bot in bots:
+        if bot['TOKEN'] == token:
+            return bot[feature]
     return None
 
 
-def get_port_by_token(token):
-    for bot_entity in bot_list:
-        if bot_entity['TOKEN'] == token:
+"""def get_port_by_token(token):
+    for bot in bots:
+        if bot['TOKEN'] == token:
             return bot_entity['PORT']
-    return None
+    return None"""
 
 @app.post("/{token}/")
 async def handle(token: str, request: Request):
@@ -115,7 +115,7 @@ async def handle(token: str, request: Request):
     # logger.info(f'Available tokens: {list(bots.values())}')
     # Get the bot instance based on the token
     # bot = bots.get(token)
-    bot = get_bot_by_token(token)
+    bot = get_feature_by_token(token, 'bot)
     if bot != None:
         logger.info(f'Bot object retrieved successfully.')
         if update.callback_query:
@@ -145,7 +145,7 @@ def generic_message_handler(bot, message):
     body = message.json
     logger.info(f'Getting port from: {bot.token[:5]}_PORT')
     # BOT_PORT = os.environ.get(f"{bot.token[:5]}_PORT", '')  # Using truncated token to get the appropriate port
-    BOT_PORT = get_port_by_token(bot.token)
+    BOT_PORT = get_feature_by_token(bot.token, 'PORT')
     message_url = f'http://localhost:{BOT_PORT}/message'
     logger.info(f'message_url: {message_url}')
     logger.info(f'body: {body}')
