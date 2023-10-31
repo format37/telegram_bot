@@ -54,6 +54,7 @@ def default_bot_init(bot_token_env):
 # Initialize bots
 bots = [
     {
+        'name': 'pantherabot',
         'PORT': os.environ.get('PANTHERABOT_PORT', ''),
         'TOKEN': os.environ.get('PANTHERABOT_TOKEN', ''),
         'bot': None
@@ -70,20 +71,20 @@ def get_bot_feature_by_token(token, feature):
 
 @app.post("/{token}/")
 async def handle(token: str, request: Request):
-    logger.info(f'handle. Received token: {token}')
+    # logger.info(f'handle. Received token: {token}')
     request_body_dict = await request.json()
-    logger.info(f'Received request payload: {request_body_dict}')
+    # logger.info(f'Received request payload: {request_body_dict}')
     update = telebot.types.Update.de_json(request_body_dict)
 
     bot = get_bot_feature_by_token(token, 'bot')
     if bot != None:
-        logger.info(f'Bot object retrieved successfully.')
+        # logger.info(f'Bot object retrieved successfully.')
         if update.callback_query:
             handle_callback_query(bot, update.callback_query)
         else:
-            logger.info('Before processing new updates.')
+            # logger.info('Before processing new updates.')
             bot.process_new_updates([update])
-            logger.info('After processing new updates.')
+            # logger.info('After processing new updates.')
         return JSONResponse(content={"status": "ok"})
     else:
         logger.info(f'Failed to retrieve bot object.')
@@ -100,21 +101,21 @@ def handle_callback_query(bot, callback_query):
 
 # General message handler function
 def generic_message_handler(bot, message):
-    logger.info('generic_message_handler')
-    logger.info(f'{bot.token[:5]}_message from: {message.chat.id}')  # Truncated token for identification
+    # logger.info('generic_message_handler')
+    logger.info(f'{get_bot_feature_by_token(bot.token, 'name')} message from: {message.chat.id}')  # Truncated token for identification
     body = message.json
-    logger.info(f'Getting port from: {bot.token[:5]}_PORT')
+    # logger.info(f'Getting port from: {bot.token[:5]}_PORT')
     # BOT_PORT = os.environ.get(f"{bot.token[:5]}_PORT", '')  # Using truncated token to get the appropriate port
     BOT_PORT = get_bot_feature_by_token(bot.token, 'PORT')
     message_url = f'http://localhost:{BOT_PORT}/message'
-    logger.info(f'message_url: {message_url}')
-    logger.info(f'body: {body}')
+    # logger.info(f'message_url: {message_url}')
+    # logger.info(f'body: {body}')
     result = requests.post(message_url, json=body)
-    logger.info(f'result: {str(result)}')
+    # logger.info(f'result: {str(result)}')
     if result.status_code != 200:
         logger.error(f"Failed to send message. Status code: {result.status_code}, Response: {result.content}")
     else:
-        logger.info(f'result: {str(result.text)}')
+        # logger.info(f'result: {str(result.text)}')
         result_message = json.loads(result.text)
 
         if result_message['type'] == 'text':
@@ -139,10 +140,8 @@ def generic_message_handler(bot, message):
 
 
 for bot_instance in bots:
-    # logger.info(f'# Initializing bot: {bot_instance}')
     bot_instance['bot'] = default_bot_init(bot_instance['TOKEN'])
-    # bot = bot_instance['bot']
     @bot_instance['bot'].message_handler()
     def message_handler(message, bot=bot_instance['bot']):  # Default to the current bot instance
-        logger.info('Inside message_handler.')
+        # logger.info('Inside message_handler.')
         generic_message_handler(bot_instance['bot'], message)
