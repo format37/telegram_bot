@@ -65,21 +65,31 @@ def get_bot_feature_by_token(token, feature):
             return bot[feature]
     return None
 
+# General function to handle callback queries
+"""def handle_callback_query(bot, callback_query):
+    logger.info(f'handle_callback_query: {callback_query}')
+    if callback_query.data == 'choose_model':
+        bot.send_message(callback_query.message.chat.id, 'You pressed choose_model Button.')
+    elif callback_query.data == 'btn2':
+        bot.send_message(callback_query.message.chat.id, 'You pressed Button 2.')"""
+
 
 @app.post("/{token}/")
 async def handle(token: str, request: Request):
     # logger.info(f'handle. Received token: {token}')
     request_body_dict = await request.json()
-    logger.info(f'Received request payload: {request_body_dict}')
+    # logger.info(f'Received request payload: {request_body_dict}')
     update = telebot.types.Update.de_json(request_body_dict)
 
     bot = get_bot_feature_by_token(token, 'bot')
     if bot != None:
         # logger.info(f'Bot object retrieved successfully.')
-        if update.callback_query:
+        logger.info(f'=== update: {update}')
+        """if update.callback_query:
             logger.info(f'update.callback_query')
             handle_callback_query(bot, update.callback_query)
-        elif update.message:
+        elif update.message:"""
+        if update.message:
             logger.info('update.message')
             bot.process_new_updates([update])
             # logger.info('After processing new updates.')
@@ -92,20 +102,11 @@ async def handle(token: str, request: Request):
         raise HTTPException(status_code=403, detail="Invalid token")
 
 
-# General function to handle callback queries
-def handle_callback_query(bot, callback_query):
-    logger.info(f'handle_callback_query: {callback_query}')
-    if callback_query.data == 'choose_model':
-        bot.send_message(callback_query.message.chat.id, 'You pressed choose_model Button.')
-    elif callback_query.data == 'btn2':
-        bot.send_message(callback_query.message.chat.id, 'You pressed Button 2.')
-
-
 # General message handler function
 def generic_message_handler(bot, message):
     # logger.info('generic_message_handler')
     bot_name = get_bot_feature_by_token(bot.token, 'name')
-    logger.info(f'{bot_name} message from: {message.chat.id}')  # Truncated token for identification
+    # logger.info(f'{bot_name} message from: {message.chat.id}')  # Truncated token for identification
     body = message.json
     # logger.info(f'Getting port from: {bot.token[:5]}_PORT')
     # BOT_PORT = os.environ.get(f"{bot.token[:5]}_PORT", '')  # Using truncated token to get the appropriate port
@@ -118,7 +119,7 @@ def generic_message_handler(bot, message):
     if result.status_code != 200:
         logger.error(f"Failed to send message. Status code: {result.status_code}, Response: {result.content}")
     else:
-        logger.info(f'generic_message_handler result: {str(result.text)}')
+        # logger.info(f'generic_message_handler result: {str(result.text)}')
         result_message = json.loads(result.text)
 
         if result_message['type'] == 'text':
@@ -130,12 +131,11 @@ def generic_message_handler(bot, message):
                 resize_keyboard=keyboard_dict['resize_keyboard'],
             )
             for button_definition in keyboard_dict['buttons']:
-                logger.info(f'button callback_data: {button_definition["callback_data"]}')
+                # logger.info(f'button callback_data: {button_definition["callback_data"]}')
                 button = telebot.types.KeyboardButton(
                     text=button_definition['text'],
-                    callback_data=button_definition['callback_data']
+                    request_contact=button_definition['request_contact']
                 )
-                # request_contact=button_definition['request_contact'],
                 keyboard.add(button)
                 
             bot.send_message(
@@ -157,5 +157,6 @@ for bot_instance in bots:
     bot_instance['bot'] = default_bot_init(bot_instance['TOKEN'])
     @bot_instance['bot'].message_handler()
     def message_handler(message, bot=bot_instance['bot']):  # Default to the current bot instance
-        logger.info(f'### message_handler: {message} ###')
+        # logger.info(f'### message_handler: {message} ###')
         generic_message_handler(bot_instance['bot'], message)
+    @bot_instance['bot'].callback_query_handler(func=lambda call: True)
