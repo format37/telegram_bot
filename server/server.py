@@ -42,7 +42,9 @@ async def call_test():
 
 # Initialize bot
 def default_bot_init(bot_token_env):
+    logger.info(f'default_bot_init. Initializing bot: {bot_token_env}')
     API_TOKEN = os.environ.get(bot_token_env, '')
+    logger.info(f'default_bot_init. API_TOKEN: {API_TOKEN}')
     bot = telebot.TeleBot(API_TOKEN)
 
     # Set webhook
