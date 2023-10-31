@@ -75,12 +75,16 @@ async def handle(token: str, request: Request):
     # Get the bot instance based on the token
     bot = bots.get(token)
     if bot:
+        logger.info(f'Bot object retrieved successfully.')
         if update.callback_query:
             handle_callback_query(bot, update.callback_query)
         else:
+            logger.info('Before processing new updates.')
             bot.process_new_updates([update])
+            logger.info('After processing new updates.')
         return JSONResponse(content={"status": "ok"})
     else:
+        logger.info(f'Failed to retrieve bot object.')
         raise HTTPException(status_code=403, detail="Invalid token")
 
 
@@ -132,4 +136,5 @@ for token, bot in bots.items():
     logger.info(f'Initializing bot: {token}')
     @bot.message_handler()
     def message_handler(message, bot=bot):  # Default to the current bot instance
+        logger.info('Inside message_handler.')
         generic_message_handler(bot, message)
