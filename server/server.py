@@ -114,6 +114,7 @@ def generic_message_handler(bot, message):
     logger.info('generic_message_handler')
     logger.info(f'{bot.token[:5]}_message from: {message.chat.id}')  # Truncated token for identification
     body = message.json
+    logger.info(f'Getting port from: {bot.token[:5]}_PORT')
     BOT_PORT = os.environ.get(f"{bot.token[:5]}_PORT", '')  # Using truncated token to get the appropriate port
     message_url = f'http://localhost:{BOT_PORT}/message'
     logger.info(f'message_url: {message_url}')
