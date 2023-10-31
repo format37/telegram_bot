@@ -99,8 +99,8 @@ async def handle(token: str, request: Request):
 
 # General function to handle callback queries
 def handle_callback_query(bot, callback_query):
-    if callback_query.data == 'btn1':
-        bot.send_message(callback_query.message.chat.id, 'You pressed Button 1.')
+    if callback_query.data == 'choose_model':
+        bot.send_message(callback_query.message.chat.id, 'You pressed choose_model Button.')
     elif callback_query.data == 'btn2':
         bot.send_message(callback_query.message.chat.id, 'You pressed Button 2.')
 
