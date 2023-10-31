@@ -116,8 +116,10 @@ def generic_message_handler(bot, message):
     body = message.json
     BOT_PORT = os.environ.get(f"{bot.token[:5]}_PORT", '')  # Using truncated token to get the appropriate port
     message_url = f'http://localhost:{BOT_PORT}/message'
-
+    logger.info(f'message_url: {message_url}')
+    logger.info(f'body: {body}')
     result = requests.post(message_url, json=body)
+    logger.info(f'result: {str(result)}')
     if result.status_code != 200:
         logger.error(f"Failed to send message. Status code: {result.status_code}, Response: {result.content}")
     else:
