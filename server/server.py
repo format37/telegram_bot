@@ -123,9 +123,9 @@ def generic_message_handler(bot, message):
             )
 
 # Initialize bots and set up message handlers
-bots = {
+"""bots = {
     'PANTHERABOT_TOKEN': default_bot_init('PANTHERABOT_TOKEN')
-}
+}"""
 
 for token, bot in bots.items():
     @bot.message_handler()
