@@ -70,10 +70,38 @@ def default_bot_init(bot_token_env):
 
 
 # Initialize bots
-bots = {
-    os.environ.get('PANTHERABOT_TOKEN'): default_bot_init('PANTHERABOT_TOKEN'),
-}
+bots = [
+    {
+        'PORT': os.environ.get('PANTHERABOT_PORT', ''),
+        'TOKEN': os.environ.get('PANTHERABOT_TOKEN', ''),
+        'bot': None
+    }
+]
 
+"""bots = {
+    os.environ.get('PANTHERABOT_TOKEN'): default_bot_init('PANTHERABOT_TOKEN'),
+}"""
+
+# bots = {}
+"""for bot_token_env in bot_list:
+    bots[bot_token_env] = default_bot_init(f'{bot_token_env}_TOKEN')"""
+
+for bot in bots:
+    bot['bot'] = default_bot_init(bot['TOKEN'])
+
+
+def get_bot_by_token(token):
+    for bot_entity in bot_list:
+        if bot_entity['TOKEN'] == token:
+            return bot_entity['bot']
+    return None
+
+
+def get_port_by_token(token):
+    for bot_entity in bot_list:
+        if bot_entity['TOKEN'] == token:
+            return bot_entity['PORT']
+    return None
 
 @app.post("/{token}/")
 async def handle(token: str, request: Request):
@@ -82,11 +110,11 @@ async def handle(token: str, request: Request):
     logger.info(f'Received request payload: {request_body_dict}')
     update = telebot.types.Update.de_json(request_body_dict)
 
-    logger.info(f'Available bots: {list(bots.keys())}')
-    logger.info(f'Available tokens: {list(bots.values())}')
+    # logger.info(f'Available bots: {list(bots.keys())}')
+    # logger.info(f'Available tokens: {list(bots.values())}')
     # Get the bot instance based on the token
-    bot = bots.get(token)
-    # bot = get_bot_by_token(token)
+    # bot = bots.get(token)
+    bot = get_bot_by_token(token)
     if bot != None:
         logger.info(f'Bot object retrieved successfully.')
         if update.callback_query:
@@ -115,7 +143,8 @@ def generic_message_handler(bot, message):
     logger.info(f'{bot.token[:5]}_message from: {message.chat.id}')  # Truncated token for identification
     body = message.json
     logger.info(f'Getting port from: {bot.token[:5]}_PORT')
-    BOT_PORT = os.environ.get(f"{bot.token[:5]}_PORT", '')  # Using truncated token to get the appropriate port
+    # BOT_PORT = os.environ.get(f"{bot.token[:5]}_PORT", '')  # Using truncated token to get the appropriate port
+    BOT_PORT = get_port_by_token(bot.token)
     message_url = f'http://localhost:{BOT_PORT}/message'
     logger.info(f'message_url: {message_url}')
     logger.info(f'body: {body}')
