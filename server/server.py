@@ -111,7 +111,6 @@ def generic_message_handler(bot, message):
         elif result_message['type'] == 'keyboard':
             keyboard_dict = result_message['body']
             keyboard = telebot.types.ReplyKeyboardMarkup(
-                message=keyboard_dict['message'],
                 row_width=keyboard_dict['row_width'], 
                 resize_keyboard=keyboard_dict['resize_keyboard'],
             )
