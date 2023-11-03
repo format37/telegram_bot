@@ -127,6 +127,8 @@ def generic_message_handler(bot, message):
                 keyboard_dict['message'], 
                 reply_markup=keyboard
             )
+        elif result_message['type'] == 'image':
+            bot.send_photo(message.chat.id, result_message['body'])
 
 bots = []
 for bot_name in bot_names:
