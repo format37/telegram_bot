@@ -103,32 +103,36 @@ def generic_message_handler(bot, message):
     if result.status_code != 200:
         logger.error(f"Failed to send message. Status code: {result.status_code}, Response: {result.content}")
     else:
-        # logger.info(f'generic_message_handler result: {str(result.text)}')
-        result_message = json.loads(result.text)
-        logger.info(f'received message type: {result_message["type"]}')
-        if result_message['type'] == 'text':
-            bot.reply_to(message, result_message['body'])
-        elif result_message['type'] == 'keyboard':
-            keyboard_dict = result_message['body']
-            keyboard = telebot.types.ReplyKeyboardMarkup(
-                row_width=keyboard_dict['row_width'], 
-                resize_keyboard=keyboard_dict['resize_keyboard'],
-            )
-            for button_definition in keyboard_dict['buttons']:
-                # logger.info(f'button callback_data: {button_definition["callback_data"]}')
-                button = telebot.types.KeyboardButton(
-                    text=button_definition['text'],
-                    request_contact=button_definition['request_contact']
+        if result.headers['Content-Type'].startswith('image/'):
+            # FileResponse with image
+            bot.send_photo(message.chat.id, result.content)
+        elif result.headers['Content-Type'] == 'application/json':
+            # logger.info(f'generic_message_handler result: {str(result.text)}')
+            result_message = json.loads(result.text)
+            logger.info(f'received message type: {result_message["type"]}')
+            if result_message['type'] == 'text':
+                bot.reply_to(message, result_message['body'])
+            elif result_message['type'] == 'keyboard':
+                keyboard_dict = result_message['body']
+                keyboard = telebot.types.ReplyKeyboardMarkup(
+                    row_width=keyboard_dict['row_width'], 
+                    resize_keyboard=keyboard_dict['resize_keyboard'],
                 )
-                keyboard.add(button)
-                
-            bot.send_message(
-                message.chat.id, 
-                keyboard_dict['message'], 
-                reply_markup=keyboard
-            )
-        elif result_message['type'] == 'image':
-            bot.send_photo(message.chat.id, result_message['body'])
+                for button_definition in keyboard_dict['buttons']:
+                    # logger.info(f'button callback_data: {button_definition["callback_data"]}')
+                    button = telebot.types.KeyboardButton(
+                        text=button_definition['text'],
+                        request_contact=button_definition['request_contact']
+                    )
+                    keyboard.add(button)
+                    
+                bot.send_message(
+                    message.chat.id, 
+                    keyboard_dict['message'], 
+                    reply_markup=keyboard
+                )
+            elif result_message['type'] == 'image':
+                bot.send_photo(message.chat.id, result_message['body'])
 
 bots = []
 for bot_name in bot_names:
