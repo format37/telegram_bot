@@ -105,7 +105,7 @@ def generic_message_handler(bot, message):
     else:
         # logger.info(f'generic_message_handler result: {str(result.text)}')
         result_message = json.loads(result.text)
-
+        logger.info(f'received message type: {result_message["type"]}')
         if result_message['type'] == 'text':
             bot.reply_to(message, result_message['body'])
         elif result_message['type'] == 'keyboard':
