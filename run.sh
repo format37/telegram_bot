@@ -1,4 +1,5 @@
-#     --rm \
+sudo docker stop telegram_bot
+sudo docker rm telegram_bot
 sudo docker run \
     -d \
     --restart always \
