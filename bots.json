@@ -1,6 +1,6 @@
 {
     "PARTNERS_ICEBERG_BOT":{
-        "PORT": "7401",
+        "PORT": 7401,
         "TOKEN": "",
         "bot": ""
     }
