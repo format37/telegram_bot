@@ -105,7 +105,7 @@ async def handle(token: str, request: Request):
 # General message handler function
 def generic_message_handler(bot, message):
     logger.info('generic_message_handler')
-    bot_name = get_bot_feature_by_token(bot.token, 'name')
+    # bot_name = get_bot_feature_by_token(bot.token, 'name')
     # logger.info(f'{bot_name} message from: {message.chat.id}')  # Truncated token for identification
     body = message.json
     BOT_PORT = get_bot_feature_by_token(bot.token, 'PORT')
