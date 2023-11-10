@@ -1,11 +1,12 @@
 version: '3.8'
 services:
   server:
-    # restart: always
+    restart: always
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
       - ./bots.json:/server/bots.json
+      - ./config.json:/server/config.json
     build: server
     logging:
       options:
@@ -14,8 +15,3 @@ services:
     network_mode: "host"
     environment:
       - TZ=Europe/Moscow
-      - WEBHOOK_HOST=service.icecorp.ru
-      - WEBHOOK_PORT=8443
-      - DOCKER_PORT=8443
-      # - PARTNERS_ICEBERG_BOT_TOKEN=
-      # - PARTNERS_ICEBERG_BOT_PORT=7401

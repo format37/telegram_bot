@@ -21,8 +21,12 @@ your_domain.name
 openssl genrsa -out server/webhook_pkey.pem 2048
 openssl req -new -x509 -days 3650 -key server/webhook_pkey.pem -out server/webhook_cert.pem
 ```
-* Fill the bot token, ports, domain name in docker-compose.yml  
+* Build:
+```
+sh build.sh
+```
+* Update the config.json and bots.json with your configuration  
 * Run
 ```
-sh compose.sh
+sh run.sh
 ```
