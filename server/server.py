@@ -74,7 +74,7 @@ def get_bot_feature_by_token(token, feature):
     # logger.info(f'get_bot_feature_by_token. token: {token}, feature: {feature}')
     # logger.info(f'bots: {bots}')
     # for bot in bots:
-    bot_key, bot_instance in bots.items():
+    for bot_key, bot_instance in bots.items():
         if bot_instance['TOKEN'] == token:
             return bot_instance[feature]
     return None
