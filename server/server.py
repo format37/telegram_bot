@@ -35,14 +35,14 @@ def default_bot_init(bot_token_env):
     WEBHOOK_URL_BASE = f"https://{config['WEBHOOK_HOST']}:{config['WEBHOOK_PORT']}"
     WEBHOOK_URL_PATH = f"/{bot_token_env}/"
 
-    logger.info(f'WEBHOOK_URL_BASE: {WEBHOOK_URL_BASE}')
-    logger.info(f'WEBHOOK_URL_PATH: {WEBHOOK_URL_PATH}')
+    # logger.info(f'WEBHOOK_URL_BASE: {WEBHOOK_URL_BASE}')
+    # logger.info(f'WEBHOOK_URL_PATH: {WEBHOOK_URL_PATH}')
 
     bot.remove_webhook()
     # log WEBHOOK_URL_BASE
-    logger.info(f'WEBHOOK_URL_BASE: {WEBHOOK_URL_BASE}')
+    # logger.info(f'WEBHOOK_URL_BASE: {WEBHOOK_URL_BASE}')
     # log WEBHOOK_URL_PATH
-    logger.info(f'WEBHOOK_URL_PATH: {WEBHOOK_URL_PATH}')
+    # logger.info(f'WEBHOOK_URL_PATH: {WEBHOOK_URL_PATH}')
     wh_res = bot.set_webhook(
         url=f"{WEBHOOK_URL_BASE}{WEBHOOK_URL_PATH}", 
         certificate=open('webhook_cert.pem', 'r'),
@@ -64,15 +64,15 @@ def get_bot_feature_by_token(token, feature):
 
 @app.post("/{token}/")
 async def handle(token: str, request: Request):
-    logger.info(f'handle. Received token: {token}')
+    # logger.info(f'handle. Received token: {token}')
     request_body_dict = await request.json()
-    logger.info(f'Received request payload: {request_body_dict}')
+    # logger.info(f'Received request payload: {request_body_dict}')
     update = telebot.types.Update.de_json(request_body_dict)
 
     bot = get_bot_feature_by_token(token, 'bot')
     if bot != None:
         if update.message:
-            logger.info('update.message')
+            # logger.info('update.message')
             bot.process_new_updates([update])
             # logger.info('After processing new updates.')
         else:
@@ -86,14 +86,14 @@ async def handle(token: str, request: Request):
 
 # General message handler function
 def generic_message_handler(bot, message):
-    logger.info('generic_message_handler')
+    # logger.info('generic_message_handler')
     body = message.json
     BOT_PORT = get_bot_feature_by_token(bot.token, 'PORT')
     message_url = f'http://localhost:{BOT_PORT}/message'
     # logger.info(f'message_url: {message_url}')
     # logger.info(f'body: {body}')
     result = requests.post(message_url, json=body)
-    logger.info(f'result: {str(result)}')
+    # logger.info(f'result: {str(result)}')
     if result.status_code != 200:
         logger.error(f"Failed to send message. Status code: {result.status_code}, Response: {result.content}")
     else:
@@ -103,7 +103,7 @@ def generic_message_handler(bot, message):
         elif result.headers['Content-Type'] == 'application/json':
             # logger.info(f'generic_message_handler result: {str(result.text)}')
             result_message = json.loads(result.text)
-            logger.info(f'received message type: {result_message["type"]}')
+            # logger.info(f'received message type: {result_message["type"]}')
             if result_message['type'] == 'text':
                 bot.reply_to(message, result_message['body'])
             elif result_message['type'] == 'keyboard':
