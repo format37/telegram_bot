@@ -26,12 +26,12 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 # Environment variables
-WEBHOOK_HOST = os.environ.get('WEBHOOK_HOST', '')
-WEBHOOK_PORT = os.environ.get('WEBHOOK_PORT', '')
+# WEBHOOK_HOST = os.environ.get('service.icecorp.ru', '')
+# WEBHOOK_PORT = os.environ.get('WEBHOOK_PORT', '')
 # 443, 80, 88 or 8443 (port need to be 'open')
-WEBHOOK_LISTEN = '0.0.0.0'  # In some VPS you may need to put here the IP addr
-WEBHOOK_SSL_CERT = 'webhook_cert.pem'
-WEBHOOK_SSL_PRIV = 'webhook_pkey.pem'
+# WEBHOOK_LISTEN = '0.0.0.0'  # In some VPS you may need to put here the IP addr
+# WEBHOOK_SSL_CERT = 'webhook_cert.pem'
+# WEBHOOK_SSL_PRIV = 'webhook_pkey.pem'
 
 @app.get("/test")
 async def call_test():
@@ -44,13 +44,16 @@ def default_bot_init(bot_token_env):
     logger.info(f'default_bot_init. API_TOKEN: {bot_token_env}')
     bot = telebot.TeleBot(bot_token_env)
 
+    # Read config.json
+    with open('config.json') as config_file:
+        config = json.load(config_file)
+
     # Set webhook
-    WEBHOOK_URL_BASE = f"https://{WEBHOOK_HOST}:{WEBHOOK_PORT}"
+    WEBHOOK_URL_BASE = f"https://{config['WEBHOOK_HOST']}:{config['WEBHOOK_PORT']}"
     WEBHOOK_URL_PATH = f"/{bot_token_env}/"
 
     logger.info(f'WEBHOOK_URL_BASE: {WEBHOOK_URL_BASE}')
     logger.info(f'WEBHOOK_URL_PATH: {WEBHOOK_URL_PATH}')
-    logger.info(f'WEBHOOK_SSL_CERT: {WEBHOOK_SSL_CERT}')
 
     bot.remove_webhook()
     # log WEBHOOK_URL_BASE
@@ -59,7 +62,7 @@ def default_bot_init(bot_token_env):
     logger.info(f'WEBHOOK_URL_PATH: {WEBHOOK_URL_PATH}')
     wh_res = bot.set_webhook(
         url=f"{WEBHOOK_URL_BASE}{WEBHOOK_URL_PATH}", 
-        certificate=open(WEBHOOK_SSL_CERT, 'r'),
+        certificate=open('webhook_cert.pem', 'r'),
         allowed_updates=['message', 'callback_query']
         )
     logger.info(f'webhook set: {wh_res}')

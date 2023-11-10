@@ -1,0 +1,4 @@
+{
+    "WEBHOOK_HOST":"service.icecorp.ru",
+    "WEBHOOK_PORT":"8443"
+}
