@@ -10,7 +10,7 @@ import json
 
 # Initialize bots
 bot_names = [
-    'PANTHERABOT'
+    'PARTNERS_ICEBERG_BOT'
     ]
 
 # Initialize FastAPI

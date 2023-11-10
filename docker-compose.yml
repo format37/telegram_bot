@@ -12,9 +12,9 @@ services:
         max-file: "3"
     network_mode: "host"
     environment:
-      - TZ=America/Los_Angeles
-      - WEBHOOK_HOST=scriptlab.us.to
+      - TZ=Europe/Moscow
+      - WEBHOOK_HOST=service.icecorp.ru
       - WEBHOOK_PORT=8443
       - DOCKER_PORT=8443
-      - PANTHERABOT_TOKEN=
-      - PANTHERABOT_PORT=4220
+      - PARTNERS_ICEBERG_BOT_TOKEN=
+      - PARTNERS_ICEBERG_BOT_PORT=7401
