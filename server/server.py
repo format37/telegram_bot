@@ -8,15 +8,6 @@ import ssl
 import requests
 import json
 
-# Read config from config.json
-"""with open('config.json') as config_file:
-    config = json.load(config_file)"""
-
-# Initialize bots
-"""bot_names = [
-    'PARTNERS_ICEBERG_BOT'
-    ]"""
-
 # Initialize FastAPI
 app = FastAPI()
 
@@ -24,14 +15,6 @@ app = FastAPI()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-
-# Environment variables
-# WEBHOOK_HOST = os.environ.get('service.icecorp.ru', '')
-# WEBHOOK_PORT = os.environ.get('WEBHOOK_PORT', '')
-# 443, 80, 88 or 8443 (port need to be 'open')
-# WEBHOOK_LISTEN = '0.0.0.0'  # In some VPS you may need to put here the IP addr
-# WEBHOOK_SSL_CERT = 'webhook_cert.pem'
-# WEBHOOK_SSL_PRIV = 'webhook_pkey.pem'
 
 @app.get("/test")
 async def call_test():
@@ -73,7 +56,6 @@ def default_bot_init(bot_token_env):
 def get_bot_feature_by_token(token, feature):
     # logger.info(f'get_bot_feature_by_token. token: {token}, feature: {feature}')
     # logger.info(f'bots: {bots}')
-    # for bot in bots:
     for bot_key, bot_instance in bots.items():
         if bot_instance['TOKEN'] == token:
             return bot_instance[feature]
@@ -105,8 +87,6 @@ async def handle(token: str, request: Request):
 # General message handler function
 def generic_message_handler(bot, message):
     logger.info('generic_message_handler')
-    # bot_name = get_bot_feature_by_token(bot.token, 'name')
-    # logger.info(f'{bot_name} message from: {message.chat.id}')  # Truncated token for identification
     body = message.json
     BOT_PORT = get_bot_feature_by_token(bot.token, 'PORT')
     message_url = f'http://localhost:{BOT_PORT}/message'
@@ -148,26 +128,9 @@ def generic_message_handler(bot, message):
             elif result_message['type'] == 'image':
                 bot.send_photo(message.chat.id, result_message['body'])
 
-# bots = []
-"""for bot_name in bot_names:
-    bots.append({
-        'name': bot_name,
-        'PORT': os.environ.get(f"{bot_name}_PORT", ''),
-        'TOKEN': os.environ.get(f"{bot_name}_TOKEN", ''),
-        'bot': None
-    })"""
-
 with open('bots.json') as bots_file:
     bots = json.load(bots_file)
     logger.info(f'bots: {bots}')
-
-data = {'PARTNERS_ICEBERG_BOT': {'PORT': 7401, 'TOKEN': '', 'bot': ''}}
-
-for outer_key, inner_dict in data.items():
-    print(f"Outer Key: {outer_key}")
-    for inner_key, value in inner_dict.items():
-        print(f"  Inner Key: {inner_key}, Value: {value}")
-
 
 for bot_key, bot_instance in bots.items():
     bot_instance['bot'] = default_bot_init(bot_instance['TOKEN'])
