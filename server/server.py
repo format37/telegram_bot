@@ -151,7 +151,15 @@ with open('bots.json') as bots_file:
     bots = json.load(bots_file)
     logger.info(f'bots: {bots}')
 
-for bot_instance in bots:
+data = {'PARTNERS_ICEBERG_BOT': {'PORT': 7401, 'TOKEN': '', 'bot': ''}}
+
+for outer_key, inner_dict in data.items():
+    print(f"Outer Key: {outer_key}")
+    for inner_key, value in inner_dict.items():
+        print(f"  Inner Key: {inner_key}, Value: {value}")
+
+
+for bot_key, bot_instance in bots.items():
     bot_instance['bot'] = default_bot_init(bot_instance['TOKEN'])
     @bot_instance['bot'].message_handler()
     def message_handler(message, bot=bot_instance['bot']):  # Default to the current bot instance
