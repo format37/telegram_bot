@@ -71,6 +71,8 @@ def default_bot_init(bot_token_env):
 
 
 def get_bot_feature_by_token(token, feature):
+    logger.info(f'get_bot_feature_by_token. token: {token}, feature: {feature}')
+    logger.info(f'bots: {bots}')
     for bot in bots:
         if bot['TOKEN'] == token:
             return bot[feature]
