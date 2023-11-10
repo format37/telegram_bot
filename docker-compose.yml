@@ -5,6 +5,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
+      - ./bots.json:/server/bots.json
     build: server
     logging:
       options:
@@ -16,5 +17,5 @@ services:
       - WEBHOOK_HOST=service.icecorp.ru
       - WEBHOOK_PORT=8443
       - DOCKER_PORT=8443
-      - PARTNERS_ICEBERG_BOT_TOKEN=
-      - PARTNERS_ICEBERG_BOT_PORT=7401
+      # - PARTNERS_ICEBERG_BOT_TOKEN=
+      # - PARTNERS_ICEBERG_BOT_PORT=7401

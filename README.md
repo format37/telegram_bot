@@ -11,7 +11,7 @@ The benefit of this structure is that it is possible to serve multiple bots with
 * Clone the repo:
 ```
 git clone https://github.com/format37/telegram_bot.git
-cd telegram_bot_docker
+cd telegram_bot
 ```
 * Link your domain name to ip of yor machine  
 * Make a cert files on a server machine:  

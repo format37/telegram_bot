@@ -8,10 +8,14 @@ import ssl
 import requests
 import json
 
+# Read config from config.json
+"""with open('config.json') as config_file:
+    config = json.load(config_file)"""
+
 # Initialize bots
-bot_names = [
+"""bot_names = [
     'PARTNERS_ICEBERG_BOT'
-    ]
+    ]"""
 
 # Initialize FastAPI
 app = FastAPI()
@@ -134,14 +138,18 @@ def generic_message_handler(bot, message):
             elif result_message['type'] == 'image':
                 bot.send_photo(message.chat.id, result_message['body'])
 
-bots = []
-for bot_name in bot_names:
+# bots = []
+"""for bot_name in bot_names:
     bots.append({
         'name': bot_name,
         'PORT': os.environ.get(f"{bot_name}_PORT", ''),
         'TOKEN': os.environ.get(f"{bot_name}_TOKEN", ''),
         'bot': None
-    })
+    })"""
+
+with open('bots.json') as bots_file:
+    bots = json.load(bots_file)
+    logger.info(f'bots: {bots}')
 
 for bot_instance in bots:
     bot_instance['bot'] = default_bot_init(bot_instance['TOKEN'])
