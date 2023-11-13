@@ -72,7 +72,9 @@ async def handle(token: str, request: Request):
     bot = get_bot_feature_by_token(token, 'bot')
     if bot != None:
         if update.message:
-            # logger.info('update.message')
+            logger.info('update.message')
+            if update.message.photo:
+                logger.info(f"Image received: {update.message.photo[0].file_id}")
             bot.process_new_updates([update])
             # logger.info('After processing new updates.')
         else:
