@@ -1,12 +1,10 @@
 {
     "PARTNERS_ICEBERG_BOT":{
-        "name": "PARTNERS_ICEBERG_BOT",
         "PORT": 7401,
         "TOKEN": "",
         "bot": ""
     },
     "MRM_INFO_BOT":{
-        "name": "MRM_INFO_BOT",
         "PORT": 7402,
         "TOKEN": "",
         "bot": ""
