@@ -8,5 +8,10 @@
         "PORT": 7402,
         "TOKEN": "",
         "bot": ""
+    },
+    "GPT_INSTRUCTOR_BOT":{
+        "PORT": 7403,
+        "TOKEN": "",
+        "bot": ""
     }
 }
