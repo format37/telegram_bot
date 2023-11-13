@@ -80,7 +80,7 @@ async def handle(token: str, request: Request):
 
         return JSONResponse(content={"status": "ok"})
     else:
-        logger.info(f'Failed to retrieve bot object.')
+        logger.info(f'Failed to retrieve bot object: {token}')
         raise HTTPException(status_code=403, detail="Invalid token")
 
 
