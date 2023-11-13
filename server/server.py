@@ -87,7 +87,8 @@ async def handle(token: str, request: Request):
 # General message handler function
 def generic_message_handler(bot, message):
     body = message.json
-    logger.info('generic_message_handler from ' + bot.name)
+    logger.info('generic_message_handler from ' + bot.token)
+    logger.info(f'body: {body}')
     BOT_PORT = get_bot_feature_by_token(bot.token, 'PORT')
     message_url = f'http://localhost:{BOT_PORT}/message'
     # logger.info(f'message_url: {message_url}')
