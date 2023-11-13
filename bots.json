@@ -3,5 +3,10 @@
         "PORT": 7401,
         "TOKEN": "",
         "bot": ""
+    },
+    "MRM_INFO_BOT":{
+        "PORT": 7402,
+        "TOKEN": "",
+        "bot": ""
     }
 }
