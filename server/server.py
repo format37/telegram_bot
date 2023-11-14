@@ -131,6 +131,7 @@ def generic_message_handler(bot, message):
             elif result_message['type'] == 'image':
                 bot.send_photo(message.chat.id, result_message['body'])
 
+"""
 with open('bots.json') as bots_file:
     bots = json.load(bots_file)
     logger.info(f'bots: {bots}')
@@ -141,3 +142,59 @@ for bot_key, bot_instance in bots.items():
     def message_handler(message, bot=bot_instance['bot']):  # Default to the current bot instance
         logger.info(f'### message_handler: {message} ###')
         generic_message_handler(bot_instance['bot'], message)
+"""
+
+with open('bots.json') as bots_file:
+    bots_json = json.load(bots_file)
+    logger.info(f'bots: {bots_json}')
+
+content_types=[
+    'text',
+    'photo',
+    'document',
+    'audio',
+    'video',
+    'sticker',
+    'contact',
+    'location',
+    'venue',
+    'voice',
+    'video_note',
+    'new_chat_members',
+    'left_chat_member',
+    'new_chat_title',
+    'new_chat_photo',
+    'delete_chat_photo',
+    'group_chat_created',
+    'supergroup_chat_created',
+    'channel_chat_created',
+    'migrate_to_chat_id',
+    'migrate_from_chat_id',
+    'pinned_message',
+    'invoice',
+    'successful_payment',
+    'connected_website',
+    'passport_data',
+    'proximity_alert_triggered',
+    'dice',
+    'poll',
+    'poll_answer',
+    'my_chat_member',
+    'chat_member'
+    ]
+
+bots = {}
+
+for bot_key, bot_config in bots_json.items():
+    # Create bot instance
+    bot = telebot.TeleBot(bot_config['TOKEN'])  
+    bots[bot_key] = {
+        'bot': bot,
+        'PORT': bot_config['PORT']
+    }
+
+    # Define handler for this bot instance  
+    @bot.message_handler(content_types=content_types)
+    def message_handler(message):
+        logger.info(f'### {bot_key} got message: {message} ###') 
+        generic_message_handler(bot, message)
