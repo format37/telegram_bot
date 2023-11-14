@@ -90,11 +90,11 @@ async def handle(token: str, request: Request):
 def generic_message_handler(bot, message):
     body = message.json
     logger.info('generic_message_handler from ' + bot.token)
-    logger.info(f'body: {body}')
+    # logger.info(f'body: {body}')
     BOT_PORT = get_bot_feature_by_token(bot.token, 'PORT')
     message_url = f'http://localhost:{BOT_PORT}/message'
-    # logger.info(f'message_url: {message_url}')
-    # logger.info(f'body: {body}')
+    logger.info(f'### Sending message_url: {message_url}')
+    logger.info(f'body: {body}')
     result = requests.post(message_url, json=body)
     # logger.info(f'result: {str(result)}')
     if result.status_code != 200:
