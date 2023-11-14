@@ -71,6 +71,7 @@ async def handle(token: str, request: Request):
 
     bot = get_bot_feature_by_token(token, 'bot')
     if bot != None:
+        logger.info(f'Received bot: {bot.token}')
         if update.message:
             logger.info('update.message')
             if update.message.photo:
