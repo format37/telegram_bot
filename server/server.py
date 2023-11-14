@@ -190,7 +190,8 @@ for bot_key, bot_config in bots_json.items():
     bot = telebot.TeleBot(bot_config['TOKEN'])  
     bots[bot_key] = {
         'bot': bot,
-        'PORT': bot_config['PORT']
+        'PORT': bot_config['PORT'],
+        'TOKEN': bot_config['TOKEN']
     }
 
     # Define handler for this bot instance  
