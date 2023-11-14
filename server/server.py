@@ -197,5 +197,5 @@ for bot_key, bot_config in bots_json.items():
     # Define handler for this bot instance  
     @bot.message_handler(content_types=content_types)
     def message_handler(message):
-        logger.info(f'### {bot_key} got message: {message} ###') 
+        logger.info(f'### {bot.token} got message: {message} ###') 
         generic_message_handler(bot, message)
