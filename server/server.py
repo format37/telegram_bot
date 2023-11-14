@@ -54,8 +54,8 @@ def default_bot_init(bot_token_env):
 
 
 def get_bot_feature_by_token(token, feature):
-    logger.info(f'get_bot_feature_by_token. token: {token}, feature: {feature}')
-    logger.info(f'bots: {bots}')
+    # logger.info(f'get_bot_feature_by_token. token: {token}, feature: {feature}')
+    # logger.info(f'bots: {bots}')
     for bot_key, bot_instance in bots.items():
         if bot_instance['TOKEN'] == token:
             return bot_instance[feature]
@@ -71,11 +71,11 @@ async def handle(token: str, request: Request):
 
     bot = get_bot_feature_by_token(token, 'bot')
     if bot != None:
-        logger.info(f'Received bot: {bot.token}')
+        # logger.info(f'Received bot: {bot.token}')
         if update.message:
-            logger.info('update.message')
-            if update.message.photo:
-                logger.info(f"Image received: {update.message.photo[0].file_id}")
+            # logger.info('update.message')
+            # if update.message.photo:
+                # logger.info(f"Image received: {update.message.photo[0].file_id}")
             bot.process_new_updates([update])
             # logger.info('After processing new updates.')
         else:
@@ -90,12 +90,12 @@ async def handle(token: str, request: Request):
 # General message handler function
 def generic_message_handler(bot, message):
     body = message.json
-    logger.info('generic_message_handler from ' + bot.token)
+    # logger.info('generic_message_handler from ' + bot.token)
     # logger.info(f'body: {body}')
     BOT_PORT = get_bot_feature_by_token(bot.token, 'PORT')
     message_url = f'http://localhost:{BOT_PORT}/message'
-    logger.info(f'### Sending message_url: {message_url}')
-    logger.info(f'body: {body}')
+    # logger.info(f'### Sending message_url: {message_url}')
+    # logger.info(f'body: {body}')
     result = requests.post(message_url, json=body)
     # logger.info(f'result: {str(result)}')
     if result.status_code != 200:
@@ -171,35 +171,12 @@ content_types=[
 
 with open('bots.json') as bots_file:
     bots = json.load(bots_file)
-    logger.info(f'bots: {bots}')
+    # logger.info(f'bots: {bots}')
 
 for bot_key, bot_instance in bots.items():
     bot_instance['bot'] = default_bot_init(bot_instance['TOKEN'])
     @bot_instance['bot'].message_handler(content_types=content_types)
     def message_handler(message, bot=bot_instance['bot']):  # Default to the current bot instance
-        logger.info(f'### message_handler from bot:{bot.token} or {bot_instance["TOKEN"]} message: {message} ###')
+        # logger.info(f'### message_handler from bot:{bot.token} or {bot_instance["TOKEN"]} message: {message} ###')
         # generic_message_handler(bot_instance['bot'], message)
         generic_message_handler(bot, message)
-
-"""
-with open('bots.json') as bots_file:
-    bots_json = json.load(bots_file)
-    logger.info(f'bots: {bots_json}')
-
-bots = {}
-
-for bot_key, bot_config in bots_json.items():
-    # Create bot instance
-    bot = telebot.TeleBot(bot_config['TOKEN'])  
-    bots[bot_key] = {
-        'bot': bot,
-        'PORT': bot_config['PORT'],
-        'TOKEN': bot_config['TOKEN']
-    }
-
-    # Define handler for this bot instance  
-    @bot.message_handler(content_types=content_types)
-    def message_handler(message):
-        logger.info(f'### {bot.token} got message: {message} ###') 
-        generic_message_handler(bot, message)
-"""
