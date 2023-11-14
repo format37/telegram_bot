@@ -132,22 +132,6 @@ def generic_message_handler(bot, message):
             elif result_message['type'] == 'image':
                 bot.send_photo(message.chat.id, result_message['body'])
 
-"""
-with open('bots.json') as bots_file:
-    bots = json.load(bots_file)
-    logger.info(f'bots: {bots}')
-
-for bot_key, bot_instance in bots.items():
-    bot_instance['bot'] = default_bot_init(bot_instance['TOKEN'])
-    @bot_instance['bot'].message_handler(content_types=['text','photo','document','audio','video','sticker','contact','location','venue','voice','video_note','new_chat_members','left_chat_member','new_chat_title','new_chat_photo','delete_chat_photo','group_chat_created','supergroup_chat_created','channel_chat_created','migrate_to_chat_id','migrate_from_chat_id','pinned_message','invoice','successful_payment','connected_website','passport_data','proximity_alert_triggered','dice','poll','poll_answer','my_chat_member','chat_member'])
-    def message_handler(message, bot=bot_instance['bot']):  # Default to the current bot instance
-        logger.info(f'### message_handler: {message} ###')
-        generic_message_handler(bot_instance['bot'], message)
-"""
-
-with open('bots.json') as bots_file:
-    bots_json = json.load(bots_file)
-    logger.info(f'bots: {bots_json}')
 
 content_types=[
     'text',
@@ -184,6 +168,23 @@ content_types=[
     'chat_member'
     ]
 
+
+with open('bots.json') as bots_file:
+    bots = json.load(bots_file)
+    logger.info(f'bots: {bots}')
+
+for bot_key, bot_instance in bots.items():
+    bot_instance['bot'] = default_bot_init(bot_instance['TOKEN'])
+    @bot_instance['bot'].message_handler(content_types=content_types)
+    def message_handler(message, bot=bot_instance['bot']):  # Default to the current bot instance
+        logger.info(f'### message_handler from bot:{bot.token} message: {message} ###')
+        generic_message_handler(bot_instance['bot'], message)
+
+"""
+with open('bots.json') as bots_file:
+    bots_json = json.load(bots_file)
+    logger.info(f'bots: {bots_json}')
+
 bots = {}
 
 for bot_key, bot_config in bots_json.items():
@@ -200,3 +201,4 @@ for bot_key, bot_config in bots_json.items():
     def message_handler(message):
         logger.info(f'### {bot.token} got message: {message} ###') 
         generic_message_handler(bot, message)
+"""
