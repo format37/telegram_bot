@@ -96,7 +96,11 @@ def generic_message_handler(bot, message):
     message_url = f'http://localhost:{BOT_PORT}/message'
     # logger.info(f'### Sending message_url: {message_url}')
     # logger.info(f'body: {body}')
-    result = requests.post(message_url, json=body)
+    
+    headers = {'Authorization': f'Bearer {bot.token}'}
+    # result = requests.post(message_url, json=body)
+    result = requests.post(message_url, json=body, headers=headers)
+
     # logger.info(f'result: {str(result)}')
     if result.status_code != 200:
         logger.error(f"Failed to send message. Status code: {result.status_code}, Response: {result.content}")
