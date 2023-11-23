@@ -109,8 +109,10 @@ def generic_message_handler(bot, message):
             result_message = json.loads(result.text)
             # logger.info(f'received message type: {result_message["type"]}')
             if result_message['type'] == 'text':
+                logger.info(f'generic_message_handler text from {bot.token}')
                 bot.reply_to(message, result_message['body'])
             elif result_message['type'] == 'keyboard':
+                logger.info(f'generic_message_handler keyboard from {bot.token}')
                 keyboard_dict = result_message['body']
                 keyboard = telebot.types.ReplyKeyboardMarkup(
                     row_width=keyboard_dict['row_width'], 
@@ -130,7 +132,11 @@ def generic_message_handler(bot, message):
                     reply_markup=keyboard
                 )
             elif result_message['type'] == 'image':
+                logger.info(f'generic_message_handler image from {bot.token}')
                 bot.send_photo(message.chat.id, result_message['body'])
+            elif result_message['type'] == 'empty':
+                logger.info(f'generic_message_handler empty from {bot.token}')
+                pass            
 
 
 content_types=[
