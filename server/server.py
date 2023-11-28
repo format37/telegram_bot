@@ -122,17 +122,28 @@ def generic_message_handler(bot, message):
                 if 'keyboard_type' in result_message and result_message['keyboard_type'] == 'inline':
                     logger.info(f'{message.chat.id} inline keyboard from {bot.token}')
                     keyboard = telebot.types.InlineKeyboardMarkup(
-                        row_width=keyboard_dict['row_width'], 
-                        resize_keyboard=keyboard_dict['resize_keyboard'],
+                        row_width=keyboard_dict['row_width']                        
                     )
+                    # resize_keyboard=keyboard_dict['resize_keyboard'],
                     logger.info(f'{message.chat.id} inline key button list length: {len(keyboard_dict["buttons"])}')
-                    for button_definition in keyboard_dict['buttons']:
+                    """for button_definition in keyboard_dict['buttons']:
                         logger.info(f'Adding button: {button_definition["text"]}')
                         button = telebot.types.InlineKeyboardButton(
                             text=button_definition['text']
                         )
                         # callback_data=button_definition['callback_data']
-                        keyboard.add(button)
+                        keyboard.add(button)"""
+                    
+                    for button_group in keyboard_dict['buttons']:
+                        buttons = []
+                        for button_definition in button_group:
+                            logger.info(f'Adding button: {button_definition["text"]}')
+                            button = telebot.types.InlineKeyboardButton(
+                                text=button_definition['text'],
+                                callback_data=button_definition['callback_data']
+                            )
+                            buttons.append(button)
+                        keyboard.add(*buttons)
 
                 else:
                     logger.info(f'{message.chat.id} reply keyboard from {bot.token}')
