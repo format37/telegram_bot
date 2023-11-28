@@ -73,9 +73,13 @@ async def handle(token: str, request: Request):
     if bot != None:
         # logger.info(f'Received bot: {bot.token}')
         if update.message:
-            # logger.info('update.message')
+            logger.info('update.message')
             # if update.message.photo:
                 # logger.info(f"Image received: {update.message.photo[0].file_id}")
+            bot.process_new_updates([update])
+            # logger.info('After processing new updates.')
+        elif update.callback_query:
+            logger.info('update.callback_query')
             bot.process_new_updates([update])
             # logger.info('After processing new updates.')
         else:
@@ -85,7 +89,29 @@ async def handle(token: str, request: Request):
     else:
         logger.info(f'Failed to retrieve bot object: {token}')
         raise HTTPException(status_code=403, detail="Invalid token")
+    
+# Callback query handler
+def callback_query_handler(bot, call):
+    logger.info(f'callback_query_handler from {bot.token}')
+    body = call.json
+    logger.info(f'body: {body}')
+    BOT_PORT = get_bot_feature_by_token(bot.token, 'PORT')
+    callback_query_url = f'http://localhost:{BOT_PORT}/callback_query'
+    # logger.info(f'### Sending callback_query_url: {callback_query_url}')
+    # logger.info(f'body: {body}')
+    
+    headers = {'Authorization': f'Bearer {bot.token}'}
+    # result = requests.post(callback_query_url, json=body)
+    
+    """
+    result = requests.post(callback_query_url, json=body, headers=headers)
 
+    # logger.info(f'result: {str(result)}')
+    if result.status_code != 200:
+        logger.error(f"Failed to send callback_query. Status code: {result.status_code}, Response: {result.content}")
+    else:
+        logger.info(f'callback_query_handler result: {str(result.text)}')
+    """
 
 # General message handler function
 def generic_message_handler(bot, message):
@@ -213,9 +239,16 @@ with open('bots.json') as bots_file:
     # logger.info(f'bots: {bots}')
 
 for bot_key, bot_instance in bots.items():
+    
     bot_instance['bot'] = default_bot_init(bot_instance['TOKEN'])
+
     @bot_instance['bot'].message_handler(content_types=content_types)
     def message_handler(message, bot=bot_instance['bot']):  # Default to the current bot instance
         # logger.info(f'### message_handler from bot:{bot.token} or {bot_instance["TOKEN"]} message: {message} ###')
         # generic_message_handler(bot_instance['bot'], message)
         generic_message_handler(bot, message)
+
+    @bot_instance['bot'].callback_query_handler(func=lambda call: True)
+    def callback_query_handler(call, bot=bot_instance['bot']):
+        # logger.info(f'### callback_query_handler from bot:{bot.token} or {bot_instance["TOKEN"]} call: {call} ###')
+        callback_query_handler(bot, call)
