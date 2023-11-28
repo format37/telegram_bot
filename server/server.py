@@ -92,10 +92,10 @@ async def handle(token: str, request: Request):
         raise HTTPException(status_code=403, detail="Invalid token")
     
 # Callback query handler
-def callback_query_handler(bot, call):
-    logger.info(f'callback_query_handler from {bot.token}')
+def generic_callback_query_handler(bot, call):
+    logger.info(f'[{bot.token}] generic_callback_query_handler')
     body = call.json
-    logger.info(f'body: {body}')
+    logger.info(f'[{bot.token}] body: {body}')
     BOT_PORT = get_bot_feature_by_token(bot.token, 'PORT')
     callback_query_url = f'http://localhost:{BOT_PORT}/callback'
     # logger.info(f'### Sending callback_query_url: {callback_query_url}')
@@ -253,4 +253,4 @@ for bot_key, bot_instance in bots.items():
     @bot_instance['bot'].callback_query_handler(func=lambda call: True)
     def callback_query_handler(call, bot=bot_instance['bot']):
         logger.info(f'### callback_query_handler from bot:{bot.token} or {bot_instance["TOKEN"]} call: {call} ###')
-        callback_query_handler(bot, call)
+        generic_callback_query_handler(bot, call)
