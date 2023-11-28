@@ -115,14 +115,17 @@ def generic_message_handler(bot, message):
             if result_message['type'] == 'text':
                 logger.info(f'generic_message_handler text from {bot.token}')
                 bot.reply_to(message, result_message['body'])
+            
             elif result_message['type'] == 'keyboard':
                 logger.info(f'generic_message_handler keyboard from {bot.token}')
                 keyboard_dict = result_message['body']
                 if 'keyboard_type' in result_message and result_message['keyboard_type'] == 'inline':
+                    logger.info(f'{message.chat.id} inline keyboard from {bot.token}')
                     keyboard = telebot.types.InlineKeyboardMarkup(
                         row_width=keyboard_dict['row_width'], 
                         resize_keyboard=keyboard_dict['resize_keyboard'],
                     )
+                    logger.info(f'{message.chat.id} inline key button list length: {len(keyboard_dict["buttons"])}')
                     for button_definition in keyboard_dict['buttons']:
                         logger.info(f'Adding button: {button_definition["text"]}')
                         button = telebot.types.InlineKeyboardButton(
@@ -130,7 +133,9 @@ def generic_message_handler(bot, message):
                         )
                         # callback_data=button_definition['callback_data']
                         keyboard.add(button)
+
                 else:
+                    logger.info(f'{message.chat.id} reply keyboard from {bot.token}')
                     keyboard = telebot.types.ReplyKeyboardMarkup(
                         row_width=keyboard_dict['row_width'], 
                         resize_keyboard=keyboard_dict['resize_keyboard'],
