@@ -72,16 +72,17 @@ async def handle(token: str, request: Request):
     bot = get_bot_feature_by_token(token, 'bot')
     if bot != None:
         # logger.info(f'Received bot: {bot.token}')
-        if update.message:
-            logger.info('update.message')
+        if update.message or update.callback_query:
+            logger.info(f'[{bot.token}] update')
             # if update.message.photo:
                 # logger.info(f"Image received: {update.message.photo[0].file_id}")
             bot.process_new_updates([update])
             # logger.info('After processing new updates.')
-        elif update.callback_query:
+            """elif update.callback_query:
             logger.info('update.callback_query')
             bot.process_new_updates([update])
-            # logger.info('After processing new updates.')
+            # logger.info('After processing new updates.')"""
+
         else:
             logger.info(f'update have no candidate: {update}')
 
@@ -245,11 +246,11 @@ for bot_key, bot_instance in bots.items():
 
     @bot_instance['bot'].message_handler(content_types=content_types)
     def message_handler(message, bot=bot_instance['bot']):  # Default to the current bot instance
-        # logger.info(f'### message_handler from bot:{bot.token} or {bot_instance["TOKEN"]} message: {message} ###')
+        logger.info(f'### message_handler from bot:{bot.token} or {bot_instance["TOKEN"]} message: {message} ###')
         # generic_message_handler(bot_instance['bot'], message)
         generic_message_handler(bot, message)
 
     @bot_instance['bot'].callback_query_handler(func=lambda call: True)
     def callback_query_handler(call, bot=bot_instance['bot']):
-        # logger.info(f'### callback_query_handler from bot:{bot.token} or {bot_instance["TOKEN"]} call: {call} ###')
+        logger.info(f'### callback_query_handler from bot:{bot.token} or {bot_instance["TOKEN"]} call: {call} ###')
         callback_query_handler(bot, call)
