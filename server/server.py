@@ -111,7 +111,7 @@ def generic_message_handler(bot, message):
         elif result.headers['Content-Type'] == 'application/json':
             # logger.info(f'generic_message_handler result: {str(result.text)}')
             result_message = json.loads(result.text)
-            # logger.info(f'received message type: {result_message["type"]}')
+            logger.info(f'generic_message_handler application/json result_message: {result_message}')
             if result_message['type'] == 'text':
                 logger.info(f'generic_message_handler text from {bot.token}')
                 bot.reply_to(message, result_message['body'])
