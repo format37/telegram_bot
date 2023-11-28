@@ -103,15 +103,20 @@ def callback_query_handler(bot, call):
     headers = {'Authorization': f'Bearer {bot.token}'}
     # result = requests.post(callback_query_url, json=body)
     
-    """
+    
     result = requests.post(callback_query_url, json=body, headers=headers)
 
-    # logger.info(f'result: {str(result)}')
+    # logger.info(f'bot: {bot.token} id: {call.callback_query.json.from.id}  result: {str(result)}')
+    logger.info(f'bot: {bot.token} result: {str(result)}')
+    try:
+        logger.info(f'call.callback_query.json.from.id: {call.callback_query.json.from.id}')
+    except Exception as e:
+        logger.info(f'unable to parse call.callback_query.json.from.id')
+        
     if result.status_code != 200:
         logger.error(f"Failed to send callback_query. Status code: {result.status_code}, Response: {result.content}")
     else:
         logger.info(f'callback_query_handler result: {str(result.text)}')
-    """
 
 # General message handler function
 def generic_message_handler(bot, message):
