@@ -96,7 +96,7 @@ def callback_query_handler(bot, call):
     body = call.json
     logger.info(f'body: {body}')
     BOT_PORT = get_bot_feature_by_token(bot.token, 'PORT')
-    callback_query_url = f'http://localhost:{BOT_PORT}/callback_query'
+    callback_query_url = f'http://localhost:{BOT_PORT}/callback'
     # logger.info(f'### Sending callback_query_url: {callback_query_url}')
     # logger.info(f'body: {body}')
     
@@ -108,11 +108,7 @@ def callback_query_handler(bot, call):
 
     # logger.info(f'bot: {bot.token} id: {call.callback_query.json.from.id}  result: {str(result)}')
     logger.info(f'bot: {bot.token} result: {str(result)}')
-    try:
-        logger.info(f'call.callback_query.json.from.id: {call.callback_query.json.from.id}')
-    except Exception as e:
-        logger.info(f'unable to parse call.callback_query.json.from.id')
-        
+
     if result.status_code != 200:
         logger.error(f"Failed to send callback_query. Status code: {result.status_code}, Response: {result.content}")
     else:
