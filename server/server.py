@@ -123,18 +123,25 @@ def generic_message_handler(bot, message):
                         row_width=keyboard_dict['row_width'], 
                         resize_keyboard=keyboard_dict['resize_keyboard'],
                     )
+                    for button_definition in keyboard_dict['buttons']:
+                        logger.info(f'Adding button: {button_definition["text"]}')
+                        button = telebot.types.InlineKeyboardButton(
+                            text=button_definition['text']
+                        )
+                        # callback_data=button_definition['callback_data']
+                        keyboard.add(button)
                 else:
                     keyboard = telebot.types.ReplyKeyboardMarkup(
                         row_width=keyboard_dict['row_width'], 
                         resize_keyboard=keyboard_dict['resize_keyboard'],
                     )
-                for button_definition in keyboard_dict['buttons']:
-                    # logger.info(f'button callback_data: {button_definition["callback_data"]}')
-                    button = telebot.types.KeyboardButton(
-                        text=button_definition['text'],
-                        request_contact=button_definition['request_contact']
-                    )
-                    keyboard.add(button)
+                    for button_definition in keyboard_dict['buttons']:
+                        # logger.info(f'button callback_data: {button_definition["callback_data"]}')
+                        button = telebot.types.KeyboardButton(
+                            text=button_definition['text'],
+                            request_contact=button_definition['request_contact']
+                        )
+                        keyboard.add(button)
                     
                 bot.send_message(
                     message.chat.id, 
