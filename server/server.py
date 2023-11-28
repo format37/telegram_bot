@@ -104,7 +104,6 @@ def generic_callback_query_handler(bot, call):
     headers = {'Authorization': f'Bearer {bot.token}'}
     # result = requests.post(callback_query_url, json=body)
     
-    
     result = requests.post(callback_query_url, json=body, headers=headers)
 
     # logger.info(f'bot: {bot.token} id: {call.callback_query.json.from.id}  result: {str(result)}')
@@ -114,6 +113,28 @@ def generic_callback_query_handler(bot, call):
         logger.error(f"Failed to send callback_query. Status code: {result.status_code}, Response: {result.content}")
     else:
         logger.info(f'callback_query_handler result: {str(result.text)}')
+
+        if result.headers['Content-Type'].startswith('image/'):
+            # FileResponse with image
+            # bot.send_photo(message.chat.id, result.content)
+            logger.info(f'[{bot.token}] generic_callback_query_handler: image')
+        elif result.headers['Content-Type'] == 'application/json':
+            logger.info(f'[{bot.token}] generic_callback_query_handler: application/json')
+            result_message = json.loads(result.text)
+            if result_message['type'] == 'text':
+                logger.info(f'[{bot.token}] generic_callback_query_handler type: text')
+                # bot.reply_to(message, result_message['body'])
+            elif result_message['type'] == 'keyboard':
+                logger.info(f'[{bot.token}] generic_callback_query_handler type: keyboard')
+                # TODO: Init the keyboard and text from answer
+                # keyboard_dict = result_message['body']
+                # Edit the message with the keyboard        
+                """bot.edit_message_text(
+                    chat_id=call.message.chat.id, 
+                    message_id=call.message.message_id, 
+                    text='Список заявок ['+str(current_page)+'/'+str(total_pages)+']:', 
+                    reply_markup=keyboard
+                    )"""
 
 # General message handler function
 def generic_message_handler(bot, message):
@@ -246,11 +267,9 @@ for bot_key, bot_instance in bots.items():
 
     @bot_instance['bot'].message_handler(content_types=content_types)
     def message_handler(message, bot=bot_instance['bot']):  # Default to the current bot instance
-        logger.info(f'### message_handler from bot:{bot.token} or {bot_instance["TOKEN"]} message: {message} ###')
-        # generic_message_handler(bot_instance['bot'], message)
+        # logger.info(f'### message_handler from bot:{bot.token} or {bot_instance["TOKEN"]} message: {message} ###')
         generic_message_handler(bot, message)
 
     @bot_instance['bot'].callback_query_handler(func=lambda call: True)
     def callback_query_handler(call, bot=bot_instance['bot']):
-        logger.info(f'### callback_query_handler from bot:{bot.token} or {bot_instance["TOKEN"]} call: {call} ###')
         generic_callback_query_handler(bot, call)
