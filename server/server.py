@@ -91,7 +91,7 @@ async def handle(token: str, request: Request):
         logger.info(f'Failed to retrieve bot object: {token}')
         raise HTTPException(status_code=403, detail="Invalid token")
     
-# Callback query handler
+# Callback query handler (inline keyboard edit)
 def generic_callback_query_handler(bot, call):
     logger.info(f'[{bot.token}] generic_callback_query_handler')
     body = call.json
@@ -126,15 +126,29 @@ def generic_callback_query_handler(bot, call):
                 # bot.reply_to(message, result_message['body'])
             elif result_message['type'] == 'keyboard':
                 logger.info(f'[{bot.token}] generic_callback_query_handler type: keyboard')
-                # TODO: Init the keyboard and text from answer
-                # keyboard_dict = result_message['body']
-                # Edit the message with the keyboard        
-                """bot.edit_message_text(
+                
+                keyboard_dict = result_message['body']
+
+                # Create an instance of InlineKeyboardMarkup
+                keyboard = telebot.types.InlineKeyboardMarkup()
+
+                for button_group in keyboard_dict['buttons']:
+                        buttons = []
+                        for button_definition in button_group:
+                            logger.info(f'Adding button: {button_definition["text"]}')
+                            button = telebot.types.InlineKeyboardButton(
+                                text=button_definition['text'],
+                                callback_data=button_definition['callback_data']
+                            )
+                            buttons.append(button)
+                        keyboard.add(*buttons)
+
+                bot.edit_message_text(
                     chat_id=call.message.chat.id, 
                     message_id=call.message.message_id, 
-                    text='Список заявок ['+str(current_page)+'/'+str(total_pages)+']:', 
+                    text=keyboard_dict['message'], 
                     reply_markup=keyboard
-                    )"""
+                    )
 
 # General message handler function
 def generic_message_handler(bot, message):
