@@ -101,54 +101,60 @@ def generic_callback_query_handler(bot, call):
     # logger.info(f'### Sending callback_query_url: {callback_query_url}')
     # logger.info(f'body: {body}')
     
-    headers = {'Authorization': f'Bearer {bot.token}'}
-    # result = requests.post(callback_query_url, json=body)
-    
+    headers = {'Authorization': f'Bearer {bot.token}'}    
     result = requests.post(callback_query_url, json=body, headers=headers)
 
-    # logger.info(f'bot: {bot.token} id: {call.callback_query.json.from.id}  result: {str(result)}')
     logger.info(f'bot: {bot.token} result: {str(result)}')
 
     if result.status_code != 200:
         logger.error(f"Failed to send callback_query. Status code: {result.status_code}, Response: {result.content}")
-    else:
-        logger.info(f'callback_query_handler result: {str(result.text)}')
+        return
+    
+    logger.info(f'callback_query_handler result: {str(result.text)}')
 
-        if result.headers['Content-Type'].startswith('image/'):
-            # FileResponse with image
-            # bot.send_photo(message.chat.id, result.content)
-            logger.info(f'[{bot.token}] generic_callback_query_handler: image')
-        elif result.headers['Content-Type'] == 'application/json':
-            logger.info(f'[{bot.token}] generic_callback_query_handler: application/json')
-            result_message = json.loads(result.text)
-            if result_message['type'] == 'text':
-                logger.info(f'[{bot.token}] generic_callback_query_handler type: text')
-                # bot.reply_to(message, result_message['body'])
-            elif result_message['type'] == 'keyboard':
-                logger.info(f'[{bot.token}] generic_callback_query_handler type: keyboard')
-                
-                keyboard_dict = result_message['body']
+    if result.headers['Content-Type'].startswith('image/'):
+        # FileResponse with image
+        # bot.send_photo(message.chat.id, result.content)
+        logger.info(f'[{bot.token}] generic_callback_query_handler: image')
 
-                # Create an instance of InlineKeyboardMarkup
-                keyboard = telebot.types.InlineKeyboardMarkup()
+    elif result.headers['Content-Type'] == 'application/json':
+        logger.info(f'[{bot.token}] generic_callback_query_handler: application/json')
+        result_message = json.loads(result.text)
+       
+        if result_message['type'] == 'text':
+            logger.info(f'[{bot.token}] generic_callback_query_handler type: text')
+            bot.edit_message_text(
+                chat_id=call.message.chat.id, 
+                message_id=call.message.message_id, 
+                text=result_message['body']
+                )
+            # bot.reply_to(message, result_message['body'])
+            
+        elif result_message['type'] == 'keyboard':
+            logger.info(f'[{bot.token}] generic_callback_query_handler type: keyboard')
+            
+            keyboard_dict = result_message['body']
 
-                for button_group in keyboard_dict['buttons']:
-                        buttons = []
-                        for button_definition in button_group:
-                            logger.info(f'Adding button: {button_definition["text"]}')
-                            button = telebot.types.InlineKeyboardButton(
-                                text=button_definition['text'],
-                                callback_data=button_definition['callback_data']
-                            )
-                            buttons.append(button)
-                        keyboard.add(*buttons)
+            # Create an instance of InlineKeyboardMarkup
+            keyboard = telebot.types.InlineKeyboardMarkup()
 
-                bot.edit_message_text(
-                    chat_id=call.message.chat.id, 
-                    message_id=call.message.message_id, 
-                    text=keyboard_dict['message'], 
-                    reply_markup=keyboard
-                    )
+            for button_group in keyboard_dict['buttons']:
+                    buttons = []
+                    for button_definition in button_group:
+                        logger.info(f'Adding button: {button_definition["text"]}')
+                        button = telebot.types.InlineKeyboardButton(
+                            text=button_definition['text'],
+                            callback_data=button_definition['callback_data']
+                        )
+                        buttons.append(button)
+                    keyboard.add(*buttons)
+
+            bot.edit_message_text(
+                chat_id=call.message.chat.id, 
+                message_id=call.message.message_id, 
+                text=keyboard_dict['message'], 
+                reply_markup=keyboard
+                )
 
 # General message handler function
 def generic_message_handler(bot, message):
