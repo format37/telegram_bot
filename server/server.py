@@ -291,6 +291,6 @@ for bot_key, bot_instance in bots.items():
         logger.info(f'### message_handler from bot:{bot.token} or {bot_instance["TOKEN"]} message: {message} ###')
         generic_message_handler(bot, message)
 
-    """@bot_instance['bot'].callback_query_handler(func=lambda call: True)
+    @bot_instance['bot'].callback_query_handler(func=lambda call: True)
     def callback_query_handler(call, bot=bot_instance['bot']):
-        generic_callback_query_handler(bot, call)"""
+        generic_callback_query_handler(bot, call)
