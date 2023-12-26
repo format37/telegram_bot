@@ -31,10 +31,11 @@ def default_bot_init(bot_token_env):
     with open('config.json') as config_file:
         config = json.load(config_file)
 
+    logger.info('config was readen')
     # Set webhook
     WEBHOOK_URL_BASE = f"https://{config['WEBHOOK_HOST']}:{config['WEBHOOK_PORT']}"
     WEBHOOK_URL_PATH = f"/{bot_token_env}/"
-
+    
     logger.info(f'WEBHOOK_URL_BASE: {WEBHOOK_URL_BASE}')
     logger.info(f'WEBHOOK_URL_PATH: {WEBHOOK_URL_PATH}')
 
