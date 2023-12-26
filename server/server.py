@@ -64,14 +64,14 @@ def get_bot_feature_by_token(token, feature):
 
 @app.post("/{token}/")
 async def handle(token: str, request: Request):
-    # logger.info(f'handle. Received token: {token}')
+    logger.info(f'handle. Received token: {token}')
     request_body_dict = await request.json()
     # logger.info(f'Received request payload: {request_body_dict}')
     update = telebot.types.Update.de_json(request_body_dict)
 
     bot = get_bot_feature_by_token(token, 'bot')
     if bot != None:
-        # logger.info(f'Received bot: {bot.token}')
+        logger.info(f'Received bot: {bot.token}')
         if update.message or update.callback_query:
             logger.info(f'[{bot.token}] update')
             # if update.message.photo:
@@ -91,7 +91,7 @@ async def handle(token: str, request: Request):
         logger.info(f'Failed to retrieve bot object: {token}')
         raise HTTPException(status_code=403, detail="Invalid token")
     
-# Callback query handler (inline keyboard edit)
+# Callback query handler (Reaction: edit bot's message)
 def generic_callback_query_handler(bot, call):
     logger.info(f'[{bot.token}] generic_callback_query_handler')
     body = call.json
@@ -128,8 +128,7 @@ def generic_callback_query_handler(bot, call):
                 message_id=call.message.message_id, 
                 text=result_message['body']
                 )
-            # bot.reply_to(message, result_message['body'])
-            
+
         elif result_message['type'] == 'keyboard':
             logger.info(f'[{bot.token}] generic_callback_query_handler type: keyboard')
             
@@ -156,10 +155,10 @@ def generic_callback_query_handler(bot, call):
                 reply_markup=keyboard
                 )
 
-# General message handler function
+# General User's message handler function
 def generic_message_handler(bot, message):
     body = message.json
-    # logger.info('generic_message_handler from ' + bot.token)
+    logger.info('generic_message_handler from ' + bot.token)
     logger.info(f'body: {body}')
     BOT_PORT = get_bot_feature_by_token(bot.token, 'PORT')
     message_url = f'http://localhost:{BOT_PORT}/message'
@@ -167,7 +166,6 @@ def generic_message_handler(bot, message):
     # logger.info(f'body: {body}')
     
     headers = {'Authorization': f'Bearer {bot.token}'}
-    # result = requests.post(message_url, json=body)
     result = requests.post(message_url, json=body, headers=headers)
 
     # logger.info(f'result: {str(result)}')
@@ -176,7 +174,9 @@ def generic_message_handler(bot, message):
     else:
         if result.headers['Content-Type'].startswith('image/'):
             # FileResponse with image
-            bot.send_photo(message.chat.id, result.content)
+            # bot.send_photo(message.chat.id, result.content)
+            logger.info(f'[{bot.token}] generic_message_handler IMAGE response for {message.chat.id}')
+
         elif result.headers['Content-Type'] == 'application/json':
             # logger.info(f'generic_message_handler result: {str(result.text)}')
             result_message = json.loads(result.text)
@@ -238,7 +238,7 @@ def generic_message_handler(bot, message):
                 bot.send_photo(message.chat.id, result_message['body'])
             elif result_message['type'] == 'empty':
                 logger.info(f'generic_message_handler empty from {bot.token}')
-                pass            
+                pass
 
 
 content_types=[
