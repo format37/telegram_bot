@@ -284,7 +284,7 @@ with open('bots.json') as bots_file:
 for bot_key, bot_instance in bots.items():
     
     bot_instance['bot'] = default_bot_init(bot_instance['TOKEN'])
-    logger.info(f'created bot_instance: {bot_instance}')
+    logger.info(f'created {bot_key} bot_instance: {bot_instance}')
 
     @bot_instance['bot'].message_handler(content_types=content_types)
     def message_handler(message, bot=bot_instance['bot']):  # Default to the current bot instance
