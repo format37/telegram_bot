@@ -280,10 +280,10 @@ content_types=[
 
 
 with open('bots.json') as bots_file:
-    bots = json.load(bots_file)
+    bots_config = json.load(bots_file)
     # logger.info(f'bots: {bots}')
 
-for bot_key, bot_instance in bots.items():
+for bot_key, bot_instance in bots_config.items():
     
     bot_instance['bot'] = default_bot_init(bot_instance['TOKEN'])
     logger.info(f'created {bot_key} bot_instance: {bot_instance}')
