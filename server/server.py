@@ -284,10 +284,11 @@ with open('bots.json') as bots_file:
 for bot_key, bot_instance in bots.items():
     
     bot_instance['bot'] = default_bot_init(bot_instance['TOKEN'])
+    logger.info(f'created bot_instance: {bot_instance}')
 
     @bot_instance['bot'].message_handler(content_types=content_types)
     def message_handler(message, bot=bot_instance['bot']):  # Default to the current bot instance
-        # logger.info(f'### message_handler from bot:{bot.token} or {bot_instance["TOKEN"]} message: {message} ###')
+        logger.info(f'### message_handler from bot:{bot.token} or {bot_instance["TOKEN"]} message: {message} ###')
         generic_message_handler(bot, message)
 
     @bot_instance['bot'].callback_query_handler(func=lambda call: True)
