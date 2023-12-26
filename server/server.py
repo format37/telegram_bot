@@ -289,10 +289,10 @@ for bot_key, bot_instance in bots_config.items():
     logger.info(f'created {bot_key} bot_instance: {bot_instance}')
 
     @bot_instance['bot'].message_handler(content_types=content_types)
-    def message_handler(message, bot=bot_instance['bot']):  # Default to the current bot instance
-        logger.info(f'### message_handler from bot:{bot.token} or {bot_instance["TOKEN"]} message: {message} ###')
-        generic_message_handler(bot, message)
+    def message_handler(message, current_bot=bot_instance['bot']):  # Default to the current bot instance
+        logger.info(f'### message_handler from bot:{current_bot.token} or {bot_instance["TOKEN"]} message: {message} ###')
+        generic_message_handler(current_bot, message)
 
     @bot_instance['bot'].callback_query_handler(func=lambda call: True)
-    def callback_query_handler(call, bot=bot_instance['bot']):
-        generic_callback_query_handler(bot, call)
+    def callback_query_handler(call, current_bot=bot_instance['bot']):
+        generic_callback_query_handler(current_bot, call)
