@@ -158,6 +158,7 @@ def generic_callback_query_handler(bot, call):
 
 # General User's message handler function
 def generic_message_handler(bot, message):
+    logger.info('generic_message_handler..')
     body = message.json
     logger.info('generic_message_handler from ' + bot.token)
     logger.info(f'body: {body}')
