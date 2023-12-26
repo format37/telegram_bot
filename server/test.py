@@ -29,7 +29,11 @@ def init_bot(bot_config):
     def message_handler(message):
         handle_text_message(bot, message)
 
-    webhook_url = f"https://{bot_config['WEBHOOK_HOST']}:{bot_config['WEBHOOK_PORT']}/{bot_config['TOKEN']}/"
+    # Read config.json
+    with open('config.json') as config_file:
+        config = json.load(config_file)
+
+    webhook_url = f"https://{config['WEBHOOK_HOST']}:{config['WEBHOOK_PORT']}/{bot_config['TOKEN']}/"
     bot.remove_webhook()
     bot.set_webhook(url=webhook_url)
 
