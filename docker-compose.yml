@@ -8,7 +8,7 @@ services:
       - ./bots.json:/server/bots.json
       - ./config.json:/server/config.json
     build: server
-    container_name: bos_server_telegram
+    container_name: bots_server_telegram
     logging:
       options:
         max-size: "10m"
