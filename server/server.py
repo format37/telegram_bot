@@ -28,7 +28,7 @@ def handle_text_message(bot, message, bot_config):
 
     # if 'document' in message:
 
-    if 'audio' in message:
+    """if 'audio' in body:
         logger.info(f'[{bot.token}] generic_message_handler AUDIO from {message.chat.id}')
         AUDIO_URL = f'http://localhost:{BOT_PORT}/audio'
     
@@ -52,11 +52,11 @@ def handle_text_message(bot, message, bot_config):
             # print("Error uploading audio:")
             logger.error(f'Error uploading audio: {response.text}')
             # print(response.text)
-    else:
-        message_url = f'http://localhost:{BOT_PORT}/message'
-        logger.info(f'### Sending message_url: {message_url}')
-        headers = {'Authorization': f'Bearer {bot.token}'}
-        result = requests.post(message_url, json=body, headers=headers)
+    else:"""
+    message_url = f'http://localhost:{BOT_PORT}/message'
+    logger.info(f'### Sending message_url: {message_url}')
+    headers = {'Authorization': f'Bearer {bot.token}'}
+    result = requests.post(message_url, json=body, headers=headers)
     
     if result.status_code != 200:
         logger.error(f"Failed to send message. Status code: {result.status_code}, Response: {result.content}")
