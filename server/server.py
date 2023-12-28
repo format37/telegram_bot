@@ -111,9 +111,45 @@ def handle_text_message(bot, message, bot_config):
 # Initialize bot
 def init_bot(bot_config):
     bot = telebot.TeleBot(bot_config['TOKEN'])
+
+    content_types=[
+        `'text',
+        'photo',
+        'document',
+        'audio',
+        'video',
+        'sticker',
+        'contact',
+        'location',
+        'venue',
+        'voice',
+        'video_note',
+        'new_chat_members',
+        'left_chat_member',
+        'new_chat_title',
+        'new_chat_photo',
+        'delete_chat_photo',
+        'group_chat_created',
+        'supergroup_chat_created',
+        'channel_chat_created',
+        'migrate_to_chat_id',
+        'migrate_from_chat_id',
+        'pinned_message',
+        'invoice',
+        'successful_payment',
+        'connected_website',
+        'passport_data',
+        'proximity_alert_triggered',
+        'dice',
+        'poll',
+        'poll_answer',
+        'my_chat_member',
+        'chat_member'`
+    ]
     
     # message_handler
-    @bot.message_handler(func=lambda message: True)
+    # @bot.message_handler(func=lambda message: True)
+    @bot.message_handler(content_types=content_types)
     def message_handler(message):
         handle_text_message(bot, message, bot_config)
 
