@@ -25,9 +25,15 @@ def handle_text_message(bot, message):
 def init_bot(bot_config):
     bot = telebot.TeleBot(bot_config['TOKEN'])
     
+    # message_handler
     @bot.message_handler(func=lambda message: True)
     def message_handler(message):
         handle_text_message(bot, message)
+
+    # callback_query_handler
+    @bot.callback_query_handler(func=lambda call: True)
+    def callback_query_handler(call):
+        logger.info(f'Received callback query from {call.message.chat.id}: {call.data}')
 
     # Read config.json
     with open('config.json') as config_file:
