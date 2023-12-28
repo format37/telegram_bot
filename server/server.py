@@ -113,7 +113,7 @@ def init_bot(bot_config):
     bot = telebot.TeleBot(bot_config['TOKEN'])
 
     content_types=[
-        `'text',
+        'text',
         'photo',
         'document',
         'audio',
@@ -144,7 +144,7 @@ def init_bot(bot_config):
         'poll',
         'poll_answer',
         'my_chat_member',
-        'chat_member'`
+        'chat_member'
     ]
     
     # message_handler
