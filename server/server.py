@@ -18,8 +18,13 @@ async def call_test():
     return JSONResponse(content={"status": "ok"})
 
 # Simple text message handler function
-def handle_text_message(bot, message):
+def handle_text_message(bot, message, bot_config):
     logger.info(f'Received message from {message.chat.id}: {message.text}')
+    body = message.json
+    logger.info(f'body: {body}')
+    BOT_PORT = bot_config['PORT']
+    message_url = f'http://localhost:{BOT_PORT}/message'
+    logger.info(f'### Sending message_url: {message_url}')
 
 # Initialize bot
 def init_bot(bot_config):
@@ -28,7 +33,7 @@ def init_bot(bot_config):
     # message_handler
     @bot.message_handler(func=lambda message: True)
     def message_handler(message):
-        handle_text_message(bot, message)
+        handle_text_message(bot, message, bot_config)
 
     # callback_query_handler
     @bot.callback_query_handler(func=lambda call: True)
