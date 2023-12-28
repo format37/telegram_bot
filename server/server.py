@@ -38,6 +38,12 @@ def handle_text_message(bot, message, bot_config):
             # bot.send_photo(message.chat.id, result.content)
             logger.info(f'[{bot.token}] generic_message_handler IMAGE response for {message.chat.id}')
 
+        # audio document
+        elif result.headers['Content-Type'].startswith('audio/'):
+            # FileResponse with audio
+            # bot.send_audio(message.chat.id, result.content)
+            logger.info(f'[{bot.token}] generic_message_handler AUDIO response for {message.chat.id}')
+
         elif result.headers['Content-Type'] == 'application/json':
             # logger.info(f'generic_message_handler result: {str(result.text)}')
             result_message = json.loads(result.text)
