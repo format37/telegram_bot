@@ -25,10 +25,38 @@ def handle_text_message(bot, message, bot_config):
     logger.info(f'body: {body}')
     
     BOT_PORT = bot_config['PORT']
-    message_url = f'http://localhost:{BOT_PORT}/message'
-    logger.info(f'### Sending message_url: {message_url}')
-    headers = {'Authorization': f'Bearer {bot.token}'}
-    result = requests.post(message_url, json=body, headers=headers)
+
+    # if 'document' in message:
+
+    if 'audio' in message:
+        logger.info(f'[{bot.token}] generic_message_handler AUDIO from {message.chat.id}')
+        AUDIO_URL = f'http://localhost:{BOT_PORT}/audio'
+    
+        # Get the audio file ID
+        file_id = message.audio.file_id 
+        file_info = bot.get_file(file_id)
+        
+        # Download the file contents 
+        file_bytes = bot.download_file(file_info.file_path)
+
+        # Post the audio data to the /audio endpoint  
+        headers = {'Authorization': f'Bearer {bot.token}'}
+        response = requests.post(AUDIO_URL, 
+            data=file_bytes, 
+            headers=headers)
+
+        if response.ok:
+            # print("Audio uploaded successfully")
+            logger.info(f'Audio uploaded successfully')
+        else:
+            # print("Error uploading audio:")
+            logger.error(f'Error uploading audio: {response.text}')
+            # print(response.text)
+    else:
+        message_url = f'http://localhost:{BOT_PORT}/message'
+        logger.info(f'### Sending message_url: {message_url}')
+        headers = {'Authorization': f'Bearer {bot.token}'}
+        result = requests.post(message_url, json=body, headers=headers)
     
     if result.status_code != 200:
         logger.error(f"Failed to send message. Status code: {result.status_code}, Response: {result.content}")
@@ -43,6 +71,8 @@ def handle_text_message(bot, message, bot_config):
             # FileResponse with audio
             # bot.send_audio(message.chat.id, result.content)
             logger.info(f'[{bot.token}] generic_message_handler AUDIO response for {message.chat.id}')
+            # Call audio
+            
 
         elif result.headers['Content-Type'] == 'application/json':
             # logger.info(f'generic_message_handler result: {str(result.text)}')
