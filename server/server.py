@@ -190,6 +190,7 @@ def init_bot(bot_config):
     @bot.inline_handler(func=lambda query: True)
     def inline_query_handler(query):
         logger.info(f'Received inline query from {query.from_user.id}: {query.query}')
+        handle_inline_query(bot, query, bot_config)
 
     # Read config.json
     with open('config.json') as config_file:
