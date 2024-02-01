@@ -26,33 +26,6 @@ def handle_text_message(bot, message, bot_config):
     
     BOT_PORT = bot_config['PORT']
 
-    # if 'document' in message:
-
-    """if 'audio' in body:
-        logger.info(f'[{bot.token}] generic_message_handler AUDIO from {message.chat.id}')
-        AUDIO_URL = f'http://localhost:{BOT_PORT}/audio'
-    
-        # Get the audio file ID
-        file_id = message.audio.file_id 
-        file_info = bot.get_file(file_id)
-        
-        # Download the file contents 
-        file_bytes = bot.download_file(file_info.file_path)
-
-        # Post the audio data to the /audio endpoint  
-        headers = {'Authorization': f'Bearer {bot.token}'}
-        response = requests.post(AUDIO_URL, 
-            data=file_bytes, 
-            headers=headers)
-
-        if response.ok:
-            # print("Audio uploaded successfully")
-            logger.info(f'Audio uploaded successfully')
-        else:
-            # print("Error uploading audio:")
-            logger.error(f'Error uploading audio: {response.text}')
-            # print(response.text)
-    else:"""
     message_url = f'http://localhost:{BOT_PORT}/message'
     logger.info(f'### Sending message_url: {message_url}')
     headers = {'Authorization': f'Bearer {bot.token}'}
@@ -138,6 +111,31 @@ def handle_text_message(bot, message, bot_config):
                 pass
 
 
+def handle_inline_query(bot, inline_query, bot_config):
+    logger.info(f'Received inline query from {inline_query.from_user.id}: {inline_query.query}')
+    
+    results = []  # This list should contain one or more objects of types.InlineQueryResult
+    
+    # Example: Generating one InlineQueryResultArticle
+    try:
+        result_article = telebot.types.InlineQueryResultArticle(
+            id='1',
+            title='Sample Result',
+            input_message_content=telebot.types.InputTextMessageContent(
+                message_text='Response to the query'
+            )
+        )
+        results.append(result_article)
+        
+        # If you have more results, generate them here and append to "results"
+        
+    except Exception as e:
+        logger.error(f'Error processing inline query: {str(e)}')
+
+    # Sending results to Telegram
+    bot.answer_inline_query(inline_query.id, results)
+
+
 # Initialize bot
 def init_bot(bot_config):
     bot = telebot.TeleBot(bot_config['TOKEN'])
@@ -188,6 +186,11 @@ def init_bot(bot_config):
     def callback_query_handler(call):
         logger.info(f'Received callback query from {call.message.chat.id}: {call.data}')
 
+    # Inline_query_handler
+    @bot.inline_handler(func=lambda query: True)
+    def inline_query_handler(query):
+        logger.info(f'Received inline query from {query.from_user.id}: {query.query}')
+
     # Read config.json
     with open('config.json') as config_file:
         config = json.load(config_file)
@@ -210,7 +213,7 @@ for bot_key, bot_instance in bots_config.items():
 
 @app.post("/{token}/")
 async def handle_request(token: str, request: Request):
-    if token in bots:
+    if token in bots: 
         bot = bots[token]
         request_body_dict = await request.json()
         update = telebot.types.Update.de_json(request_body_dict)
