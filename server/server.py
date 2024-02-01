@@ -144,9 +144,9 @@ def handle_inline_query(bot, inline_query, bot_config):
     results = []  # This list should contain one or more objects of types.InlineQueryResult
     # Request results from server
     BOT_PORT = bot_config['PORT']
-    inline_query_url = f'http://localhost:{BOT_PORT}/inline'
+    inline_query_url = f'http://localhost:{BOT_PORT}/inline_query'
     headers = {'Authorization': f'Bearer {bot.token}'}
-    logger.info(f'### Sending message_url: {inline_query_url}')
+    logger.info(f'### Sending inline_query_url: {inline_query_url}')
     # body = inline_query.json
     body = inline_query
     logger.info(f'body type: {type(body)}')
