@@ -119,8 +119,11 @@ def handle_inline_query(bot, inline_query, bot_config):
     BOT_PORT = bot_config['PORT']
     inline_query_url = f'http://localhost:{BOT_PORT}/inline'
     headers = {'Authorization': f'Bearer {bot.token}'}
-    body = inline_query.json
     logger.info(f'### Sending message_url: {inline_query_url}')
+    # body = inline_query.json
+    body = inline_query
+    logger.info(f'body type: {type(body)}')
+    logger.info(f'body: {body}')
     result = requests.post(inline_query_url, json=body, headers=headers)
     """
     logger.info(f'### Sending inline_query_url: {inline_query_url}')
