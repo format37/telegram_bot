@@ -118,11 +118,17 @@ def handle_inline_query(bot, inline_query, bot_config):
     # Request results from server
     BOT_PORT = bot_config['PORT']
     inline_query_url = f'http://localhost:{BOT_PORT}/inline'
+    headers = {'Authorization': f'Bearer {bot.token}'}
+    body = inline_query.json
+    logger.info(f'### Sending message_url: {inline_query_url}')
+    result = requests.post(inline_query_url, json=body, headers=headers)
+    """
     logger.info(f'### Sending inline_query_url: {inline_query_url}')
     data = {
         "inline_query": inline_query.json
     }
     result = requests.post(inline_query_url, json=data)
+    """
     logger.info(f'inline_query result code: {result.status_code}')
     logger.info(f'inline_query result headers: {result.headers}')
     logger.info(f'inline_query result content: {result.content}')
@@ -202,7 +208,7 @@ def init_bot(bot_config):
     # Inline_query_handler
     @bot.inline_handler(func=lambda query: True)
     def inline_query_handler(query):
-        logger.info(f'Received inline query from {query.from_user.id}: {query.query}')
+        # logger.info(f'Received inline query from {query.from_user.id}: {query.query}')
         handle_inline_query(bot, query, bot_config)
 
     # Read config.json
