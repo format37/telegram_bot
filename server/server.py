@@ -148,11 +148,9 @@ def handle_inline_query(bot, inline_query, bot_config):
     headers = {'Authorization': f'Bearer {bot.token}'}
     logger.info(f'### Sending inline_query_url: {inline_query_url}')
     # body = inline_query.json
-    body = inline_query
-    logger.info(f'body type: {type(body)}')
-    # body type: <class 'telebot.types.InlineQuery'>
-    # Convert to json
-    body = body.json
+    body = {
+        "from_user_id": inline_query.from_user.id
+    }
     logger.info(f'body type: {type(body)}')
     logger.info(f'body: {body}')
     result = requests.post(inline_query_url, json=body, headers=headers)
