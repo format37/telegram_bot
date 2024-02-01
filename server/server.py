@@ -123,6 +123,11 @@ def handle_inline_query(bot, inline_query, bot_config):
         "inline_query": inline_query.json
     }
     result = requests.post(inline_query_url, json=data)
+    logger.info(f'inline_query result code: {result.status_code}')
+    logger.info(f'inline_query result headers: {result.headers}')
+    logger.info(f'inline_query result content: {result.content}')
+    result = json.loads(result.text)
+    logger.info(f'inline_query result: {result}')
     
     # Example: Generating one InlineQueryResultArticle
     try:
