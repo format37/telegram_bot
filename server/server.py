@@ -115,6 +115,14 @@ def handle_inline_query(bot, inline_query, bot_config):
     logger.info(f'Received inline query from {inline_query.from_user.id}: {inline_query.query}')
     
     results = []  # This list should contain one or more objects of types.InlineQueryResult
+    # Request results from server
+    BOT_PORT = bot_config['PORT']
+    inline_query_url = f'http://localhost:{BOT_PORT}/inline'
+    logger.info(f'### Sending inline_query_url: {inline_query_url}')
+    data = {
+        "inline_query": inline_query.json
+    }
+
     
     # Example: Generating one InlineQueryResultArticle
     try:
