@@ -122,15 +122,15 @@ def handle_inline_query(bot, inline_query, bot_config):
     data = {
         "inline_query": inline_query.json
     }
-
+    result = requests.post(inline_query_url, json=data)
     
     # Example: Generating one InlineQueryResultArticle
     try:
         result_article = telebot.types.InlineQueryResultArticle(
             id='1',
-            title='Sample Result',
+            title=result['title'],
             input_message_content=telebot.types.InputTextMessageContent(
-                message_text='Response to the query'
+                message_text=result['message_text']
             )
         )
         results.append(result_article)
