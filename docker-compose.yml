@@ -7,6 +7,7 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - ./bots.json:/server/bots.json
       - ./config.json:/server/config.json
+      - ./blocked.txt:/server/blocked.txt
     build: server
     container_name: bots_server_telegram
     logging:

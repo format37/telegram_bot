@@ -4,9 +4,36 @@ import telebot
 import logging
 import json
 import requests
+from fastapi import FastAPI, Request, HTTPException
+from starlette.middleware.base import BaseHTTPMiddleware
 
 # Initialize FastAPI
 app = FastAPI()
+
+# Read blocked IP addresses from file
+def read_blocked_ips():
+    with open('blocked.txt', 'r') as blocked_file:
+        blocked_ips = blocked_file.readlines()
+        blocked_ips = [ip.strip() for ip in blocked_ips]
+    return blocked_ips
+
+blocked_ips = read_blocked_ips()
+
+# Middleware for blocking requests from blocked IPs
+class BlockIPMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        client_host = request.client.host
+        if client_host in blocked_ips:
+            raise HTTPException(status_code=403, detail="Access forbidden")
+        return await call_next(request)
+
+# Add the middleware to the app
+app.add_middleware(BlockIPMiddleware)
+
+# Your routes would go here
+@app.get("/")
+async def read_root():
+    return {"Hello": "World"}
 
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
