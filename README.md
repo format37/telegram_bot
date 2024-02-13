@@ -20,12 +20,12 @@ sudo apt-get update
 sudo apt-get install certbot python3-certbot-nginx
 ```
 * Set Up Nginx
+You need to replace yourdomain.com with your domain in all the following steps.
 ```
 sudo apt-get install nginx
-# Replace yourdomain.com with your domain:
 sudo nano /etc/nginx/sites-available/yourdomain.com
 ```
-Paste the following, replacing the yourdomain.com:
+Paste the following:
 ```
 server {
     listen 80;
@@ -47,7 +47,7 @@ server {
 
 }
 ```
-* Enable the site, replacing yourdomain.com:
+* Enable the site:
 ```
 sudo ln -s /etc/nginx/sites-available/yourdomain.com /etc/nginx/sites-enabled/
 sudo nginx -t
@@ -59,8 +59,8 @@ sudo certbot --nginx -d yourdomain.com
 ```
 * Copy the SSL certificate to the project folder
 ```
-sudo cp /etc/letsencrypt/live/service.icecorp.ru/fullchain.pem ./server/webhook_cert.pem
-sudo cp /etc/letsencrypt/live/service.icecorp.ru/privkey.pem ./server/webhook_pkey.pem
+sudo cp /etc/letsencrypt/live/yourdomain.com/fullchain.pem ./server/webhook_cert.pem
+sudo cp /etc/letsencrypt/live/yourdomain.com/privkey.pem ./server/webhook_pkey.pem
 ```
 * Build the docker image
 ```
