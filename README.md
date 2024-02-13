@@ -19,7 +19,7 @@ cd telegram_bot
 sudo apt-get update
 sudo apt-get install certbot python3-certbot-nginx
 ```
-* Set Up Nginx
+* Set Up Nginx  
 You need to replace yourdomain.com with your domain in all the following steps.
 ```
 sudo apt-get install nginx
