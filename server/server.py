@@ -268,7 +268,7 @@ async def handle_request(token: str, request: Request):
     if token in bots: 
         bot = bots[token]
         request_body_dict = await request.json()
-        logger.info(f'Received request for bot {token}: {request_body_dict}')
+        # logger.info(f'Received request for bot {token}: {request_body_dict}')
         update = telebot.types.Update.de_json(request_body_dict)
         bot.process_new_updates([update])
         return JSONResponse(content={"status": "ok"})
