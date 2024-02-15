@@ -8,8 +8,8 @@ services:
       - ./bots.json:/server/bots.json
       - ./config.json:/server/config.json
       - ./blocked.txt:/server/blocked.txt
-      - /etc/letsencrypt/live/rtlm.info/fullchain.pem:/certs/fullchain.pem
-      - /etc/letsencrypt/live/rtlm.info/privkey.pem:/certs/privkey.pem
+      - /etc/letsencrypt/live/rtlm.info/fullchain.pem:/cert/fullchain.pem
+      - /etc/letsencrypt/live/rtlm.info/privkey.pem:/cert/privkey.pem
     build: server
     container_name: bots_server_telegram
     logging:
