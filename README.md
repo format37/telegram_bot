@@ -57,11 +57,11 @@ sudo systemctl restart nginx
 ```
 sudo certbot --nginx -d yourdomain.com
 ```
-* Copy the SSL certificate to the project folder
+* Enabling auto-renewal
 ```
-sudo cp /etc/letsencrypt/live/yourdomain.com/fullchain.pem ./server/webhook_cert.pem
-sudo cp /etc/letsencrypt/live/yourdomain.com/privkey.pem ./server/webhook_pkey.pem
+sudo certbot renew --dry-run
 ```
+* Don't forget to replace yourdomain.com with your domain in the docker-compose.yml
 * Build the docker image
 ```
 sh build.sh
