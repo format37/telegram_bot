@@ -151,7 +151,8 @@ def handle_inline_query(bot, inline_query, bot_config):
     # logger.info(f'### Sending inline_query_url: {inline_query_url}')
     # body = inline_query.json
     body = {
-        "from_user_id": inline_query.from_user.id
+        "from_user_id": inline_query.from_user.id,
+        "query": inline_query.query
     }
     # logger.info(f'body type: {type(body)}')
     # logger.info(f'body: {body}')
