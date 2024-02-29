@@ -152,6 +152,7 @@ def handle_inline_query(bot, inline_query, bot_config):
     # body = inline_query.json
     body = {
         "from_user_id": inline_query.from_user.id,
+        "inline_query_id": inline_query.id,
         "query": inline_query.query
     }
     # logger.info(f'body type: {type(body)}')
@@ -164,69 +165,69 @@ def handle_inline_query(bot, inline_query, bot_config):
     }
     result = requests.post(inline_query_url, json=data)
     """
-    logger.info(f'inline_query result code: {result.status_code}')
+    # logger.info(f'inline_query result code: {result.status_code}')
     # logger.info(f'inline_query result headers: {result.headers}')
     # logger.info(f'inline_query result content: {result.content}')
-    result = json.loads(result.text)
-    logger.info(f'inline_query result: {result}')
+    # result = json.loads(result.text)
+    # logger.info(f'inline_query result: {result}')
     
     # Example: Generating one InlineQueryResultArticle
-    try:
-        """result_article = telebot.types.InlineQueryResultArticle(
-            id='1',
-            title=result['title'],
-            input_message_content=telebot.types.InputTextMessageContent(
-                message_text=result['message_text']
-            )
+    # try:
+    """result_article = telebot.types.InlineQueryResultArticle(
+        id='1',
+        title=result['title'],
+        input_message_content=telebot.types.InputTextMessageContent(
+            message_text=result['message_text']
         )
-        results.append(result_article)"""
+    )
+    results.append(result_article)"""
 
-        """# answer 0
-            r0 = telebot.types.InlineQueryResultArticle(
-                '0',
-                answer[0],
-                telebot.types.InputTextMessageContent(answer[0]),
-            )
+    """# answer 0
+    r0 = telebot.types.InlineQueryResultArticle(
+        '0',
+        answer[0],
+        telebot.types.InputTextMessageContent(answer[0]),
+    )
 
-            # answer 1
-            r1 = telebot.types.InlineQueryResultArticle(
-                '1',
-                answer[1],
-                telebot.types.InputTextMessageContent(answer[1]),
-            )
+    # answer 1
+    r1 = telebot.types.InlineQueryResultArticle(
+        '1',
+        answer[1],
+        telebot.types.InputTextMessageContent(answer[1]),
+    )
 
-            # answer 2
-            r2 = telebot.types.InlineQueryResultArticle(
-                '2',
-                answer[2],
-                telebot.types.InputTextMessageContent(answer[2]),
-            )
+    # answer 2
+    r2 = telebot.types.InlineQueryResultArticle(
+        '2',
+        answer[2],
+        telebot.types.InputTextMessageContent(answer[2]),
+    )
 
-            answer = [r0, r1, r2]
+    answer = [r0, r1, r2]
 
-            calcubot.answer_inline_query(
-                inline_query.id,
-                answer,
-                cache_time=0,
-                is_personal=True
-            )  # updated"""
+    calcubot.answer_inline_query(
+        inline_query.id,
+        answer,
+        cache_time=0,
+        is_personal=True
+    )  # updated"""
 
-        # Actually, result is a dict like {'title': 'Solution', 'message_text': '["2 = 2", "2 = 2", "2"]'}, so we need to iterate in message_text
-        for i, message_text in enumerate(result['message_text']):
-            curent_r = telebot.types.InlineQueryResultArticle(
-                str(i),
-                message_text,
-                telebot.types.InputTextMessageContent(message_text),
-            )
-            results.append(curent_r)
+    # Actually, result is a dict like {'title': 'Solution', 'message_text': '["2 = 2", "2 = 2", "2"]'}, so we need to iterate in message_text
+    """for i, message_text in enumerate(result['message_text']):
+        curent_r = telebot.types.InlineQueryResultArticle(
+            str(i),
+            message_text,
+            telebot.types.InputTextMessageContent(message_text),
+        )
+        results.append(curent_r)"""
+    
+    # If you have more results, generate them here and append to "results"
         
-        # If you have more results, generate them here and append to "results"
-        
-    except Exception as e:
+    """except Exception as e:
         logger.error(f'Error processing inline query: {str(e)}')
 
     # Sending results to Telegram
-    bot.answer_inline_query(inline_query.id, results, cache_time=0, is_personal=True)
+    bot.answer_inline_query(inline_query.id, results, cache_time=0, is_personal=True)"""
 
 
 # Initialize bot
