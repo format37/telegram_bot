@@ -269,9 +269,13 @@ async def handle_request(token: str, request: Request):
         bot = bots[token]
         request_body_dict = await request.json()
         # logger.info(f'Received request for bot {token}: {request_body_dict}')
-        update = telebot.types.Update.de_json(request_body_dict)
-        bot.process_new_updates([update])
-        return JSONResponse(content={"status": "ok"})
+        try:
+            update = telebot.types.Update.de_json(request_body_dict)
+            bot.process_new_updates([update])
+            return JSONResponse(content={"status": "ok"})
+        except Exception as e:
+            logger.error(f'Error processing request for bot {token}: {str(e)}')
+            return JSONResponse(content={"status": "error"}, status_code=500)
     else:
         logger.error(f'Invalid token: {token}')
         return JSONResponse(content={"status": "error"}, status_code=403)
