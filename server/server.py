@@ -164,22 +164,32 @@ def handle_inline_query(bot, inline_query, bot_config):
     }
     result = requests.post(inline_query_url, json=data)
     """
-    # logger.info(f'inline_query result code: {result.status_code}')
+    logger.info(f'inline_query result code: {result.status_code}')
     # logger.info(f'inline_query result headers: {result.headers}')
     # logger.info(f'inline_query result content: {result.content}')
     result = json.loads(result.text)
-    # logger.info(f'inline_query result: {result}')
+    logger.info(f'inline_query result: {result}')
     
     # Example: Generating one InlineQueryResultArticle
     try:
-        result_article = telebot.types.InlineQueryResultArticle(
+        """result_article = telebot.types.InlineQueryResultArticle(
             id='1',
             title=result['title'],
             input_message_content=telebot.types.InputTextMessageContent(
                 message_text=result['message_text']
             )
         )
-        results.append(result_article)
+        results.append(result_article)"""
+        # Actually, result is a list
+        for i, res in enumerate(result):
+            result_article = telebot.types.InlineQueryResultArticle(
+                id=str(i),
+                title=res,
+                input_message_content=telebot.types.InputTextMessageContent(
+                    message_text=res
+                )
+            )
+            results.append(result_article)
         
         # If you have more results, generate them here and append to "results"
         
