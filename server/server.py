@@ -47,14 +47,14 @@ async def call_test():
 
 # Simple text message handler function
 def handle_text_message(bot, message, bot_config):
-    logger.info(f'Received message from {message.chat.id}: {message.text}')
+    # logger.info(f'Received message from {message.chat.id}: {message.text}')
     body = message.json
-    logger.info(f'body: {body}')
+    # logger.info(f'body: {body}')
     
     BOT_PORT = bot_config['PORT']
 
     message_url = f'http://localhost:{BOT_PORT}/message'
-    logger.info(f'### Sending message_url: {message_url}')
+    # logger.info(f'### Sending message_url: {message_url}')
     headers = {'Authorization': f'Bearer {bot.token}'}
     result = requests.post(message_url, json=body, headers=headers)
     
@@ -64,34 +64,36 @@ def handle_text_message(bot, message, bot_config):
         if result.headers['Content-Type'].startswith('image/'):
             # FileResponse with image
             # bot.send_photo(message.chat.id, result.content)
-            logger.info(f'[{bot.token}] generic_message_handler IMAGE response for {message.chat.id}')
+            # logger.info(f'[{bot.token}] generic_message_handler IMAGE response for {message.chat.id}')
+            pass
 
         # audio document
         elif result.headers['Content-Type'].startswith('audio/'):
             # FileResponse with audio
             # bot.send_audio(message.chat.id, result.content)
-            logger.info(f'[{bot.token}] generic_message_handler AUDIO response for {message.chat.id}')
+            # logger.info(f'[{bot.token}] generic_message_handler AUDIO response for {message.chat.id}')
+            pass
             # Call audio
             
 
         elif result.headers['Content-Type'] == 'application/json':
             # logger.info(f'generic_message_handler result: {str(result.text)}')
             result_message = json.loads(result.text)
-            logger.info(f'generic_message_handler application/json result_message: {result_message}')
+            # logger.info(f'generic_message_handler application/json result_message: {result_message}')
             if result_message['type'] == 'text':
-                logger.info(f'generic_message_handler text from {bot.token}')
+                # logger.info(f'generic_message_handler text from {bot.token}')
                 bot.reply_to(message, result_message['body'])
             
             elif result_message['type'] == 'keyboard':
-                logger.info(f'generic_message_handler keyboard from {bot.token}')
+                # logger.info(f'generic_message_handler keyboard from {bot.token}')
                 keyboard_dict = result_message['body']
                 if 'keyboard_type' in result_message and result_message['keyboard_type'] == 'inline':
-                    logger.info(f'{message.chat.id} inline keyboard from {bot.token}')
+                    # logger.info(f'{message.chat.id} inline keyboard from {bot.token}')
                     keyboard = telebot.types.InlineKeyboardMarkup(
                         row_width=keyboard_dict['row_width']                        
                     )
                     # resize_keyboard=keyboard_dict['resize_keyboard'],
-                    logger.info(f'{message.chat.id} inline key button list length: {len(keyboard_dict["buttons"])}')
+                    # logger.info(f'{message.chat.id} inline key button list length: {len(keyboard_dict["buttons"])}')
                     """for button_definition in keyboard_dict['buttons']:
                         logger.info(f'Adding button: {button_definition["text"]}')
                         button = telebot.types.InlineKeyboardButton(
@@ -103,7 +105,7 @@ def handle_text_message(bot, message, bot_config):
                     for button_group in keyboard_dict['buttons']:
                         buttons = []
                         for button_definition in button_group:
-                            logger.info(f'Adding button: {button_definition["text"]}')
+                            # logger.info(f'Adding button: {button_definition["text"]}')
                             button = telebot.types.InlineKeyboardButton(
                                 text=button_definition['text'],
                                 callback_data=button_definition['callback_data']
@@ -112,7 +114,7 @@ def handle_text_message(bot, message, bot_config):
                         keyboard.add(*buttons)
 
                 else:
-                    logger.info(f'{message.chat.id} reply keyboard from {bot.token}')
+                    # logger.info(f'{message.chat.id} reply keyboard from {bot.token}')
                     keyboard = telebot.types.ReplyKeyboardMarkup(
                         row_width=keyboard_dict['row_width'], 
                         resize_keyboard=keyboard_dict['resize_keyboard'],
@@ -131,28 +133,28 @@ def handle_text_message(bot, message, bot_config):
                     reply_markup=keyboard
                 )
             elif result_message['type'] == 'image':
-                logger.info(f'generic_message_handler image from {bot.token}')
+                # logger.info(f'generic_message_handler image from {bot.token}')
                 bot.send_photo(message.chat.id, result_message['body'])
             elif result_message['type'] == 'empty':
-                logger.info(f'generic_message_handler empty from {bot.token}')
+                # logger.info(f'generic_message_handler empty from {bot.token}')
                 pass
 
 
 def handle_inline_query(bot, inline_query, bot_config):
-    logger.info(f'Received inline query from {inline_query.from_user.id}: {inline_query.query}')
+    # logger.info(f'Received inline query from {inline_query.from_user.id}: {inline_query.query}')
     
     results = []  # This list should contain one or more objects of types.InlineQueryResult
     # Request results from server
     BOT_PORT = bot_config['PORT']
     inline_query_url = f'http://localhost:{BOT_PORT}/inline'
     headers = {'Authorization': f'Bearer {bot.token}'}
-    logger.info(f'### Sending inline_query_url: {inline_query_url}')
+    # logger.info(f'### Sending inline_query_url: {inline_query_url}')
     # body = inline_query.json
     body = {
         "from_user_id": inline_query.from_user.id
     }
-    logger.info(f'body type: {type(body)}')
-    logger.info(f'body: {body}')
+    # logger.info(f'body type: {type(body)}')
+    # logger.info(f'body: {body}')
     result = requests.post(inline_query_url, json=body, headers=headers)
     """
     logger.info(f'### Sending inline_query_url: {inline_query_url}')
@@ -161,11 +163,11 @@ def handle_inline_query(bot, inline_query, bot_config):
     }
     result = requests.post(inline_query_url, json=data)
     """
-    logger.info(f'inline_query result code: {result.status_code}')
-    logger.info(f'inline_query result headers: {result.headers}')
-    logger.info(f'inline_query result content: {result.content}')
+    # logger.info(f'inline_query result code: {result.status_code}')
+    # logger.info(f'inline_query result headers: {result.headers}')
+    # logger.info(f'inline_query result content: {result.content}')
     result = json.loads(result.text)
-    logger.info(f'inline_query result: {result}')
+    # logger.info(f'inline_query result: {result}')
     
     # Example: Generating one InlineQueryResultArticle
     try:
@@ -235,7 +237,8 @@ def init_bot(bot_config):
     # callback_query_handler
     @bot.callback_query_handler(func=lambda call: True)
     def callback_query_handler(call):
-        logger.info(f'Received callback query from {call.message.chat.id}: {call.data}')
+        # logger.info(f'Received callback query from {call.message.chat.id}: {call.data}')
+        pass
 
     # Inline_query_handler
     @bot.inline_handler(func=lambda query: True)

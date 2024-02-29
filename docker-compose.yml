@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   server:
-    # restart: always
+    restart: always
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
@@ -17,5 +17,3 @@ services:
         max-size: "10m"
         max-file: "3"
     network_mode: "host"
-    environment:
-      - TZ=Europe/Moscow
