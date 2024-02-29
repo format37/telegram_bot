@@ -180,13 +180,13 @@ def handle_inline_query(bot, inline_query, bot_config):
             )
         )
         results.append(result_article)"""
-        # Actually, result is a list
-        for i, res in enumerate(result):
+        # Actually, result is a dict like {'title': 'Solution', 'message_text': '["2 = 2", "2 = 2", "2"]'}, so we need to iterate in message_text
+        for i, message_text in enumerate(result['message_text']):
             result_article = telebot.types.InlineQueryResultArticle(
                 id=str(i),
-                title=res,
+                title=result['title'],
                 input_message_content=telebot.types.InputTextMessageContent(
-                    message_text=res
+                    message_text=message_text
                 )
             )
             results.append(result_article)
