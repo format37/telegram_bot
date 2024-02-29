@@ -23,29 +23,6 @@ sudo apt-get install certbot python3-certbot-nginx
 You need to replace yourdomain.com with your domain in all the following steps.
 ```
 sudo apt-get install nginx
-sudo nano /etc/nginx/sites-available/yourdomain.com
-```
-Paste the following:
-```
-server {
-    listen 80;
-    server_name yourdomain.com www.yourdomain.com;
-
-    location / {
-        proxy_pass http://localhost:8443; # Assuming FastAPI runs on port 8443
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-
-    listen 443 ssl; # managed by Certbot
-    ssl_certificate /etc/letsencrypt/live/service.icecorp.ru/fullchain.pem; # managed by Certbot
-    ssl_certificate_key /etc/letsencrypt/live/service.icecorp.ru/privkey.pem; # managed by Certbot
-    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
-    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
-
-}
 ```
 * Enable the site:
 ```
