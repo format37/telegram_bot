@@ -326,12 +326,12 @@ async def handle_request(token: str, request: Request):
         logger.error(f'Invalid token: {token} Bots: {bots}')
         return JSONResponse(content={"status": "error"}, status_code=403)
 
-
+for bot_key, bot_instance in bots_config.items():
+    bots[bot_instance['TOKEN']] = init_bot(bot_instance)
+    logger.info(f'Bot {bot_key} initialized with webhook')
 
 async def main():
-    for bot_key, bot_instance in bots_config.items():
-        bots[bot_instance['TOKEN']] = init_bot(bot_instance)
-        logger.info(f'Bot {bot_key} initialized with webhook')
+    pass
 
 if __name__ == "__main__":
     asyncio.run(main())
