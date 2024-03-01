@@ -19,10 +19,6 @@ app = FastAPI()
 # Initialize bots and set webhooks
 bots = {}
 
-# Load bot configurations
-with open('bots.json') as bots_file:
-    bots_config = json.load(bots_file)
-
 # Read blocked IP addresses from file
 """def read_blocked_ips():
     with open('blocked.txt', 'r') as blocked_file:
@@ -280,20 +276,20 @@ async def init_bot(bot_config):
     # message_handler
     # @bot.message_handler(func=lambda message: True)
     @bot.message_handler(content_types=content_types)
-    async def message_handler(message):
-        await handle_text_message(bot, message, bot_config)
+    def message_handler(message):
+        handle_text_message(bot, message, bot_config)
 
     # callback_query_handler
     @bot.callback_query_handler(func=lambda call: True)
-    async def callback_query_handler(call):
+    def callback_query_handler(call):
         # logger.info(f'Received callback query from {call.message.chat.id}: {call.data}')
         pass
 
     # Inline_query_handler
     @bot.inline_handler(func=lambda query: True)
-    async def inline_query_handler(query):
+    def inline_query_handler(query):
         # logger.info(f'Received inline query from {query.from_user.id}: {query.query}')
-        await handle_inline_query(bot, query, bot_config)
+        handle_inline_query(bot, query, bot_config)
 
     # Read config.json
     with open('config.json') as config_file:
@@ -325,6 +321,10 @@ async def handle_request(token: str, request: Request):
 
 async def main():
     global bots
+    # Load bot configurations
+    with open('bots.json') as bots_file:
+        bots_config = json.load(bots_file)
+
     for bot_key, bot_instance in bots_config.items():
         bots[bot_instance['TOKEN']] = await init_bot(bot_instance)
         logger.info(f'Bot {bot_key} initialized with webhook')
