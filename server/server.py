@@ -23,8 +23,6 @@ bots = {}
 with open('bots.json') as bots_file:
     bots_config = json.load(bots_file)
 
-
-
 # Read blocked IP addresses from file
 """def read_blocked_ips():
     with open('blocked.txt', 'r') as blocked_file:
@@ -49,8 +47,6 @@ app.add_middleware(BlockIPMiddleware)"""
 @app.get("/")
 async def read_root():
     return {"Hello": "World"}
-
-
 
 @app.get("/test")
 async def call_test():
@@ -243,7 +239,7 @@ async def handle_inline_query(bot, inline_query, bot_config):
 
 
 # Initialize bot
-async def init_bot(bot_config):
+def init_bot(bot_config):
     bot = telebot.TeleBot(bot_config['TOKEN'])
 
     content_types=[
