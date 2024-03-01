@@ -50,7 +50,7 @@ async def call_test():
     return JSONResponse(content={"status": "ok"})
 
 # Simple text message handler function
-async def handle_text_message(bot, message, bot_config):
+def handle_text_message(bot, message, bot_config):
     # logger.info(f'Received message from {message.chat.id}: {message.text}')
     body = message.json
     # logger.info(f'body: {body}')
