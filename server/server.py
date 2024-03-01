@@ -6,7 +6,7 @@ import json
 import requests
 from fastapi import FastAPI, Request, HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
-import asyncio
+# import asyncio
 
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
@@ -243,7 +243,7 @@ async def handle_inline_query(bot, inline_query, bot_config):
 
 
 # Initialize bot
-def init_bot(bot_config):
+async def init_bot(bot_config):
     bot = telebot.TeleBot(bot_config['TOKEN'])
 
     content_types=[
@@ -330,8 +330,9 @@ for bot_key, bot_instance in bots_config.items():
     bots[bot_instance['TOKEN']] = init_bot(bot_instance)
     logger.info(f'Bot {bot_key} initialized with webhook')
 
-async def main():
+"""async def main():
     pass
 
 if __name__ == "__main__":
     asyncio.run(main())
+"""
