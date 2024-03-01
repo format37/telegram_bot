@@ -8,11 +8,22 @@ from fastapi import FastAPI, Request, HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
 import asyncio
 
+# Initialize logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
 # Initialize FastAPI
 app = FastAPI()
 
 # Initialize bots and set webhooks
 bots = {}
+
+# Load bot configurations
+with open('bots.json') as bots_file:
+    bots_config = json.load(bots_file)
+
+
 
 # Read blocked IP addresses from file
 """def read_blocked_ips():
@@ -39,10 +50,7 @@ app.add_middleware(BlockIPMiddleware)"""
 async def read_root():
     return {"Hello": "World"}
 
-# Initialize logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+
 
 @app.get("/test")
 async def call_test():
@@ -235,7 +243,7 @@ async def handle_inline_query(bot, inline_query, bot_config):
 
 
 # Initialize bot
-async def init_bot(bot_config):
+def init_bot(bot_config):
     bot = telebot.TeleBot(bot_config['TOKEN'])
 
     content_types=[
@@ -318,13 +326,11 @@ async def handle_request(token: str, request: Request):
         logger.error(f'Invalid token: {token} Bots: {bots}')
         return JSONResponse(content={"status": "error"}, status_code=403)
 
+
+
 async def main():
-    # Load bot configurations
-    with open('bots.json') as bots_file:
-        bots_config = json.load(bots_file)
-    
     for bot_key, bot_instance in bots_config.items():
-        bots[bot_instance['TOKEN']] = await init_bot(bot_instance)
+        bots[bot_instance['TOKEN']] = init_bot(bot_instance)
         logger.info(f'Bot {bot_key} initialized with webhook')
 
 if __name__ == "__main__":
