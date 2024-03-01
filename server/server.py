@@ -329,5 +329,10 @@ async def main():
         bots[bot_instance['TOKEN']] = await init_bot(bot_instance)
         logger.info(f'Bot {bot_key} initialized with webhook')
 
-if __name__ == "__main__":
+@app.on_event("startup")
+async def startup_event():
+    await main()
+
+"""if __name__ == "__main__":
     asyncio.run(main())
+"""
