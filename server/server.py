@@ -315,7 +315,7 @@ async def handle_request(token: str, request: Request):
             logger.error(f'Error processing request for bot {token}: {str(e)}')
             return JSONResponse(content={"status": "error"}, status_code=500)
     else:
-        logger.error(f'Invalid token: {token}')
+        logger.error(f'Invalid token: {token} Bots: {bots}')
         return JSONResponse(content={"status": "error"}, status_code=403)
 
 async def main():
