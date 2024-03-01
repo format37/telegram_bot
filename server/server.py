@@ -6,12 +6,16 @@ import json
 import requests
 from fastapi import FastAPI, Request, HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
+import asyncio
 
 # Initialize FastAPI
 app = FastAPI()
 
+# Initialize bots and set webhooks
+bots = {}
+
 # Read blocked IP addresses from file
-def read_blocked_ips():
+"""def read_blocked_ips():
     with open('blocked.txt', 'r') as blocked_file:
         blocked_ips = blocked_file.readlines()
         blocked_ips = [ip.strip() for ip in blocked_ips]
@@ -28,7 +32,7 @@ class BlockIPMiddleware(BaseHTTPMiddleware):
         return await call_next(request)
 
 # Add the middleware to the app
-app.add_middleware(BlockIPMiddleware)
+app.add_middleware(BlockIPMiddleware)"""
 
 # Your routes would go here
 @app.get("/")
@@ -46,7 +50,7 @@ async def call_test():
     return JSONResponse(content={"status": "ok"})
 
 # Simple text message handler function
-def handle_text_message(bot, message, bot_config):
+async def handle_text_message(bot, message, bot_config):
     # logger.info(f'Received message from {message.chat.id}: {message.text}')
     body = message.json
     # logger.info(f'body: {body}')
@@ -140,7 +144,7 @@ def handle_text_message(bot, message, bot_config):
                 pass
 
 
-def handle_inline_query(bot, inline_query, bot_config):
+async def handle_inline_query(bot, inline_query, bot_config):
     # logger.info(f'Received inline query from {inline_query.from_user.id}: {inline_query.query}')
     
     results = []  # This list should contain one or more objects of types.InlineQueryResult
@@ -231,7 +235,7 @@ def handle_inline_query(bot, inline_query, bot_config):
 
 
 # Initialize bot
-def init_bot(bot_config):
+async def init_bot(bot_config):
     bot = telebot.TeleBot(bot_config['TOKEN'])
 
     content_types=[
@@ -272,20 +276,20 @@ def init_bot(bot_config):
     # message_handler
     # @bot.message_handler(func=lambda message: True)
     @bot.message_handler(content_types=content_types)
-    def message_handler(message):
-        handle_text_message(bot, message, bot_config)
+    async def message_handler(message):
+        await handle_text_message(bot, message, bot_config)
 
     # callback_query_handler
     @bot.callback_query_handler(func=lambda call: True)
-    def callback_query_handler(call):
+    async def callback_query_handler(call):
         # logger.info(f'Received callback query from {call.message.chat.id}: {call.data}')
         pass
 
     # Inline_query_handler
     @bot.inline_handler(func=lambda query: True)
-    def inline_query_handler(query):
+    async def inline_query_handler(query):
         # logger.info(f'Received inline query from {query.from_user.id}: {query.query}')
-        handle_inline_query(bot, query, bot_config)
+        await handle_inline_query(bot, query, bot_config)
 
     # Read config.json
     with open('config.json') as config_file:
@@ -296,16 +300,6 @@ def init_bot(bot_config):
     bot.set_webhook(url=webhook_url)
 
     return bot
-
-# Load bot configurations
-with open('bots.json') as bots_file:
-    bots_config = json.load(bots_file)
-
-# Initialize bots and set webhooks
-bots = {}
-for bot_key, bot_instance in bots_config.items():
-    bots[bot_instance['TOKEN']] = init_bot(bot_instance)
-    logger.info(f'Bot {bot_key} initialized with webhook')
 
 @app.post("/{token}/")
 async def handle_request(token: str, request: Request):
@@ -323,3 +317,15 @@ async def handle_request(token: str, request: Request):
     else:
         logger.error(f'Invalid token: {token}')
         return JSONResponse(content={"status": "error"}, status_code=403)
+
+async def main():
+    # Load bot configurations
+    with open('bots.json') as bots_file:
+        bots_config = json.load(bots_file)
+    
+    for bot_key, bot_instance in bots_config.items():
+        bots[bot_instance['TOKEN']] = await init_bot(bot_instance)
+        logger.info(f'Bot {bot_key} initialized with webhook')
+
+if __name__ == "__main__":
+    asyncio.run(main())
