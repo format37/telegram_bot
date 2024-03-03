@@ -51,6 +51,17 @@ async def call_test():
 
 # Simple text message handler function
 def handle_text_message(bot, message, bot_config):
+
+    if message.chat.type == 'group' and 'group_starters' in bot_config:
+        granted_message = False
+        for group_starter in bot_config['group_starters']:
+            if message.text.startswith(group_starter):
+                logger.info(f'Granted message from {message.chat.id}: {message.text}')
+                granted_message = True
+                break
+        if not granted_message:
+            return
+
     # logger.info(f'Received message from {message.chat.id}: {message.text}')
     body = message.json
     # logger.info(f'body: {body}')
@@ -332,7 +343,3 @@ async def main():
 @app.on_event("startup")
 async def startup_event():
     await main()
-
-"""if __name__ == "__main__":
-    asyncio.run(main())
-"""
