@@ -56,7 +56,7 @@ def handle_text_message(bot, message, bot_config):
         granted_message = False
         for group_starter in bot_config['group_starters']:
             if message.text.startswith(group_starter):
-                logger.info(f'Granted message from {message.chat.id}: {message.text}')
+                # logger.info(f'Granted message from {message.chat.id}: {message.text}')
                 granted_message = True
                 break
         if not granted_message:
