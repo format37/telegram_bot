@@ -155,7 +155,7 @@ def handle_text_message(bot, message, bot_config):
                 pass
 
 
-async def handle_inline_query(bot, inline_query, bot_config):
+def handle_inline_query(bot, inline_query, bot_config):
     # logger.info(f'Received inline query from {inline_query.from_user.id}: {inline_query.query}')
     
     results = []  # This list should contain one or more objects of types.InlineQueryResult
