@@ -172,7 +172,42 @@ def handle_inline_query(bot, inline_query, bot_config):
     }
     # logger.info(f'body type: {type(body)}')
     # logger.info(f'body: {body}')
-    result = requests.post(inline_query_url, json=body, headers=headers)
+    # result = requests.post(inline_query_url, json=body, headers=headers)
+    # Post request with 3 sec timeout
+    try:
+        result = requests.post(inline_query_url, json=body, headers=headers, timeout=3)
+    except Exception as e:
+        logger.error(f'Error sending inline query: {str(e)}')
+        return
+
+    from_user_id = inline_query.from_user.id
+    inline_query_id = inline_query.id
+    expression = inline_query.query
+
+    if result.status_code == 200:
+        result_message = json.loads(result.text)
+        answer = result_message['body']
+        inline_elements = []
+        for i in range(len(answer)):    
+            element = telebot.types.InlineQueryResultArticle(
+                str(i),
+                answer[i],
+                telebot.types.InputTextMessageContent(answer[i]),
+            )
+            inline_elements.append(element)
+        
+        try:
+            bot.answer_inline_query(
+                inline_query_id,
+                inline_elements,
+                cache_time=0,
+                is_personal=True
+            )
+        except Exception as e:
+            logger.error(f'User: {from_user_id} Inline request: {expression} Response: {res} Error: {e}')
+    else:
+        logger.error(f"Failed to send inline query. Status code: {result.status_code}, Response: {result.content}")
+
     """
     logger.info(f'### Sending inline_query_url: {inline_query_url}')
     data = {
