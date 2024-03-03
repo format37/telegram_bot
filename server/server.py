@@ -185,18 +185,22 @@ def handle_inline_query(bot, inline_query, bot_config):
     expression = inline_query.query
 
     if result.status_code == 200:
-        result_message = json.loads(result.text)
-        answer = result_message['body']
-        inline_elements = []
-        for i in range(len(answer)):    
-            element = telebot.types.InlineQueryResultArticle(
-                str(i),
-                answer[i],
-                telebot.types.InputTextMessageContent(answer[i]),
-            )
-            inline_elements.append(element)
-        
         try:
+            result_message = json.loads(result.text)
+            answer = result_message['body']
+            if result_message['type'] != 'inline':
+                logger.error(f'Inline: Invalid response type: {result_message["type"]}')
+                return
+            inline_elements = []
+            for i in range(len(answer)):    
+                element = telebot.types.InlineQueryResultArticle(
+                    str(i),
+                    answer[i],
+                    telebot.types.InputTextMessageContent(answer[i]),
+                )
+                inline_elements.append(element)
+            
+            
             bot.answer_inline_query(
                 inline_query_id,
                 inline_elements,
@@ -204,7 +208,7 @@ def handle_inline_query(bot, inline_query, bot_config):
                 is_personal=True
             )
         except Exception as e:
-            logger.error(f'User: {from_user_id} Inline request: {expression} Response: {res} Error: {e}')
+            logger.error(f'User: {from_user_id} Inline request: {expression}  Error processing inline query: {str(e)}')
     else:
         logger.error(f"Failed to send inline query. Status code: {result.status_code}, Response: {result.content}")
 
