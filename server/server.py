@@ -137,8 +137,9 @@ def handle_text_message(bot, message, bot_config):
                     for button_definition in keyboard_dict['buttons']:
                         # logger.info(f'button callback_data: {button_definition["callback_data"]}')
                         button = telebot.types.KeyboardButton(
-                            text=button_definition['text'],
-                            request_contact=button_definition['request_contact']
+                            text=button_definition.get('text', ''),
+                            request_contact=button_definition.get('request_contact', False),
+                            request_location=button_definition.get('request_location', False)
                         )
                         keyboard.add(button)
                     
