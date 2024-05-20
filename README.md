@@ -20,31 +20,48 @@ sudo apt-get update
 sudo apt-get install certbot python3-certbot-nginx
 ```
 * Set Up Nginx  
-You need to replace yourdomain.com with your domain in all the following steps.
+You need to replace YOUR-DOMAIN.COM with your domain in all the following steps.
 ```
 sudo apt-get install nginx
 ```
+* Create a new configuration file for your domain in the /etc/nginx/sites-available directory:
+```
+sudo nano /etc/nginx/sites-available/YOUR-DOMAIN.COM
+```
+* Add the following configuration to the file:
+```
+server {
+    listen 80;
+    server_name YOUR-DOMAIN.COM;
+
+    location / {
+        proxy_pass http://localhost:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+```
 * Enable the site:
 ```
-sudo ln -s /etc/nginx/sites-available/yourdomain.com /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/YOUR-DOMAIN.COM /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl restart nginx
 ```
 * Getting the SSL Certificate
 ```
-sudo certbot --nginx -d yourdomain.com
+sudo certbot --nginx -d YOUR-DOMAIN.COM
 ```
 * Enabling auto-renewal
 ```
 sudo certbot renew --dry-run
 ```
-* Don't forget to replace yourdomain.com with your domain in the docker-compose.yml
-* Build the docker image
-```
-sh build.sh
-```
+* Replace YOUR-DOMAIN.COM with your domain in files: docker-compose.yml and config.json
 * Update the config.json and bots.json with your configuration  
 * Run
 ```
-sh run.sh
+sh compose.sh
+```
+* Check logs
+```
+sh logs.sh
 ```
