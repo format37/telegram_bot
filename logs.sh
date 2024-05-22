@@ -1,1 +1,1 @@
-sudo docker logs -f bots_server_telegram
+sudo docker logs -f -t bots_server_telegram
