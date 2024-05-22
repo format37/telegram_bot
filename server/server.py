@@ -51,7 +51,7 @@ async def call_test():
 
 # Simple text message handler function
 def handle_text_message(bot, message, bot_config):
-    logger.info(f'Received message from {message.chat.id}: {message.text}')
+    logger.info(f'handle_text_message: Received message from {message.chat.id}: {message.text}')
     if message.chat.type == 'group' and 'group_starters' in bot_config:
         granted_message = False
         for group_starter in bot_config['group_starters']:
@@ -74,7 +74,7 @@ def handle_text_message(bot, message, bot_config):
     result = requests.post(message_url, json=body, headers=headers)
     
     if result.status_code != 200:
-        logger.error(f"Failed to send message. Status code: {result.status_code}, Response: {result.content}")
+        logger.error(f"handle_text_message: Failed to send message. Status code: {result.status_code}, Response: {result.content}")
     else:
         if result.headers['Content-Type'].startswith('image/'):
             # FileResponse with image
@@ -154,6 +154,7 @@ def handle_text_message(bot, message, bot_config):
             elif result_message['type'] == 'empty':
                 # logger.info(f'generic_message_handler empty from {bot.token}')
                 pass
+    return JSONResponse(content={"status": "ok"})
 
 
 def handle_inline_query(bot, inline_query, bot_config):
@@ -357,17 +358,17 @@ async def handle_request(token: str, request: Request):
     if token in bots: 
         bot = bots[token]
         request_body_dict = await request.json()
-        logger.info(f'Received request for bot {token}: {request_body_dict}')
+        logger.info(f'handle_request: Received request for bot {token}: {request_body_dict}')
         try:
             update = telebot.types.Update.de_json(request_body_dict)
             bot.process_new_updates([update])
-            logger.info(f'Processed request for bot {token}')
+            logger.info(f'handle_request: Processed request for bot {token}')
             return JSONResponse(content={"status": "ok"})
         except Exception as e:
-            logger.error(f'Error processing request for bot {token}: {str(e)}')
+            logger.error(f'handle_request: Error processing request for bot {token}: {str(e)}')
             return JSONResponse(content={"status": "error"}, status_code=500)
     else:
-        logger.error(f'Invalid token: {token} Bots: {bots}')
+        logger.error(f'handle_request: Invalid token: {token} Bots: {bots}')
         return JSONResponse(content={"status": "error"}, status_code=403)
 
 
