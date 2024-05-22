@@ -362,7 +362,7 @@ async def handle_request(token: str, request: Request):
         try:
             update = telebot.types.Update.de_json(request_body_dict)
             bot.process_new_updates([update])
-            logger.info(f'handle_request: Processed request for bot {token}')
+            # logger.info(f'handle_request: Processed request for bot {token}')
             return JSONResponse(content={"status": "ok"})
         except Exception as e:
             logger.error(f'handle_request: Error processing request for bot {token}: {str(e)}')
