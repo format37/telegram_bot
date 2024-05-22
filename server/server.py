@@ -51,7 +51,7 @@ async def call_test():
 
 # Simple text message handler function
 def handle_text_message(bot, message, bot_config):
-    logger.info(f'handle_text_message: Received message from {message.chat.id}: {message.text}')
+    # logger.info(f'handle_text_message: Received message from {message.chat.id}: {message.text}')
     if message.chat.type == 'group' and 'group_starters' in bot_config:
         granted_message = False
         for group_starter in bot_config['group_starters']:
@@ -358,7 +358,7 @@ async def handle_request(token: str, request: Request):
     if token in bots: 
         bot = bots[token]
         request_body_dict = await request.json()
-        logger.info(f'handle_request: Received request for bot {token}: {request_body_dict}')
+        # logger.info(f'handle_request: Received request for bot {token}: {request_body_dict}')
         try:
             update = telebot.types.Update.de_json(request_body_dict)
             bot.process_new_updates([update])
