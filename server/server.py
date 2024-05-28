@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Response
 from fastapi.responses import JSONResponse
 import telebot
 import logging
@@ -48,12 +48,13 @@ app.add_middleware(BlockIPMiddleware)"""
 # Your routes would go here
 @app.get("/")
 async def read_root():
-    return {"Hello": "World"}
+    return Response("ok", status_code=200)
 
 @app.get("/test")
 async def call_test():
     logger.info('Test endpoint called')
-    return JSONResponse(content={"status": "ok"}, status_code=200)
+    # return JSONResponse(content={"status": "ok"}, status_code=200)
+    return Response("ok", status_code=200)
 
 # Simple text message handler function
 def handle_text_message(bot, message, bot_config):
@@ -68,7 +69,9 @@ def handle_text_message(bot, message, bot_config):
                 granted_message = True
                 break
         if not granted_message:
-            return JSONResponse(content={"status": "ok"}, status_code=200)
+            # return JSONResponse(content={"status": "ok"}, status_code=200)
+            # return Response("Hello, World!", status_code=200)
+            return Response("ok", status_code=200)
 
     logger.info(f'[{len(bot_config["group_starters"])}] handle_text_message {message.chat.type} message from {message.chat.id}: {message.text}')
     body = message.json
@@ -181,7 +184,8 @@ def handle_text_message(bot, message, bot_config):
     time_report = f"{days} days, {hours % 24}:{minutes % 60}:{seconds}"
     logger.info(f'handle_text_message: Time taken: {end_time - start_time} ({time_report})')
 
-    return JSONResponse(content={"status": "ok"}, status_code=200)
+    # return JSONResponse(content={"status": "ok"}, status_code=200)
+    return Response("ok", status_code=200)
 
 
 def handle_inline_query(bot, inline_query, bot_config):
@@ -346,7 +350,8 @@ def handle_inline_query(bot, inline_query, bot_config):
     # logger.info(f'handle_text_message: Time taken: {end_time - start_time} ({time_report})')
 
     logger.info(f'handle_inline_query: Time taken: {end_time - start_time}')
-    return JSONResponse(content={"status": "ok"}, status_code=200)
+    # return JSONResponse(content={"status": "ok"}, status_code=200)
+    return Response("ok", status_code=200)
 
 # Initialize bot
 async def init_bot(bot_config):
@@ -438,20 +443,24 @@ async def handle_request(token: str, request: Request):
         bot = bots[token]
         if bot is None or bot == "":
             logger.error(f'[x] handle_request: Bot {token} is inactive')
-            return JSONResponse(content={"status": "ok"}, status_code=200)
+            # return JSONResponse(content={"status": "ok"}, status_code=200)
+            return Response("ok", status_code=200)
         request_body_dict = await request.json()
         # logger.info(f'handle_request: Received request for bot {token}: {request_body_dict}')
         try:
             update = telebot.types.Update.de_json(request_body_dict)
             bot.process_new_updates([update])
             # logger.info(f'handle_request: Processed request for bot {token}')
-            return JSONResponse(content={"status": "ok"})
+            # return JSONResponse(content={"status": "ok"})
+            return Response("ok", status_code=200)
         except Exception as e:
             logger.error(f'[x] handle_request: Error processing request for bot {token}: {str(e)}')
-            return JSONResponse(content={"status": "ok"}, status_code=200)
+            # return JSONResponse(content={"status": "ok"}, status_code=200)
+            return Response("ok", status_code=200)
     else:
         logger.error(f'[x] handle_request: Invalid token: {token}')
-        return JSONResponse(content={"status": "ok"}, status_code=200)
+        # return JSONResponse(content={"status": "ok"}, status_code=200)
+        return Response("ok", status_code=200)
 
 
 def fill_id_garden():
