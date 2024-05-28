@@ -75,7 +75,8 @@ def handle_text_message(bot, message, bot_config):
     message_url = f'http://localhost:{BOT_PORT}/message'
     # logger.info(f'### Sending message_url: {message_url}')
     headers = {'Authorization': f'Bearer {bot.token}'}
-    result = requests.post(message_url, json=body, headers=headers)
+    # result = requests.post(message_url, json=body, headers=headers)
+    result = requests.post(message_url, json=body, headers=headers, timeout=(1, 0))
     
     if result.status_code != 200:
         logger.error(f"handle_text_message: Failed to send message. Status code: {result.status_code}, Response: {result.content}")
@@ -200,7 +201,8 @@ def handle_inline_query(bot, inline_query, bot_config):
     # result = requests.post(inline_query_url, json=body, headers=headers)
     # Post request with 3 sec timeout
     try:
-        result = requests.post(inline_query_url, json=body, headers=headers, timeout=3)
+        # result = requests.post(inline_query_url, json=body, headers=headers, timeout=3)
+        result = requests.post(inline_query_url, json=body, headers=headers, timeout=(1, 0))
     except Exception as e:
         logger.error(f'Error sending inline query: {str(e)}')
         return JSONResponse(content={"status": "ok"})
