@@ -359,13 +359,16 @@ async def init_bot(bot_config):
     with open('config.json') as config_file:
         config = json.load(config_file)
 
-    if is_first_instance():
-        logger.info(f'### [v] First instance: Setting webhook for bot {bot_config["TOKEN"]}')
-        webhook_url = f"https://{config['WEBHOOK_HOST']}:{config['WEBHOOK_PORT']}/{bot_config['TOKEN']}/"
-        bot.remove_webhook()
-        bot.set_webhook(url=webhook_url)
-    else:
-        logger.info(f'### [x] Not first instance: Polling for bot {bot_config["TOKEN"]}')
+    worker_id = int(os.getenv('GUNICORN_WORKER_ID', '0'))
+    logger.info(f'### Worker ID: {worker_id}')
+
+    # if is_first_instance():
+    #     logger.info(f'### [v] First instance: Setting webhook for bot {bot_config["TOKEN"]}')
+    webhook_url = f"https://{config['WEBHOOK_HOST']}:{config['WEBHOOK_PORT']}/{bot_config['TOKEN']}/"
+    bot.remove_webhook()
+    bot.set_webhook(url=webhook_url)
+    # else:
+    #     logger.info(f'### [x] Not first instance: Polling for bot {bot_config["TOKEN"]}')
 
     return bot
 
