@@ -70,7 +70,7 @@ def handle_text_message(bot, message, bot_config):
         if not granted_message:
             return JSONResponse(content={"status": "ok"})
 
-    # logger.info(f'Received message from {message.chat.id}: {message.text}')
+    logger.info(f'Received message from {message.chat.id}: {message.text}')
     body = message.json
     # logger.info(f'body: {body}')
     
