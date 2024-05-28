@@ -60,7 +60,7 @@ def handle_text_message(bot, message, bot_config):
     start_time = time.time()
     # logger.info(f'handle_text_message: {message}')
     # logger.info(f'handle_text_message: Received message from {message.chat.id}: {message.text}')
-    if message.chat.type == 'group' and 'group_starters' in bot_config:
+    if message.chat.type != 'personal' and 'group_starters' in bot_config:
         granted_message = False
         for group_starter in bot_config['group_starters']:
             if message.text.startswith(group_starter):
