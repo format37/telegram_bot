@@ -7,6 +7,7 @@ import requests
 from fastapi import FastAPI, Request, HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
 import asyncio
+import time
 
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
@@ -51,6 +52,7 @@ async def call_test():
 
 # Simple text message handler function
 def handle_text_message(bot, message, bot_config):
+    start_time = time.time()
     # logger.info(f'handle_text_message: Received message from {message.chat.id}: {message.text}')
     if message.chat.type == 'group' and 'group_starters' in bot_config:
         granted_message = False
@@ -60,7 +62,7 @@ def handle_text_message(bot, message, bot_config):
                 granted_message = True
                 break
         if not granted_message:
-            return
+            return JSONResponse(content={"status": "ok"})
 
     # logger.info(f'Received message from {message.chat.id}: {message.text}')
     body = message.json
@@ -154,10 +156,13 @@ def handle_text_message(bot, message, bot_config):
             elif result_message['type'] == 'empty':
                 # logger.info(f'generic_message_handler empty from {bot.token}')
                 pass
+    end_time = time.time()
+    logger.info(f'handle_text_message: Time taken: {end_time - start_time}')
     return JSONResponse(content={"status": "ok"})
 
 
 def handle_inline_query(bot, inline_query, bot_config):
+    start_time = time.time()
     # logger.info(f'Received inline query from {inline_query.from_user.id}: {inline_query.query}')
     
     results = []  # This list should contain one or more objects of types.InlineQueryResult
@@ -180,7 +185,7 @@ def handle_inline_query(bot, inline_query, bot_config):
         result = requests.post(inline_query_url, json=body, headers=headers, timeout=3)
     except Exception as e:
         logger.error(f'Error sending inline query: {str(e)}')
-        return
+        return JSONResponse(content={"status": "ok"})
 
     from_user_id = inline_query.from_user.id
     inline_query_id = inline_query.id
@@ -192,7 +197,7 @@ def handle_inline_query(bot, inline_query, bot_config):
             answer = result_message['body']
             if result_message['type'] != 'inline':
                 logger.error(f'Inline: Invalid response type: {result_message["type"]}')
-                return
+                return JSONResponse(content={"status": "ok"})
             inline_elements = []
             for i in range(len(answer)):    
                 element = telebot.types.InlineQueryResultArticle(
@@ -284,6 +289,8 @@ def handle_inline_query(bot, inline_query, bot_config):
 
     # Sending results to Telegram
     bot.answer_inline_query(inline_query.id, results, cache_time=0, is_personal=True)"""
+    end_time = time.time()
+    logger.info(f'handle_inline_query: Time taken: {end_time - start_time}')
 
 
 # Initialize bot
