@@ -181,7 +181,7 @@ def handle_text_message(bot, message, bot_config):
 
 def handle_inline_query(bot, inline_query, bot_config):
     start_time = time.time()
-    logger.info(f'handle_inline_query: {inline_query}')
+    # logger.info(f'handle_inline_query: {inline_query}')
     # logger.info(f'Received inline query from {inline_query.from_user.id}: {inline_query.query}')
     
     results = []  # This list should contain one or more objects of types.InlineQueryResult
