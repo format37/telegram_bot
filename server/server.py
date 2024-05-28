@@ -295,8 +295,11 @@ def handle_inline_query(bot, inline_query, bot_config):
     return JSONResponse(content={"status": "ok"})
 
 def is_first_instance():
-    worker_id = int(os.getenv('GUNICORN_WORKER_ID', '0'))
-    return worker_id == 0
+    # worker_id = int(os.getenv('GUNICORN_WORKER_ID', '0'))
+    # return worker_id == 0
+    # Get the PID of the Gunicorn process
+    gunicorn_pid = os.getpid()
+
 
 # Initialize bot
 async def init_bot(bot_config):
@@ -359,8 +362,10 @@ async def init_bot(bot_config):
     with open('config.json') as config_file:
         config = json.load(config_file)
 
-    worker_id = int(os.getenv('GUNICORN_WORKER_ID', '0'))
-    logger.info(f'### Worker ID: {worker_id}')
+    # worker_id = int(os.getenv('GUNICORN_WORKER_ID', '0'))
+    # logger.info(f'### Worker ID: {worker_id}')
+    gunicorn_pid = os.getpid()
+    logger.info(f'### Gunicorn PID: {gunicorn_pid}')
 
     # if is_first_instance():
     #     logger.info(f'### [v] First instance: Setting webhook for bot {bot_config["TOKEN"]}')
@@ -380,18 +385,18 @@ async def handle_request(token: str, request: Request):
             logger.error(f'[x] handle_request: Bot {token} is inactive')
             return JSONResponse(content={"status": "ok"}, status_code=200)
         request_body_dict = await request.json()
-        logger.info(f'handle_request: Received request for bot {token}: {request_body_dict}')
+        # logger.info(f'handle_request: Received request for bot {token}: {request_body_dict}')
         try:
             update = telebot.types.Update.de_json(request_body_dict)
             bot.process_new_updates([update])
-            logger.info(f'handle_request: Processed request for bot {token}')
+            # logger.info(f'handle_request: Processed request for bot {token}')
             return JSONResponse(content={"status": "ok"})
         except Exception as e:
             logger.error(f'[x] handle_request: Error processing request for bot {token}: {str(e)}')
-            return JSONResponse(content={"status": "error"}, status_code=500)
+            return JSONResponse(content={"status": "ok"}, status_code=200)
     else:
         logger.error(f'[x] handle_request: Invalid token: {token} Bots: {bots}')
-        return JSONResponse(content={"status": "error"}, status_code=403)
+        return JSONResponse(content={"status": "ok"}, status_code=200)
 
 
 async def main():
