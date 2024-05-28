@@ -365,7 +365,7 @@ async def init_bot(bot_config):
 async def handle_request(token: str, request: Request):
     if token in bots: 
         bot = bots[token]
-        if bot is None or not bot == "":
+        if bot is None or bot == "":
             logger.error(f'[x] handle_request: Bot {token} is inactive')
             return JSONResponse(content={"status": "ok"}, status_code=200)
         request_body_dict = await request.json()
