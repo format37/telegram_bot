@@ -8,10 +8,10 @@ ENV TZ=Asia/Tbilisi
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Define the count of instances as a variable
-ENV INSTANCES=2
+ENV INSTANCES=10
 
 COPY server.py /server
 # CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8443", "--ssl-keyfile=webhook_pkey.pem", "--ssl-certfile=webhook_cert.pem"]
 # CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8443", "--ssl-keyfile=/cert/webhook_cert.pem", "--ssl-certfile=/cert/webhook_pkey.pem"]
 # CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8443", "--log-level", "warning", "--ssl-keyfile=/cert/webhook_pkey.pem", "--ssl-certfile=/cert/webhook_cert.pem"]
-CMD ["gunicorn", "-w", "2", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8443", "--timeout", "120", "server:app", "--log-level", "warning", "--keyfile=/cert/webhook_pkey.pem", "--certfile=/cert/webhook_cert.pem"]
+CMD ["gunicorn", "-w", "10", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8443", "--timeout", "120", "server:app", "--log-level", "warning", "--keyfile=/cert/webhook_pkey.pem", "--certfile=/cert/webhook_cert.pem"]
