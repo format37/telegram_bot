@@ -8,6 +8,7 @@ from fastapi import FastAPI, Request, HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
 import asyncio
 import time
+import os
 
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
@@ -293,6 +294,9 @@ def handle_inline_query(bot, inline_query, bot_config):
     logger.info(f'handle_inline_query: Time taken: {end_time - start_time}')
     return JSONResponse(content={"status": "ok"})
 
+def is_first_instance():
+    worker_id = int(os.getenv('GUNICORN_WORKER_ID', '0'))
+    return worker_id == 0
 
 # Initialize bot
 async def init_bot(bot_config):
@@ -355,9 +359,11 @@ async def init_bot(bot_config):
     with open('config.json') as config_file:
         config = json.load(config_file)
 
-    webhook_url = f"https://{config['WEBHOOK_HOST']}:{config['WEBHOOK_PORT']}/{bot_config['TOKEN']}/"
-    bot.remove_webhook()
-    bot.set_webhook(url=webhook_url)
+    if is_first_instance():
+        logger.info(f'[v] First instance: Setting webhook for bot {bot_config["TOKEN"]}')
+        webhook_url = f"https://{config['WEBHOOK_HOST']}:{config['WEBHOOK_PORT']}/{bot_config['TOKEN']}/"
+        bot.remove_webhook()
+        bot.set_webhook(url=webhook_url)
 
     return bot
 
