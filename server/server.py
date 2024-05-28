@@ -360,10 +360,12 @@ async def init_bot(bot_config):
         config = json.load(config_file)
 
     if is_first_instance():
-        logger.info(f'[v] First instance: Setting webhook for bot {bot_config["TOKEN"]}')
+        logger.info(f'### [v] First instance: Setting webhook for bot {bot_config["TOKEN"]}')
         webhook_url = f"https://{config['WEBHOOK_HOST']}:{config['WEBHOOK_PORT']}/{bot_config['TOKEN']}/"
         bot.remove_webhook()
         bot.set_webhook(url=webhook_url)
+    else:
+        logger.info(f'### [x] Not first instance: Polling for bot {bot_config["TOKEN"]}')
 
     return bot
 
