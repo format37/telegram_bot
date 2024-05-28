@@ -410,12 +410,13 @@ async def init_bot(bot_config):
     webhook_url = f"https://{config['WEBHOOK_HOST']}:{config['WEBHOOK_PORT']}/{bot_config['TOKEN']}/"
     if garden_queue == 0:
         bot.remove_webhook()
+        bot.set_webhook(url=webhook_url)
     else:
         pid = int(os.getpid())
         time_to_sleep = 1+pid/10
         logger.info(f'### Sleeping for {time_to_sleep} seconds')
         time.sleep(time_to_sleep)
-    bot.set_webhook(url=webhook_url)
+        
     # else:
     #     logger.info(f'### [x] Not first instance: Polling for bot {bot_config["TOKEN"]}')
 
