@@ -9,8 +9,8 @@ from starlette.middleware.base import BaseHTTPMiddleware
 import asyncio
 import time
 import os
-from requests import post
-from threading import Thread
+# from requests import post
+# from threading import Thread
 
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
@@ -79,8 +79,8 @@ def handle_text_message(bot, message, bot_config):
     message_url = f'http://localhost:{BOT_PORT}/message'
     # logger.info(f'### Sending message_url: {message_url}')
     headers = {'Authorization': f'Bearer {bot.token}'}
-    # result = requests.post(message_url, json=body, headers=headers)
-    Thread(target=post, args=(message_url,), kwargs={'json': body}).start()
+    result = requests.post(message_url, json=body, headers=headers, timeout=3)
+    # Thread(target=post, args=(message_url,), kwargs={'json': body}).start()
     # result = requests.post(message_url, json=body, headers=headers, timeout=(1, 0))
     
     # if result.status_code != 200:
@@ -206,8 +206,8 @@ def handle_inline_query(bot, inline_query, bot_config):
     # result = requests.post(inline_query_url, json=body, headers=headers)
     # Post request with 3 sec timeout
     try:
-        # result = requests.post(inline_query_url, json=body, headers=headers, timeout=3)
-        Thread(target=post, args=(inline_query_url,), kwargs={'json': body}).start()
+        result = requests.post(inline_query_url, json=body, headers=headers, timeout=3)
+        # Thread(target=post, args=(inline_query_url,), kwargs={'json': body}).start()
         # result = requests.post(inline_query_url, json=body, headers=headers, timeout=(1, 0))
     except Exception as e:
         logger.error(f'Error sending inline query: {str(e)}')
