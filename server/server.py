@@ -68,7 +68,8 @@ def handle_text_message(bot, message, bot_config):
                 granted_message = True
                 break
         if not granted_message:
-            return JSONResponse(content={"status": "ok"}, status_code=200)
+            # return JSONResponse(content={"status": "ok"}, status_code=200)
+            return
 
     logger.info(f'[{len(bot_config["group_starters"])}] handle_text_message {message.chat.type} message from {message.chat.id}: {message.text}')
     body = message.json
@@ -79,7 +80,7 @@ def handle_text_message(bot, message, bot_config):
     message_url = f'http://localhost:{BOT_PORT}/message'
     # logger.info(f'### Sending message_url: {message_url}')
     headers = {'Authorization': f'Bearer {bot.token}'}
-    result = requests.post(message_url, json=body, headers=headers, timeout=3)
+    result = requests.post(message_url, json=body, headers=headers, timeout=1)
     # Thread(target=post, args=(message_url,), kwargs={'json': body}).start()
     # result = requests.post(message_url, json=body, headers=headers, timeout=(1, 0))
     
@@ -181,7 +182,7 @@ def handle_text_message(bot, message, bot_config):
     time_report = f"{days} days, {hours % 24}:{minutes % 60}:{seconds}"
     logger.info(f'handle_text_message: Time taken: {end_time - start_time} ({time_report})')
 
-    return JSONResponse(content={"status": "ok"})
+    # return JSONResponse(content={"status": "ok"})
 
 
 def handle_inline_query(bot, inline_query, bot_config):
@@ -346,14 +347,7 @@ def handle_inline_query(bot, inline_query, bot_config):
     # logger.info(f'handle_text_message: Time taken: {end_time - start_time} ({time_report})')
 
     logger.info(f'handle_inline_query: Time taken: {end_time - start_time}')
-    return JSONResponse(content={"status": "ok"})
-
-def is_first_instance():
-    # worker_id = int(os.getenv('GUNICORN_WORKER_ID', '0'))
-    # return worker_id == 0
-    # Get the PID of the Gunicorn process
-    gunicorn_pid = os.getpid()
-
+    # return JSONResponse(content={"status": "ok"})
 
 # Initialize bot
 async def init_bot(bot_config):
