@@ -10,6 +10,7 @@ services:
       - ./blocked.txt:/server/blocked.txt
       - /etc/letsencrypt/live/YOUR-DOMAIN.COM/fullchain.pem:/cert/webhook_cert.pem
       - /etc/letsencrypt/live/YOUR-DOMAIN.COM/privkey.pem:/cert/webhook_pkey.pem
+      - ./id_garden:/server/id_garden
     build: server
     container_name: bots_server_telegram
     logging:

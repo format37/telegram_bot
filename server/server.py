@@ -21,6 +21,8 @@ app = FastAPI()
 # Initialize bots and set webhooks
 bots = {}
 
+garden_queue = -1
+
 # Read blocked IP addresses from file
 """def read_blocked_ips():
     with open('blocked.txt', 'r') as blocked_file:
@@ -399,8 +401,9 @@ async def init_bot(bot_config):
 
     # worker_id = int(os.getenv('GUNICORN_WORKER_ID', '0'))
     # logger.info(f'### Worker ID: {worker_id}')
-    gunicorn_pid = os.getpid()
-    logger.info(f'### Gunicorn PID: {gunicorn_pid}')
+    # gunicorn_pid = os.getpid()
+    # logger.info(f'### Gunicorn PID: {gunicorn_pid}')
+    logger.info(f'### Garden Queue: {garden_queue}')
 
     # if is_first_instance():
     #     logger.info(f'### [v] First instance: Setting webhook for bot {bot_config["TOKEN"]}')
@@ -434,7 +437,31 @@ async def handle_request(token: str, request: Request):
         return JSONResponse(content={"status": "ok"}, status_code=200)
 
 
+def fill_id_garden():
+    garden_folder = './id_garden'
+    # get pid
+    pid = os.getpid()
+    logger.info(f'garden PID: {pid}')
+    # Add file to id_garden
+    with open(f'{garden_folder}/{pid}', 'w') as f:
+        f.write('')
+    # Get the INSTANCES count from the os env
+    instances = os.getenv('INSTANCES', '1')
+    logger.info(f'garden waiting for reaching {instances} instances')
+    # List files in the garden in a loop untill the count is reached
+    while len(os.listdir(garden_folder)) < int(instances):
+        time.sleep(1)
+    # Take the queue of the current pid in the garden, starting from 0
+    queue = sorted(os.listdir(garden_folder)).index(str(pid))
+    # Return the queue
+    logger.info(f'garden Queue: {queue}')
+    return queue
+
 async def main():
+    # Fill id_garden
+    global garden_queue
+    garden_queue = fill_id_garden()
+
     global bots
     # Load bot configurations
     with open('bots.json') as bots_file:
