@@ -206,7 +206,8 @@ def handle_inline_query(bot, inline_query, bot_config):
     # result = requests.post(inline_query_url, json=body, headers=headers)
     # Post request with 3 sec timeout
     try:
-        result = requests.post(inline_query_url, json=body, headers=headers, timeout=3)
+        # result = requests.post(inline_query_url, json=body, headers=headers, timeout=3)
+        Thread(target=post, args=(inline_query_url,), kwargs={'json': body}).start()
         # result = requests.post(inline_query_url, json=body, headers=headers, timeout=(1, 0))
     except Exception as e:
         logger.error(f'Error sending inline query: {str(e)}')
