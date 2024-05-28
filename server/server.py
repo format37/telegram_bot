@@ -205,13 +205,14 @@ def handle_inline_query(bot, inline_query, bot_config):
     # logger.info(f'body: {body}')
     # result = requests.post(inline_query_url, json=body, headers=headers)
     # Post request with 3 sec timeout
-    try:
-        result = requests.post(inline_query_url, json=body, headers=headers, timeout=3)
-        # Thread(target=post, args=(inline_query_url,), kwargs={'json': body}).start()
-        # result = requests.post(inline_query_url, json=body, headers=headers, timeout=(1, 0))
-    except Exception as e:
-        logger.error(f'Error sending inline query: {str(e)}')
-        return JSONResponse(content={"status": "ok"})
+    
+    # try:
+    #     result = requests.post(inline_query_url, json=body, headers=headers, timeout=3)
+    #     # Thread(target=post, args=(inline_query_url,), kwargs={'json': body}).start()
+    #     # result = requests.post(inline_query_url, json=body, headers=headers, timeout=(1, 0))
+    # except Exception as e:
+    #     logger.error(f'Error sending inline query: {str(e)}')
+    #     return JSONResponse(content={"status": "ok"})
 
     # from_user_id = inline_query.from_user.id
     # inline_query_id = inline_query.id
@@ -315,6 +316,18 @@ def handle_inline_query(bot, inline_query, bot_config):
 
     # Sending results to Telegram
     bot.answer_inline_query(inline_query.id, results, cache_time=0, is_personal=True)"""
+
+    # for i, message_text in enumerate(result['message_text']):
+    message_text = 'Inline is temporarily disabled. Please try again later.'
+    curent_r = telebot.types.InlineQueryResultArticle(
+        '0',
+        message_text,
+        telebot.types.InputTextMessageContent(message_text),
+    )
+    results.append(curent_r)
+
+    bot.answer_inline_query(inline_query.id, results, cache_time=0, is_personal=True)
+
     end_time = time.time()
 
     # # Get the date of the message
