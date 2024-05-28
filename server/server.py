@@ -174,11 +174,13 @@ def handle_text_message(bot, message, bot_config):
     # Print the time difference
     time_report = f"{days} days, {hours % 24}:{minutes % 60}:{seconds}"
     logger.info(f'handle_text_message: Time taken: {end_time - start_time} ({time_report})')
+
     return JSONResponse(content={"status": "ok"})
 
 
 def handle_inline_query(bot, inline_query, bot_config):
     start_time = time.time()
+    logger.info(f'handle_inline_query: {inline_query}')
     # logger.info(f'Received inline query from {inline_query.from_user.id}: {inline_query.query}')
     
     results = []  # This list should contain one or more objects of types.InlineQueryResult
@@ -306,6 +308,22 @@ def handle_inline_query(bot, inline_query, bot_config):
     # Sending results to Telegram
     bot.answer_inline_query(inline_query.id, results, cache_time=0, is_personal=True)"""
     end_time = time.time()
+
+    # # Get the date of the message
+    # message_date = message['date']
+    # # Get the current timestamp
+    # current_timestamp = int(time.time())
+    # # Calculate the time difference in seconds
+    # time_difference = current_timestamp - message_date
+    # # Convert the time difference to desired units (e.g., seconds, minutes, hours, days)
+    # seconds = time_difference % 60
+    # minutes = time_difference // 60
+    # hours = minutes // 60
+    # days = hours // 24
+    # # Print the time difference
+    # time_report = f"{days} days, {hours % 24}:{minutes % 60}:{seconds}"
+    # logger.info(f'handle_text_message: Time taken: {end_time - start_time} ({time_report})')
+
     logger.info(f'handle_inline_query: Time taken: {end_time - start_time}')
     return JSONResponse(content={"status": "ok"})
 
