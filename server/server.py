@@ -217,7 +217,7 @@ def handle_inline_query(bot, inline_query, bot_config):
         except Exception as e:
             logger.error(f'User: {from_user_id} Inline request: {expression}  Error processing inline query: {str(e)}')
     else:
-        logger.error(f"Failed to send inline query. Status code: {result.status_code}, Response: {result.content}")
+        logger.error(f"[x] Failed to send inline query. Status code: {result.status_code}, Response: {result.content}")
 
     """
     logger.info(f'### Sending inline_query_url: {inline_query_url}')
@@ -291,6 +291,7 @@ def handle_inline_query(bot, inline_query, bot_config):
     bot.answer_inline_query(inline_query.id, results, cache_time=0, is_personal=True)"""
     end_time = time.time()
     logger.info(f'handle_inline_query: Time taken: {end_time - start_time}')
+    return JSONResponse(content={"status": "ok"})
 
 
 # Initialize bot
@@ -364,6 +365,9 @@ async def init_bot(bot_config):
 async def handle_request(token: str, request: Request):
     if token in bots: 
         bot = bots[token]
+        if bot['active'] == 0:
+            logger.error(f'[x] handle_request: Bot {token} is inactive')
+            return JSONResponse(content={"status": "ok"}, status_code=200)
         request_body_dict = await request.json()
         logger.info(f'handle_request: Received request for bot {token}: {request_body_dict}')
         try:
@@ -372,10 +376,10 @@ async def handle_request(token: str, request: Request):
             logger.info(f'handle_request: Processed request for bot {token}')
             return JSONResponse(content={"status": "ok"})
         except Exception as e:
-            logger.error(f'handle_request: Error processing request for bot {token}: {str(e)}')
+            logger.error(f'[x] handle_request: Error processing request for bot {token}: {str(e)}')
             return JSONResponse(content={"status": "error"}, status_code=500)
     else:
-        logger.error(f'handle_request: Invalid token: {token} Bots: {bots}')
+        logger.error(f'[x] handle_request: Invalid token: {token} Bots: {bots}')
         return JSONResponse(content={"status": "error"}, status_code=403)
 
 
@@ -386,8 +390,11 @@ async def main():
         bots_config = json.load(bots_file)
 
     for bot_key, bot_instance in bots_config.items():
-        bots[bot_instance['TOKEN']] = await init_bot(bot_instance)
-        logger.info(f'Bot {bot_key} initialized with webhook')
+        if int(bot_instance['active']):
+            bots[bot_instance['TOKEN']] = await init_bot(bot_instance)
+            logger.info(f'Bot {bot_key} initialized with webhook')
+        else:
+            logger.info(f'Bot {bot_key} is inactive')
 
 @app.on_event("startup")
 async def startup_event():
