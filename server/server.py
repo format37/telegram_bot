@@ -60,7 +60,7 @@ def handle_text_message(bot, message, bot_config):
     start_time = time.time()
     # logger.info(f'handle_text_message: {message}')
     # logger.info(f'handle_text_message: Received message from {message.chat.id}: {message.text}')
-    if message.chat.type != 'personal' and 'group_starters' in bot_config:
+    if message.chat.type != 'private' and 'group_starters' in bot_config:
         granted_message = False
         for group_starter in bot_config['group_starters']:
             if message.text.startswith(group_starter):
@@ -68,7 +68,7 @@ def handle_text_message(bot, message, bot_config):
                 granted_message = True
                 break
         if not granted_message:
-            return JSONResponse(content={"status": "ok"})
+            return JSONResponse(content={"status": "ok"}, status_code=200)
 
     logger.info(f'[{len(bot_config["group_starters"])}] handle_text_message {message.chat.type} message from {message.chat.id}: {message.text}')
     body = message.json
