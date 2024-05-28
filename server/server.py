@@ -54,7 +54,7 @@ async def call_test():
 # Simple text message handler function
 def handle_text_message(bot, message, bot_config):
     start_time = time.time()
-    logger.info(f'handle_text_message: {message}')
+    # logger.info(f'handle_text_message: {message}')
     # logger.info(f'handle_text_message: Received message from {message.chat.id}: {message.text}')
     if message.chat.type == 'group' and 'group_starters' in bot_config:
         granted_message = False
@@ -159,7 +159,21 @@ def handle_text_message(bot, message, bot_config):
                 # logger.info(f'generic_message_handler empty from {bot.token}')
                 pass
     end_time = time.time()
-    logger.info(f'handle_text_message: Time taken: {end_time - start_time}')
+
+    # Get the date of the message
+    message_date = message['date']
+    # Get the current timestamp
+    current_timestamp = int(time.time())
+    # Calculate the time difference in seconds
+    time_difference = current_timestamp - message_date
+    # Convert the time difference to desired units (e.g., seconds, minutes, hours, days)
+    seconds = time_difference % 60
+    minutes = time_difference // 60
+    hours = minutes // 60
+    days = hours // 24
+    # Print the time difference
+    time_report = f"{days} days, {hours % 24}:{minutes % 60}:{seconds}"
+    logger.info(f'handle_text_message: Time taken: {end_time - start_time} ({time_report})')
     return JSONResponse(content={"status": "ok"})
 
 
