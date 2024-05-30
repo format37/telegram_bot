@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import JSONResponse
 import telebot
+from telebot import types
 import logging
 import json
 import requests
@@ -424,8 +425,30 @@ async def init_bot(bot_config):
     #     logger.info(f'### [v] First instance: Setting webhook for bot {bot_config["TOKEN"]}')
     webhook_url = f"https://{config['WEBHOOK_HOST']}:{config['WEBHOOK_PORT']}/{bot_config['TOKEN']}/"
     if garden_queue == 0:
+
+        server_api_uri = config['SERVER_API_URI']
+        server_file_url = config['SERVER_FILE_URL']
+        if server_api_uri != '':
+            telebot.apihelper.API_URL = server_api_uri
+            logger.info(f'### Setting API_URL: {server_api_uri} for bot {bot_config["TOKEN"]}')
+        if server_file_url != '':
+            telebot.apihelper.FILE_URL = server_file_url
+            logger.info(f'### Setting FILE_URL: {server_file_url} for bot {bot_config["TOKEN"]}')
+        # telebot.apihelper.API_URL = "http://localhost:8081/bot{0}/{1}"
+        # telebot.apihelper.FILE_URL = "http://localhost:8081"
+
         bot.remove_webhook()
-        bot.set_webhook(url=webhook_url)
+
+        # https://core.telegram.org/bots/api#setwebhook
+        # https://core.telegram.org/bots/webhooks
+        # Create an InputFile object with the certificate file path
+        with open('/cert/webhook_cert.pem', 'rb') as cert_file:
+            certificate = types.InputFile(cert_file)
+        
+        # Set the webhook with the certificate
+        bot.set_webhook(url=webhook_url, max_connections=100, certificate=certificate)
+        
+        # bot.set_webhook(url=webhook_url, max_connections=100)
     else:
         pid = int(os.getpid())
         time_to_sleep = 1+pid/10
