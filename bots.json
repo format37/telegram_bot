@@ -3,6 +3,7 @@
         "PORT": 7401,
         "TOKEN": "",
         "bot": "",
+        "active": 1,
         "SERVER_API_URI": "http://localhost:8081/bot{0}/{1}",
         "SERVER_FILE_URL": "http://localhost:8081"
     },
@@ -10,6 +11,7 @@
         "PORT": 7402,
         "TOKEN": "",
         "bot": "",
+        "active": 1,
         "SERVER_API_URI": "",
         "SERVER_FILE_URL": ""
     },
@@ -17,6 +19,7 @@
         "PORT": 7403,
         "TOKEN": "",
         "bot": "",
+        "active": 1,
         "SERVER_API_URI": "",
         "SERVER_FILE_URL": ""
     }

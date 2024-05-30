@@ -426,14 +426,14 @@ async def init_bot(bot_config):
     webhook_url = f"https://{config['WEBHOOK_HOST']}:{config['WEBHOOK_PORT']}/{bot_config['TOKEN']}/"
     if garden_queue == 0:
 
-        server_api_uri = config['SERVER_API_URI']
-        server_file_url = config['SERVER_FILE_URL']
-        if server_api_uri != '':
-            telebot.apihelper.API_URL = server_api_uri
-            logger.info(f'### Setting API_URL: {server_api_uri} for bot {bot_config["TOKEN"]}')
-        if server_file_url != '':
-            telebot.apihelper.FILE_URL = server_file_url
-            logger.info(f'### Setting FILE_URL: {server_file_url} for bot {bot_config["TOKEN"]}')
+        # server_api_uri = config['SERVER_API_URI']
+        # server_file_url = config['SERVER_FILE_URL']
+        # if server_api_uri != '':
+        #     telebot.apihelper.API_URL = server_api_uri
+        #     logger.info(f'### Setting API_URL: {server_api_uri} for bot {bot_config["TOKEN"]}')
+        # if server_file_url != '':
+        #     telebot.apihelper.FILE_URL = server_file_url
+        #     logger.info(f'### Setting FILE_URL: {server_file_url} for bot {bot_config["TOKEN"]}')
         # telebot.apihelper.API_URL = "http://localhost:8081/bot{0}/{1}"
         # telebot.apihelper.FILE_URL = "http://localhost:8081"
 
