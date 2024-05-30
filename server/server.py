@@ -424,6 +424,7 @@ async def init_bot(bot_config):
     # if is_first_instance():
     #     logger.info(f'### [v] First instance: Setting webhook for bot {bot_config["TOKEN"]}')
     webhook_url = f"https://{config['WEBHOOK_HOST']}:{config['WEBHOOK_PORT']}/{bot_config['TOKEN']}/"
+    logger.info(f'Setting webhook url: {webhook_url}')
     if garden_queue == 0:
 
         # server_api_uri = config['SERVER_API_URI']
