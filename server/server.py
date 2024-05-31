@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 import telebot
 import logging
+# import logging.config
 import json
 import requests
 from fastapi import FastAPI, Request, HTTPException
@@ -9,9 +10,11 @@ from starlette.middleware.base import BaseHTTPMiddleware
 import asyncio
 
 # Initialize logging
-logging.basicConfig(level=logging.INFO)
+# logging.basicConfig(level=logging.INFO)
+# logger = logging.getLogger(__name__)
+# logger.setLevel(logging.INFO)
+logging.config.fileConfig('logging.ini')
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
 
 # Initialize FastAPI
 app = FastAPI()
@@ -29,6 +32,15 @@ async def read_root():
 async def call_test():
     logger.info('Test endpoint called')
     return JSONResponse(content={"status": "ok"})
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    logger.warning(f"Invalid HTTP request received:")
+    logger.warning(f"Method: {request.method}")
+    logger.warning(f"URL: {request.url}")
+    logger.warning(f"Headers: {request.headers}")
+    logger.warning(f"Body: {await request.body()}")
+    return JSONResponse(content={"status": "error"}, status_code=exc.status_code)
 
 # Simple text message handler function
 def handle_text_message(bot, message, bot_config):

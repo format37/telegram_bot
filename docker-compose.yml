@@ -7,6 +7,7 @@ services:
       # - /etc/timezone:/etc/timezone:ro
       - ./bots.json:/server/bots.json
       - ./config.json:/server/config.json
+      - ./logging.ini:/server/logging.ini
       # - ./blocked.txt:/server/blocked.txt
       # - /etc/letsencrypt/live/YOUR-DOMAIN.COM/fullchain.pem:/cert/webhook_cert.pem
       # - /etc/letsencrypt/live/YOUR-DOMAIN.COM/privkey.pem:/cert/webhook_pkey.pem
