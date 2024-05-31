@@ -42,6 +42,16 @@ async def http_exception_handler(request: Request, exc: HTTPException):
     logger.warning(f"Body: {await request.body()}")
     return JSONResponse(content={"status": "error"}, status_code=exc.status_code)
 
+class RequestLoggingMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        logger.info(f"Incoming request: {request.method} {request.url}")
+        logger.info(f"Headers: {request.headers}")
+        logger.info(f"Body: {await request.body()}")
+        response = await call_next(request)
+        return response
+
+app.add_middleware(RequestLoggingMiddleware)
+
 # Simple text message handler function
 def handle_text_message(bot, message, bot_config):
     logger.info(f'handle_text_message: Received message from {message.chat.id}: {message.text}')
