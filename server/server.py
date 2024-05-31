@@ -338,10 +338,10 @@ async def init_bot(bot_config):
     server_file_url = config['SERVER_FILE_URL']
     if server_api_uri != '':
         telebot.apihelper.API_URL = server_api_uri
-        logger.info(f'Setting API_URL: {server_api_uri} for bot {config["TOKEN"]}')
+        logger.info(f'Setting API_URL: {server_api_uri} for bot {bot_config["TOKEN"]}')
     if server_file_url != '':
         telebot.apihelper.FILE_URL = server_file_url
-        logger.info(f'Setting FILE_URL: {server_file_url} for bot {config["TOKEN"]}')
+        logger.info(f'Setting FILE_URL: {server_file_url} for bot {bot_config["TOKEN"]}')
     webhook_url = f"https://{config['WEBHOOK_HOST']}:{config['WEBHOOK_PORT']}/{bot_config['TOKEN']}/"
     logger.info(f'Setting webhook url: {webhook_url}')
     logger.info(f'Webhook set: {bot.set_webhook(url=webhook_url, max_connections=100)}')
