@@ -374,8 +374,11 @@ async def main():
         bots_config = json.load(bots_file)
 
     for bot_key, bot_instance in bots_config.items():
-        bots[bot_instance['TOKEN']] = await init_bot(bot_instance)
-        logger.info(f'Bot {bot_key} initialized with webhook')
+        if int(bot_instance['active']):
+            bots[bot_instance['TOKEN']] = await init_bot(bot_instance)
+            logger.info(f'Bot {bot_key} initialized with webhook')
+        else:
+            logger.info(f'Bot {bot_key} is inactive')
 
 @app.on_event("startup")
 async def startup_event():
