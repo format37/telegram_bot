@@ -48,19 +48,18 @@ async def http_exception_handler(request: Request, exc: HTTPException):
 
 class RequestLoggingMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
-        logger.info(f"Incoming request: {request.method} {request.url}")
-        logger.info(f"Headers: {request.headers}")
-        logger.info(f"Body: {await request.body()}")
+        # logger.info(f"Incoming request: {request.method} {request.url}")
+        # logger.info(f"Headers: {request.headers}")
+        # logger.info(f"Body: {await request.body()}")
         response = await call_next(request)
         return response
-
 
 app.add_middleware(RequestLoggingMiddleware)
 
 
 # Simple text message handler function
 def handle_text_message(bot, message, bot_config):
-    logger.info(f'handle_text_message: Received message from {message.chat.id}: {message.text}')
+    logger.info(f'handle_text_message from {message.chat.id}: {message.text}')
     if message.chat.type == 'group' and 'group_starters' in bot_config:
         granted_message = False
         for group_starter in bot_config['group_starters']:
@@ -83,7 +82,7 @@ def handle_text_message(bot, message, bot_config):
     result = requests.post(message_url, json=body, headers=headers)
     
     if result.status_code != 200:
-        logger.error(f"handle_text_message: Failed to send message. Status code: {result.status_code}, Response: {result.content}")
+        logger.error(f"handle_text_message: requests.post status code: {result.status_code}, Response: {result.content}")
     else:
         if result.headers['Content-Type'].startswith('image/'):
             # FileResponse with image
@@ -168,7 +167,6 @@ def handle_text_message(bot, message, bot_config):
 
 def handle_inline_query(bot, inline_query, bot_config):
     # logger.info(f'Received inline query from {inline_query.from_user.id}: {inline_query.query}')
-    
     results = []  # This list should contain one or more objects of types.InlineQueryResult
     # Request results from server
     BOT_PORT = bot_config['PORT']
@@ -222,77 +220,6 @@ def handle_inline_query(bot, inline_query, bot_config):
             logger.error(f'User: {from_user_id} Inline request: {expression}  Error processing inline query: {str(e)}')
     else:
         logger.error(f"Failed to send inline query. Status code: {result.status_code}, Response: {result.content}")
-
-    """
-    logger.info(f'### Sending inline_query_url: {inline_query_url}')
-    data = {
-        "inline_query": inline_query.json
-    }
-    result = requests.post(inline_query_url, json=data)
-    """
-    # logger.info(f'inline_query result code: {result.status_code}')
-    # logger.info(f'inline_query result headers: {result.headers}')
-    # logger.info(f'inline_query result content: {result.content}')
-    # result = json.loads(result.text)
-    # logger.info(f'inline_query result: {result}')
-    
-    # Example: Generating one InlineQueryResultArticle
-    # try:
-    """result_article = telebot.types.InlineQueryResultArticle(
-        id='1',
-        title=result['title'],
-        input_message_content=telebot.types.InputTextMessageContent(
-            message_text=result['message_text']
-        )
-    )
-    results.append(result_article)"""
-
-    """# answer 0
-    r0 = telebot.types.InlineQueryResultArticle(
-        '0',
-        answer[0],
-        telebot.types.InputTextMessageContent(answer[0]),
-    )
-
-    # answer 1
-    r1 = telebot.types.InlineQueryResultArticle(
-        '1',
-        answer[1],
-        telebot.types.InputTextMessageContent(answer[1]),
-    )
-
-    # answer 2
-    r2 = telebot.types.InlineQueryResultArticle(
-        '2',
-        answer[2],
-        telebot.types.InputTextMessageContent(answer[2]),
-    )
-
-    answer = [r0, r1, r2]
-
-    calcubot.answer_inline_query(
-        inline_query.id,
-        answer,
-        cache_time=0,
-        is_personal=True
-    )  # updated"""
-
-    # Actually, result is a dict like {'title': 'Solution', 'message_text': '["2 = 2", "2 = 2", "2"]'}, so we need to iterate in message_text
-    """for i, message_text in enumerate(result['message_text']):
-        curent_r = telebot.types.InlineQueryResultArticle(
-            str(i),
-            message_text,
-            telebot.types.InputTextMessageContent(message_text),
-        )
-        results.append(curent_r)"""
-    
-    # If you have more results, generate them here and append to "results"
-        
-    """except Exception as e:
-        logger.error(f'Error processing inline query: {str(e)}')
-
-    # Sending results to Telegram
-    bot.answer_inline_query(inline_query.id, results, cache_time=0, is_personal=True)"""
 
 
 # Initialize bot
