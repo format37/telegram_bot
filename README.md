@@ -1,67 +1,70 @@
 # Telegram bots server
-Server, for a list of telegram bots, with webhooks and FastAPI.  
-![Structure](assets/structure.png)  
-The benefit of this structure is that it is possible to serve multiple bots without restarting all bots while working with a specific bot.
-#### Requirements
-* Domain name, linked to IP of your machine
-* Docker
-* Docker-compose
-* Telegram bot token
-#### Installation & SSL certificate setup
-* Clone the repo:
-```
-git clone https://github.com/format37/telegram_bot.git
-cd telegram_bot
-```
-* Link your domain name to ip of yor machine  
-* Install Certbot
+Local telegram server
+
+## Installation
 ```
 sudo apt-get update
-sudo apt-get install certbot python3-certbot-nginx
+sudo apt-get upgrade
+sudo apt-get install make git zlib1g-dev libssl-dev gperf cmake g++
+git clone --recursive https://github.com/tdlib/telegram-bot-api.git
+cd telegram-bot-api
+rm -rf build
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=.. ..
+cmake --build . --target install
+ls -l telegram-bot-api/bin/telegram-bot-api*
 ```
-* Set Up Nginx  
-You need to replace YOUR-DOMAIN.COM with your domain in all the following steps.
+## Get API ID and Hash
+1. Go to https://my.telegram.org/auth
+2. Log in with your phone number
+3. Click on API Development Tools
+4. Fill in the required fields
+5. Click on Create Application
+6. Copy the API ID and Hash
+## Test run
+Replace YOUR_API_ID and YOUR_HASH with your API ID and Hash
 ```
-sudo apt-get install nginx
+./bin/telegram-bot-api --api-id=YOUR_API_ID --api-hash=YOUR_HASH --local
 ```
-* Create a new configuration file for your domain in the /etc/nginx/sites-available directory:
+## Run as a daemon
+Edit the file
 ```
-sudo nano /etc/nginx/sites-available/YOUR-DOMAIN.COM
+sudo nano /etc/systemd/system/telegram-bot-api.service
 ```
-* Add the following configuration to the file:
+Paste the following content (replace FOLDER_TO_CLONED_REPO, YOUR_APP_ID and YOUR_HASH with your FOLDER_TO_CLONED_REPO, API ID and Hash)
 ```
-server {
-    listen 80;
-    server_name YOUR-DOMAIN.COM;
+[Unit]
+Description=Telegram Bot API
+After=network.target
 
-    location / {
-        proxy_pass http://localhost:8000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
-}
+[Service]
+Type=simple
+ExecStart=FOLDER_TO_CLONED_REPO/telegram-bot-api/bin/telegram-bot-api --api-id=YOUR_APP_ID --api-hash=YOUR_HASH --local
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
 ```
-* Enable the site:
+Save and close the file
 ```
-sudo ln -s /etc/nginx/sites-available/YOUR-DOMAIN.COM /etc/nginx/sites-enabled/
-sudo nginx -t
-sudo systemctl restart nginx
+sudo systemctl daemon-reload
+sudo systemctl enable telegram-bot-api
+sudo systemctl start telegram-bot-api
 ```
-* Getting the SSL Certificate
+Check the status
 ```
-sudo certbot --nginx -d YOUR-DOMAIN.COM
+sudo systemctl status telegram-bot-api
 ```
-* Enabling auto-renewal
+Read the logs
 ```
-sudo certbot renew --dry-run
+sudo journalctl -fu telegram-bot-api --since today
 ```
-* Replace YOUR-DOMAIN.COM with your domain in files: docker-compose.yml and config.json
-* Update the config.json and bots.json with your configuration  
-* Run
+## Log out your bot from the cloud server (if bot had webhooks at the cloud server)
+You have to input the bot token
 ```
-sh compose.sh
-```
-* Check logs
-```
-sh logs.sh
+cd logout
+python3 -m pip install -r requirements.txt
+python3 logout.py
 ```

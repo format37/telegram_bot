@@ -1,17 +1,12 @@
-from fastapi import FastAPI, Request, Response
+from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 import telebot
-from telebot import types
 import logging
 import json
 import requests
 from fastapi import FastAPI, Request, HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
 import asyncio
-import time
-import os
-# from requests import post
-# from threading import Thread
 
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
@@ -24,45 +19,21 @@ app = FastAPI()
 # Initialize bots and set webhooks
 bots = {}
 
-garden_queue = -1
-
-# Read blocked IP addresses from file
-"""def read_blocked_ips():
-    with open('blocked.txt', 'r') as blocked_file:
-        blocked_ips = blocked_file.readlines()
-        blocked_ips = [ip.strip() for ip in blocked_ips]
-    return blocked_ips
-
-blocked_ips = read_blocked_ips()
-
-# Middleware for blocking requests from blocked IPs
-class BlockIPMiddleware(BaseHTTPMiddleware):
-    async def dispatch(self, request: Request, call_next):
-        client_host = request.client.host
-        if client_host in blocked_ips:
-            raise HTTPException(status_code=403, detail="Access forbidden")
-        return await call_next(request)
-
-# Add the middleware to the app
-app.add_middleware(BlockIPMiddleware)"""
-
 # Your routes would go here
 @app.get("/")
 async def read_root():
-    return Response("ok", status_code=200)
+    # Return ok, 200
+    return JSONResponse(content={"status": "ok"})
 
 @app.get("/test")
 async def call_test():
     logger.info('Test endpoint called')
-    # return JSONResponse(content={"status": "ok"}, status_code=200)
-    return Response("ok", status_code=200)
+    return JSONResponse(content={"status": "ok"})
 
 # Simple text message handler function
 def handle_text_message(bot, message, bot_config):
-    start_time = time.time()
-    # logger.info(f'handle_text_message: {message}')
-    # logger.info(f'handle_text_message: Received message from {message.chat.id}: {message.text}')
-    if message.chat.type != 'private' and 'group_starters' in bot_config:
+    logger.info(f'handle_text_message: Received message from {message.chat.id}: {message.text}')
+    if message.chat.type == 'group' and 'group_starters' in bot_config:
         granted_message = False
         for group_starter in bot_config['group_starters']:
             if message.text.startswith(group_starter):
@@ -70,11 +41,9 @@ def handle_text_message(bot, message, bot_config):
                 granted_message = True
                 break
         if not granted_message:
-            # return JSONResponse(content={"status": "ok"}, status_code=200)
-            # return Response("Hello, World!", status_code=200)
-            return Response("ok", status_code=200)
+            return
 
-    logger.info(f'[{len(bot_config["group_starters"])}] handle_text_message {message.chat.type} message from {message.chat.id}: {message.text}')
+    # logger.info(f'Received message from {message.chat.id}: {message.text}')
     body = message.json
     # logger.info(f'body: {body}')
     
@@ -83,115 +52,93 @@ def handle_text_message(bot, message, bot_config):
     message_url = f'http://localhost:{BOT_PORT}/message'
     # logger.info(f'### Sending message_url: {message_url}')
     headers = {'Authorization': f'Bearer {bot.token}'}
-    result = requests.post(message_url, json=body, headers=headers, timeout=1)
-    # Thread(target=post, args=(message_url,), kwargs={'json': body}).start()
-    # result = requests.post(message_url, json=body, headers=headers, timeout=(1, 0))
+    result = requests.post(message_url, json=body, headers=headers)
     
-    # if result.status_code != 200:
-    #     logger.error(f"handle_text_message: Failed to send message. Status code: {result.status_code}, Response: {result.content}")
-    # else:
-    #     if result.headers['Content-Type'].startswith('image/'):
-    #         # FileResponse with image
-    #         # bot.send_photo(message.chat.id, result.content)
-    #         # logger.info(f'[{bot.token}] generic_message_handler IMAGE response for {message.chat.id}')
-    #         pass
+    if result.status_code != 200:
+        logger.error(f"handle_text_message: Failed to send message. Status code: {result.status_code}, Response: {result.content}")
+    else:
+        if result.headers['Content-Type'].startswith('image/'):
+            # FileResponse with image
+            # bot.send_photo(message.chat.id, result.content)
+            # logger.info(f'[{bot.token}] generic_message_handler IMAGE response for {message.chat.id}')
+            pass
 
-    #     # audio document
-    #     elif result.headers['Content-Type'].startswith('audio/'):
-    #         # FileResponse with audio
-    #         # bot.send_audio(message.chat.id, result.content)
-    #         # logger.info(f'[{bot.token}] generic_message_handler AUDIO response for {message.chat.id}')
-    #         pass
-    #         # Call audio
+        # audio document
+        elif result.headers['Content-Type'].startswith('audio/'):
+            # FileResponse with audio
+            # bot.send_audio(message.chat.id, result.content)
+            # logger.info(f'[{bot.token}] generic_message_handler AUDIO response for {message.chat.id}')
+            pass
+            # Call audio
             
 
-    #     elif result.headers['Content-Type'] == 'application/json':
-    #         # logger.info(f'generic_message_handler result: {str(result.text)}')
-    #         result_message = json.loads(result.text)
-    #         # logger.info(f'generic_message_handler application/json result_message: {result_message}')
-    #         if result_message['type'] == 'text':
-    #             # logger.info(f'generic_message_handler text from {bot.token}')
-    #             bot.reply_to(message, result_message['body'])
+        elif result.headers['Content-Type'] == 'application/json':
+            # logger.info(f'generic_message_handler result: {str(result.text)}')
+            result_message = json.loads(result.text)
+            # logger.info(f'generic_message_handler application/json result_message: {result_message}')
+            if result_message['type'] == 'text':
+                # logger.info(f'generic_message_handler text from {bot.token}')
+                bot.reply_to(message, result_message['body'])
             
-    #         elif result_message['type'] == 'keyboard':
-    #             # logger.info(f'generic_message_handler keyboard from {bot.token}')
-    #             keyboard_dict = result_message['body']
-    #             if 'keyboard_type' in result_message and result_message['keyboard_type'] == 'inline':
-    #                 # logger.info(f'{message.chat.id} inline keyboard from {bot.token}')
-    #                 keyboard = telebot.types.InlineKeyboardMarkup(
-    #                     row_width=keyboard_dict['row_width']                        
-    #                 )
-    #                 # resize_keyboard=keyboard_dict['resize_keyboard'],
-    #                 # logger.info(f'{message.chat.id} inline key button list length: {len(keyboard_dict["buttons"])}')
-    #                 """for button_definition in keyboard_dict['buttons']:
-    #                     logger.info(f'Adding button: {button_definition["text"]}')
-    #                     button = telebot.types.InlineKeyboardButton(
-    #                         text=button_definition['text']
-    #                     )
-    #                     # callback_data=button_definition['callback_data']
-    #                     keyboard.add(button)"""
+            elif result_message['type'] == 'keyboard':
+                # logger.info(f'generic_message_handler keyboard from {bot.token}')
+                keyboard_dict = result_message['body']
+                if 'keyboard_type' in result_message and result_message['keyboard_type'] == 'inline':
+                    # logger.info(f'{message.chat.id} inline keyboard from {bot.token}')
+                    keyboard = telebot.types.InlineKeyboardMarkup(
+                        row_width=keyboard_dict['row_width']                        
+                    )
+                    # resize_keyboard=keyboard_dict['resize_keyboard'],
+                    # logger.info(f'{message.chat.id} inline key button list length: {len(keyboard_dict["buttons"])}')
+                    """for button_definition in keyboard_dict['buttons']:
+                        logger.info(f'Adding button: {button_definition["text"]}')
+                        button = telebot.types.InlineKeyboardButton(
+                            text=button_definition['text']
+                        )
+                        # callback_data=button_definition['callback_data']
+                        keyboard.add(button)"""
                     
-    #                 for button_group in keyboard_dict['buttons']:
-    #                     buttons = []
-    #                     for button_definition in button_group:
-    #                         # logger.info(f'Adding button: {button_definition["text"]}')
-    #                         button = telebot.types.InlineKeyboardButton(
-    #                             text=button_definition['text'],
-    #                             callback_data=button_definition['callback_data']
-    #                         )
-    #                         buttons.append(button)
-    #                     keyboard.add(*buttons)
+                    for button_group in keyboard_dict['buttons']:
+                        buttons = []
+                        for button_definition in button_group:
+                            # logger.info(f'Adding button: {button_definition["text"]}')
+                            button = telebot.types.InlineKeyboardButton(
+                                text=button_definition['text'],
+                                callback_data=button_definition['callback_data']
+                            )
+                            buttons.append(button)
+                        keyboard.add(*buttons)
 
-    #             else:
-    #                 # logger.info(f'{message.chat.id} reply keyboard from {bot.token}')
-    #                 keyboard = telebot.types.ReplyKeyboardMarkup(
-    #                     row_width=keyboard_dict['row_width'], 
-    #                     resize_keyboard=keyboard_dict['resize_keyboard'],
-    #                 )
-    #                 for button_definition in keyboard_dict['buttons']:
-    #                     # logger.info(f'button callback_data: {button_definition["callback_data"]}')
-    #                     button = telebot.types.KeyboardButton(
-    #                         text=button_definition.get('text', ''),
-    #                         request_contact=button_definition.get('request_contact', False),
-    #                         request_location=button_definition.get('request_location', False)
-    #                     )
-    #                     keyboard.add(button)
+                else:
+                    # logger.info(f'{message.chat.id} reply keyboard from {bot.token}')
+                    keyboard = telebot.types.ReplyKeyboardMarkup(
+                        row_width=keyboard_dict['row_width'], 
+                        resize_keyboard=keyboard_dict['resize_keyboard'],
+                    )
+                    for button_definition in keyboard_dict['buttons']:
+                        # logger.info(f'button callback_data: {button_definition["callback_data"]}')
+                        button = telebot.types.KeyboardButton(
+                            text=button_definition.get('text', ''),
+                            request_contact=button_definition.get('request_contact', False),
+                            request_location=button_definition.get('request_location', False)
+                        )
+                        keyboard.add(button)
                     
-    #             bot.send_message(
-    #                 message.chat.id, 
-    #                 keyboard_dict['message'], 
-    #                 reply_markup=keyboard
-    #             )
-    #         elif result_message['type'] == 'image':
-    #             # logger.info(f'generic_message_handler image from {bot.token}')
-    #             bot.send_photo(message.chat.id, result_message['body'])
-    #         elif result_message['type'] == 'empty':
-    #             # logger.info(f'generic_message_handler empty from {bot.token}')
-    #             pass
-    end_time = time.time()
-
-    # Get the date of the message
-    message_date = message['date']
-    # Get the current timestamp
-    current_timestamp = int(time.time())
-    # Calculate the time difference in seconds
-    time_difference = current_timestamp - message_date
-    # Convert the time difference to desired units (e.g., seconds, minutes, hours, days)
-    seconds = time_difference % 60
-    minutes = time_difference // 60
-    hours = minutes // 60
-    days = hours // 24
-    # Print the time difference
-    time_report = f"{days} days, {hours % 24}:{minutes % 60}:{seconds}"
-    logger.info(f'handle_text_message: Time taken: {end_time - start_time} ({time_report})')
-
-    # return JSONResponse(content={"status": "ok"}, status_code=200)
-    return Response("ok", status_code=200)
+                bot.send_message(
+                    message.chat.id, 
+                    keyboard_dict['message'], 
+                    reply_markup=keyboard
+                )
+            elif result_message['type'] == 'image':
+                # logger.info(f'generic_message_handler image from {bot.token}')
+                bot.send_photo(message.chat.id, result_message['body'])
+            elif result_message['type'] == 'empty':
+                # logger.info(f'generic_message_handler empty from {bot.token}')
+                pass
+    return JSONResponse(content={"status": "ok"})
 
 
 def handle_inline_query(bot, inline_query, bot_config):
-    start_time = time.time()
-    # logger.info(f'handle_inline_query: {inline_query}')
     # logger.info(f'Received inline query from {inline_query.from_user.id}: {inline_query.query}')
     
     results = []  # This list should contain one or more objects of types.InlineQueryResult
@@ -210,46 +157,43 @@ def handle_inline_query(bot, inline_query, bot_config):
     # logger.info(f'body: {body}')
     # result = requests.post(inline_query_url, json=body, headers=headers)
     # Post request with 3 sec timeout
-    
-    # try:
-    #     result = requests.post(inline_query_url, json=body, headers=headers, timeout=3)
-    #     # Thread(target=post, args=(inline_query_url,), kwargs={'json': body}).start()
-    #     # result = requests.post(inline_query_url, json=body, headers=headers, timeout=(1, 0))
-    # except Exception as e:
-    #     logger.error(f'Error sending inline query: {str(e)}')
-    #     return JSONResponse(content={"status": "ok"})
+    try:
+        result = requests.post(inline_query_url, json=body, headers=headers, timeout=3)
+    except Exception as e:
+        logger.error(f'Error sending inline query: {str(e)}')
+        return
 
-    # from_user_id = inline_query.from_user.id
-    # inline_query_id = inline_query.id
-    # expression = inline_query.query
+    from_user_id = inline_query.from_user.id
+    inline_query_id = inline_query.id
+    expression = inline_query.query
 
-    # if result.status_code == 200:
-    #     try:
-    #         result_message = json.loads(result.text)
-    #         answer = result_message['body']
-    #         if result_message['type'] != 'inline':
-    #             logger.error(f'Inline: Invalid response type: {result_message["type"]}')
-    #             return JSONResponse(content={"status": "ok"})
-    #         inline_elements = []
-    #         for i in range(len(answer)):    
-    #             element = telebot.types.InlineQueryResultArticle(
-    #                 str(i),
-    #                 answer[i],
-    #                 telebot.types.InputTextMessageContent(answer[i]),
-    #             )
-    #             inline_elements.append(element)
+    if result.status_code == 200:
+        try:
+            result_message = json.loads(result.text)
+            answer = result_message['body']
+            if result_message['type'] != 'inline':
+                logger.error(f'Inline: Invalid response type: {result_message["type"]}')
+                return
+            inline_elements = []
+            for i in range(len(answer)):    
+                element = telebot.types.InlineQueryResultArticle(
+                    str(i),
+                    answer[i],
+                    telebot.types.InputTextMessageContent(answer[i]),
+                )
+                inline_elements.append(element)
             
             
-    #         bot.answer_inline_query(
-    #             inline_query_id,
-    #             inline_elements,
-    #             cache_time=0,
-    #             is_personal=True
-    #         )
-    #     except Exception as e:
-    #         logger.error(f'User: {from_user_id} Inline request: {expression}  Error processing inline query: {str(e)}')
-    # else:
-    #     logger.error(f"[x] Failed to send inline query. Status code: {result.status_code}, Response: {result.content}")
+            bot.answer_inline_query(
+                inline_query_id,
+                inline_elements,
+                cache_time=0,
+                is_personal=True
+            )
+        except Exception as e:
+            logger.error(f'User: {from_user_id} Inline request: {expression}  Error processing inline query: {str(e)}')
+    else:
+        logger.error(f"Failed to send inline query. Status code: {result.status_code}, Response: {result.content}")
 
     """
     logger.info(f'### Sending inline_query_url: {inline_query_url}')
@@ -322,37 +266,6 @@ def handle_inline_query(bot, inline_query, bot_config):
     # Sending results to Telegram
     bot.answer_inline_query(inline_query.id, results, cache_time=0, is_personal=True)"""
 
-    # for i, message_text in enumerate(result['message_text']):
-    message_text = 'Inline is temporarily disabled. Please try again later.'
-    curent_r = telebot.types.InlineQueryResultArticle(
-        '0',
-        message_text,
-        telebot.types.InputTextMessageContent(message_text),
-    )
-    results.append(curent_r)
-
-    bot.answer_inline_query(inline_query.id, results, cache_time=0, is_personal=True)
-
-    end_time = time.time()
-
-    # # Get the date of the message
-    # message_date = message['date']
-    # # Get the current timestamp
-    # current_timestamp = int(time.time())
-    # # Calculate the time difference in seconds
-    # time_difference = current_timestamp - message_date
-    # # Convert the time difference to desired units (e.g., seconds, minutes, hours, days)
-    # seconds = time_difference % 60
-    # minutes = time_difference // 60
-    # hours = minutes // 60
-    # days = hours // 24
-    # # Print the time difference
-    # time_report = f"{days} days, {hours % 24}:{minutes % 60}:{seconds}"
-    # logger.info(f'handle_text_message: Time taken: {end_time - start_time} ({time_report})')
-
-    logger.info(f'handle_inline_query: Time taken: {end_time - start_time}')
-    # return JSONResponse(content={"status": "ok"}, status_code=200)
-    return Response("ok", status_code=200)
 
 # Initialize bot
 async def init_bot(bot_config):
@@ -415,49 +328,23 @@ async def init_bot(bot_config):
     with open('config.json') as config_file:
         config = json.load(config_file)
 
-    # worker_id = int(os.getenv('GUNICORN_WORKER_ID', '0'))
-    # logger.info(f'### Worker ID: {worker_id}')
-    # gunicorn_pid = os.getpid()
-    # logger.info(f'### Gunicorn PID: {gunicorn_pid}')
-    logger.info(f'### Garden Queue: {garden_queue}')
+    # Cloud server:
+    # webhook_url = f"https://{config['WEBHOOK_HOST']}:{config['WEBHOOK_PORT']}/{bot_config['TOKEN']}/"
+    # bot.remove_webhook()
+    # bot.set_webhook(url=webhook_url)
 
-    # if is_first_instance():
-    #     logger.info(f'### [v] First instance: Setting webhook for bot {bot_config["TOKEN"]}')
+    # Local server:
+    server_api_uri = config['SERVER_API_URI']
+    server_file_url = config['SERVER_FILE_URL']
+    if server_api_uri != '':
+        telebot.apihelper.API_URL = server_api_uri
+        logger.info(f'Setting API_URL: {server_api_uri} for bot {config["TOKEN"]}')
+    if server_file_url != '':
+        telebot.apihelper.FILE_URL = server_file_url
+        logger.info(f'Setting FILE_URL: {server_file_url} for bot {config["TOKEN"]}')
     webhook_url = f"https://{config['WEBHOOK_HOST']}:{config['WEBHOOK_PORT']}/{bot_config['TOKEN']}/"
     logger.info(f'Setting webhook url: {webhook_url}')
-    if garden_queue == 0:
-
-        # server_api_uri = config['SERVER_API_URI']
-        # server_file_url = config['SERVER_FILE_URL']
-        # if server_api_uri != '':
-        #     telebot.apihelper.API_URL = server_api_uri
-        #     logger.info(f'### Setting API_URL: {server_api_uri} for bot {bot_config["TOKEN"]}')
-        # if server_file_url != '':
-        #     telebot.apihelper.FILE_URL = server_file_url
-        #     logger.info(f'### Setting FILE_URL: {server_file_url} for bot {bot_config["TOKEN"]}')
-        # telebot.apihelper.API_URL = "http://localhost:8081/bot{0}/{1}"
-        # telebot.apihelper.FILE_URL = "http://localhost:8081"
-
-        bot.remove_webhook()
-
-        # https://core.telegram.org/bots/api#setwebhook
-        # https://core.telegram.org/bots/webhooks
-        # Create an InputFile object with the certificate file path
-        with open('/cert/webhook_cert.pem', 'rb') as cert_file:
-            certificate = types.InputFile(cert_file)
-        
-        # Set the webhook with the certificate
-        bot.set_webhook(url=webhook_url, max_connections=100, certificate=certificate)
-        
-        # bot.set_webhook(url=webhook_url, max_connections=100)
-    else:
-        pid = int(os.getpid())
-        time_to_sleep = 1+pid/10
-        logger.info(f'### Sleeping for {time_to_sleep} seconds')
-        time.sleep(time_to_sleep)
-        
-    # else:
-    #     logger.info(f'### [x] Not first instance: Polling for bot {bot_config["TOKEN"]}')
+    logger.info(f'Webhook set: {bot.set_webhook(url=webhook_url, max_connections=100)}')
 
     return bot
 
@@ -465,64 +352,30 @@ async def init_bot(bot_config):
 async def handle_request(token: str, request: Request):
     if token in bots: 
         bot = bots[token]
-        if bot is None or bot == "":
-            logger.error(f'[x] handle_request: Bot {token} is inactive')
-            # return JSONResponse(content={"status": "ok"}, status_code=200)
-            return Response("ok", status_code=200)
         request_body_dict = await request.json()
-        # logger.info(f'handle_request: Received request for bot {token}: {request_body_dict}')
+        logger.info(f'handle_request: Received request for bot {token}: {request_body_dict}')
         try:
             update = telebot.types.Update.de_json(request_body_dict)
             bot.process_new_updates([update])
-            # logger.info(f'handle_request: Processed request for bot {token}')
-            # return JSONResponse(content={"status": "ok"})
-            return Response("ok", status_code=200)
+            logger.info(f'handle_request: Processed request for bot {token}')
+            return JSONResponse(content={"status": "ok"})
         except Exception as e:
-            logger.error(f'[x] handle_request: Error processing request for bot {token}: {str(e)}')
-            # return JSONResponse(content={"status": "ok"}, status_code=200)
-            return Response("ok", status_code=200)
+            logger.error(f'handle_request: Error processing request for bot {token}: {str(e)}')
+            return JSONResponse(content={"status": "error"}, status_code=500)
     else:
-        logger.error(f'[x] handle_request: Invalid token: {token}')
-        # return JSONResponse(content={"status": "ok"}, status_code=200)
-        return Response("ok", status_code=200)
+        logger.error(f'handle_request: Invalid token: {token} Bots: {bots}')
+        return JSONResponse(content={"status": "error"}, status_code=403)
 
-
-def fill_id_garden():
-    garden_folder = './id_garden'
-    # get pid
-    pid = os.getpid()
-    logger.info(f'garden PID: {pid}')
-    # Add file to id_garden
-    with open(f'{garden_folder}/{pid}', 'w') as f:
-        f.write('')
-    # Get the INSTANCES count from the os env
-    instances = os.getenv('INSTANCES', '1')
-    logger.info(f'garden waiting for reaching {instances} instances')
-    # List files in the garden in a loop untill the count is reached
-    while len(os.listdir(garden_folder)) < int(instances):
-        time.sleep(1)
-    # Take the queue of the current pid in the garden, starting from 0
-    queue = sorted(os.listdir(garden_folder)).index(str(pid))
-    # Return the queue
-    logger.info(f'garden Queue: {queue}')
-    return queue
 
 async def main():
-    # Fill id_garden
-    global garden_queue
-    garden_queue = fill_id_garden()
-
     global bots
     # Load bot configurations
     with open('bots.json') as bots_file:
         bots_config = json.load(bots_file)
 
     for bot_key, bot_instance in bots_config.items():
-        if int(bot_instance['active']):
-            bots[bot_instance['TOKEN']] = await init_bot(bot_instance)
-            logger.info(f'Bot {bot_key} initialized with webhook')
-        else:
-            logger.info(f'Bot {bot_key} is inactive')
+        bots[bot_instance['TOKEN']] = await init_bot(bot_instance)
+        logger.info(f'Bot {bot_key} initialized with webhook')
 
 @app.on_event("startup")
 async def startup_event():
