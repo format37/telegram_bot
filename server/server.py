@@ -22,16 +22,19 @@ app = FastAPI()
 # Initialize bots and set webhooks
 bots = {}
 
+
 # Your routes would go here
 @app.get("/")
 async def read_root():
     # Return ok, 200
     return JSONResponse(content={"status": "ok"})
 
+
 @app.get("/test")
 async def call_test():
     logger.info('Test endpoint called')
     return JSONResponse(content={"status": "ok"})
+
 
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc: HTTPException):
@@ -42,6 +45,7 @@ async def http_exception_handler(request: Request, exc: HTTPException):
     logger.warning(f"Body: {await request.body()}")
     return JSONResponse(content={"status": "error"}, status_code=exc.status_code)
 
+
 class RequestLoggingMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         logger.info(f"Incoming request: {request.method} {request.url}")
@@ -50,7 +54,9 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
         response = await call_next(request)
         return response
 
+
 app.add_middleware(RequestLoggingMiddleware)
+
 
 # Simple text message handler function
 def handle_text_message(bot, message, bot_config):
@@ -370,6 +376,7 @@ async def init_bot(bot_config):
 
     return bot
 
+
 @app.post("/{token}/")
 async def handle_request(token: str, request: Request):
     if token in bots: 
@@ -401,6 +408,7 @@ async def main():
             logger.info(f'Bot {bot_key} initialized with webhook')
         else:
             logger.info(f'Bot {bot_key} is inactive')
+
 
 @app.on_event("startup")
 async def startup_event():
