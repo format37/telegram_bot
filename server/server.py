@@ -319,6 +319,8 @@ async def handle_request(token: str, request: Request):
                 # Get user id if available
                 if 'from' in request_body_dict['message'] and 'id' in request_body_dict['message']['from']:
                     user_id = request_body_dict['message']['from']['id']
+            else:
+                logger.error(f'handle_request: Invalid logger extractor: {request_body_dict}')
             bot_name = bot.get_me().username
             logger.info(f'handle_request {bot_name} from {user_id}: {text}')
         except Exception as e:
