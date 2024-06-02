@@ -42,7 +42,7 @@ async def http_exception_handler(request: Request, exc: HTTPException):
     logger.warning(f"Method: {request.method}")
     logger.warning(f"URL: {request.url}")
     logger.warning(f"Headers: {request.headers}")
-    logger.warning(f"Body: {await request.body()}")
+    # logger.warning(f"Body: {await request.body()}")
     return JSONResponse(content={"status": "error"}, status_code=exc.status_code)
 
 
@@ -184,42 +184,43 @@ def handle_inline_query(bot, inline_query, bot_config):
     # result = requests.post(inline_query_url, json=body, headers=headers)
     # Post request with 3 sec timeout
     try:
-        result = requests.post(inline_query_url, json=body, headers=headers, timeout=3)
+        result = requests.post(inline_query_url, json=body, headers=headers, timeout=2)
     except Exception as e:
         logger.error(f'Error sending inline query: {str(e)}')
-        return
+    # Return ok, 200
+    return JSONResponse(content={"status": "ok"})
 
-    from_user_id = inline_query.from_user.id
-    inline_query_id = inline_query.id
-    expression = inline_query.query
+    # from_user_id = inline_query.from_user.id
+    # inline_query_id = inline_query.id
+    # expression = inline_query.query
 
-    if result.status_code == 200:
-        try:
-            result_message = json.loads(result.text)
-            answer = result_message['body']
-            if result_message['type'] != 'inline':
-                logger.error(f'Inline: Invalid response type: {result_message["type"]}')
-                return
-            inline_elements = []
-            for i in range(len(answer)):    
-                element = telebot.types.InlineQueryResultArticle(
-                    str(i),
-                    answer[i],
-                    telebot.types.InputTextMessageContent(answer[i]),
-                )
-                inline_elements.append(element)
+    # if result.status_code == 200:
+    #     try:
+    #         result_message = json.loads(result.text)
+    #         answer = result_message['body']
+    #         if result_message['type'] != 'inline':
+    #             logger.error(f'Inline: Invalid response type: {result_message["type"]}')
+    #             return
+    #         inline_elements = []
+    #         for i in range(len(answer)):    
+    #             element = telebot.types.InlineQueryResultArticle(
+    #                 str(i),
+    #                 answer[i],
+    #                 telebot.types.InputTextMessageContent(answer[i]),
+    #             )
+    #             inline_elements.append(element)
             
             
-            bot.answer_inline_query(
-                inline_query_id,
-                inline_elements,
-                cache_time=0,
-                is_personal=True
-            )
-        except Exception as e:
-            logger.error(f'User: {from_user_id} Inline request: {expression}  Error processing inline query: {str(e)}')
-    else:
-        logger.error(f"Failed to send inline query. Status code: {result.status_code}, Response: {result.content}")
+    #         bot.answer_inline_query(
+    #             inline_query_id,
+    #             inline_elements,
+    #             cache_time=0,
+    #             is_personal=True
+    #         )
+    #     except Exception as e:
+    #         logger.error(f'User: {from_user_id} Inline request: {expression}  Error processing inline query: {str(e)}')
+    # else:
+    #     logger.error(f"Failed to send inline query. Status code: {result.status_code}, Response: {result.content}")
 
 
 # Initialize bot

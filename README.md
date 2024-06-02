@@ -1,7 +1,10 @@
 # Telegram bots server
-Local telegram server
-
+Local server, for a list of telegram bots, with webhooks and FastAPI.  
+![Structure](assets/structure.png)  
+The benefit of this structure is that it is possible to serve multiple bots without restarting all bots while working with a specific bot.
 ## Installation
+Use docker image(https://hub.docker.com/r/aiogram/telegram-bot-api)  
+or install  locally:
 ```
 sudo apt-get update
 sudo apt-get upgrade
