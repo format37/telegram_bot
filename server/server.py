@@ -311,23 +311,31 @@ async def handle_request(token: str, request: Request):
         bot = bots[token]
         request_body_dict = await request.json()
         # logger.info(f'handle_request: Received request for bot {token}: {request_body_dict}')
-        try:
-            text = None
-            user_id = None
-            if 'message' in request_body_dict and 'text' in request_body_dict['message']:
-                text = request_body_dict['message']['text']
-                # Get user id if available
-                if 'from' in request_body_dict['message'] and 'id' in request_body_dict['message']['from']:
-                    user_id = request_body_dict['message']['from']['id']
-            else:
-                logger.error(f'handle_request: Invalid logger extractor: {request_body_dict}')
+        log_updates = False
+        if log_updates:
             bot_name = bot.get_me().username
-            logger.info(f'handle_request {bot_name} from {user_id}: {text}')
-        except Exception as e:
-            logger.error(f'handle_request: Error logging request for bot {token}: {str(e)}')
+            try:
+                text = None
+                user_id = None
+                if 'inline_query' in request_body_dict:
+                    text = request_body_dict['inline_query']['query']
+                    user_id = request_body_dict['inline_query']['from']['id']
+                elif 'message' in request_body_dict and 'text' in request_body_dict['message']:
+                    text = request_body_dict['message']['text']
+                    # Get user id if available
+                    if 'from' in request_body_dict['message'] and 'id' in request_body_dict['message']['from']:
+                        user_id = request_body_dict['message']['from']['id']
+                else:
+                    logger.info(f'handle_request: Invalid logger extractor: {request_body_dict}')
+                
+                logger.info(f'handle_request {bot_name} from {user_id}: {text}')
+            except Exception as e:
+                logger.info(f'handle_request: Error logging request for bot {token}: {str(e)}')
         try:
             update = telebot.types.Update.de_json(request_body_dict)
             bot.process_new_updates([update])
+            if log_updates:
+                logger.info(f'handle_request: Processed update for bot {token}')
             logger.info(f'handle_request: Processed request for bot {token}')
             return JSONResponse(content={"status": "ok"})
         except Exception as e:
