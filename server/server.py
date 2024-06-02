@@ -310,7 +310,19 @@ async def handle_request(token: str, request: Request):
     if token in bots: 
         bot = bots[token]
         request_body_dict = await request.json()
-        logger.info(f'handle_request: Received request for bot {token}: {request_body_dict}')
+        # logger.info(f'handle_request: Received request for bot {token}: {request_body_dict}')
+        try
+            text = None
+            user_id = None
+            if 'message' in request_body_dict and 'text' in request_body_dict['message']:
+                text = request_body_dict['message']['text']
+                # Get user id if available
+                if 'from' in request_body_dict['message'] and 'id' in request_body_dict['message']['from']:
+                    user_id = request_body_dict['message']['from']['id']
+            bot_name = bot.get_me().username
+            logger.info(f'handle_request {bot_name} from {user_id}: {text}')
+        except Exception as e:
+            logger.error(f'handle_request: Error logging request for bot {token}: {str(e)}')
         try:
             update = telebot.types.Update.de_json(request_body_dict)
             bot.process_new_updates([update])
