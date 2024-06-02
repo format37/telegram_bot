@@ -311,7 +311,7 @@ async def handle_request(token: str, request: Request):
         bot = bots[token]
         request_body_dict = await request.json()
         # logger.info(f'handle_request: Received request for bot {token}: {request_body_dict}')
-        try
+        try:
             text = None
             user_id = None
             if 'message' in request_body_dict and 'text' in request_body_dict['message']:
