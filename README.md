@@ -21,7 +21,7 @@ ls -l telegram-bot-api/bin/telegram-bot-api*
 ## Get API ID and Hash
 1. Go to https://my.telegram.org/auth
 2. Log in with your phone number
-3. Click on API Development Tools
+3. Click on [API Development Tools](https://my.telegram.org/apps)
 4. Fill in the required fields
 5. Click on Create Application
 6. Copy the API ID and Hash
