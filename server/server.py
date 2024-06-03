@@ -60,7 +60,7 @@ app.add_middleware(RequestLoggingMiddleware)
 # Simple text message handler function
 def handle_text_message(bot, message, bot_config):
     logger.info(f'handle_text_message from {message.chat.id}: {message.text}')
-    if message.chat.type == 'group' and 'group_starters' in bot_config:
+    if (not message.chat.type == 'private') and 'group_starters' in bot_config:
         granted_message = False
         for group_starter in bot_config['group_starters']:
             if message.text.startswith(group_starter):
@@ -68,7 +68,7 @@ def handle_text_message(bot, message, bot_config):
                 granted_message = True
                 break
         if not granted_message:
-            return
+            return JSONResponse(content={"status": "ok"})
 
     # logger.info(f'Received message from {message.chat.id}: {message.text}')
     body = message.json
