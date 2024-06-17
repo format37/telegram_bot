@@ -83,13 +83,4 @@ python3 logout.py
 ```
 2. Dockerfile: Uncomment the Cloud server section and comment the Local server section
 3. Obtain the cert files using certbot
-4. Copy cert files to the server folder:
-```
-cp /etc/letsencrypt/live/service.icecorp.ru/fullchain.pem ./server/webhook_cert.pem
-cp /etc/letsencrypt/live/service.icecorp.ru/privkey.pem ./server/webhook_pkey.pem
-```
-5. Update cert files permissions
-```
-chmod -R 777 ./server/webhook_cert.pem
-chmod -R 777 ./server/webhook_pkey.pem
-```
+4. compose.sh: Uncomment the Cloud server section and update folders
