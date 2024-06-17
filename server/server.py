@@ -314,6 +314,7 @@ async def init_bot(bot_config):
         cert_readed = False
         with open('/cert/webhook_cert.pem', 'r') as cert_file:
             cert = cert_file.read()
+            cert_readed = True
         if cert_readed:
             logger.info(f'Cert reading success: {cert[:10]}...')
         else:
