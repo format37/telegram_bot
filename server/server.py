@@ -324,7 +324,7 @@ async def init_bot(bot_config):
 
         wh_res = bot.set_webhook(
             url=webhook_url,
-            certificate=cert,
+            # certificate=cert,
             # allowed_updates=content_types
         )
         logger.info(f'Cloud webhook set: {wh_res}')
