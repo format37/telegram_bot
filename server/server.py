@@ -17,7 +17,7 @@ logger.setLevel(logging.INFO)
 # logger = logging.getLogger(__name__)
 
 # Initialize FastAPI
-app = FastAPI()
+app = FastAPI(lifespan=True)
 
 # Initialize bots and set webhooks
 bots = {}
@@ -230,7 +230,7 @@ def handle_inline_query(bot, inline_query, bot_config):
 
 
 # Initialize bot
-def init_bot(bot_config):
+async def init_bot(bot_config):
     bot = telebot.TeleBot(bot_config['TOKEN'])
 
     content_types=[
@@ -378,7 +378,7 @@ async def handle_request(token: str, request: Request):
         return JSONResponse(content={"status": "error"}, status_code=403)
 
 
-def main():
+async def main():
     logger.info('Initializing bots')
     global bots
     # Load bot configurations
@@ -388,13 +388,13 @@ def main():
     for bot_key, bot_instance in bots_config.items():
         if int(bot_instance['active']):
             logger.info(f'Initializing bot {bot_key}')
-            bots[bot_instance['TOKEN']] = init_bot(bot_instance)
+            bots[bot_instance['TOKEN']] = await init_bot(bot_instance)
             logger.info(f'Bot {bot_key} initialized with webhook')
         else:
             logger.info(f'Bot {bot_key} is inactive')
 
 
 @app.on_event("startup")
-def startup_event():
+async def startup_event():
     logger.info('Starting up')
-    main()
+    await main()
