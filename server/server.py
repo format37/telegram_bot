@@ -36,6 +36,11 @@ async def call_test():
     logger.info('Test endpoint called')
     return JSONResponse(content={"status": "ok"})
 
+@app.get("/test_b")
+async def call_test():
+    logger.info('Test endpoint called')
+    return JSONResponse(content={"test_b_status": "ok"})
+
 
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc: HTTPException):
