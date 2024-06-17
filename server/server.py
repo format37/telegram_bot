@@ -394,7 +394,11 @@ async def main():
             logger.info(f'Bot {bot_key} is inactive')
 
 
+# @app.on_event("startup")
+# async def startup_event():
+#     logger.info('Starting up')
+#     await main()
+
 @app.on_event("startup")
 async def startup_event():
-    logger.info('Starting up')
-    await main()
+    logger.info("Application startup")
