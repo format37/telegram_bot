@@ -302,6 +302,7 @@ async def init_bot(bot_config):
 
     webhook_url += f"{config['WEBHOOK_HOST']}:{config['WEBHOOK_PORT']}/{bot_config['TOKEN']}/"
     logger.info(f'Setting webhook url: {webhook_url}')
+
     if server_api_uri != '':
         # Local server:
         wh_res = bot.set_webhook(
@@ -309,6 +310,7 @@ async def init_bot(bot_config):
             max_connections=100
             )
         logger.info(f'Local webhook set: {wh_res}')
+
     else:
         # Cloud server:
         cert_readed = False
@@ -319,10 +321,11 @@ async def init_bot(bot_config):
             logger.info(f'Cert reading success: {cert[:10]}...')
         else:
             logger.error('Cert reading failed')
+
         wh_res = bot.set_webhook(
             url=webhook_url,
             certificate=cert,
-            allowed_updates=['message', 'callback_query']
+            # allowed_updates=content_types
         )
         logger.info(f'Cloud webhook set: {wh_res}')
 
