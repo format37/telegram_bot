@@ -286,8 +286,6 @@ async def init_bot(bot_config):
  
     server_api_uri = config['SERVER_API_URI']
     server_file_url = config['SERVER_FILE_URL']
-    logger.info(f'Removing webhook for bot {bot_config["TOKEN"]}')
-    bot.remove_webhook()
     if server_api_uri != '':
         # Local server:
         telebot.apihelper.API_URL = server_api_uri
@@ -299,17 +297,26 @@ async def init_bot(bot_config):
         telebot.apihelper.FILE_URL = server_file_url
         logger.info(f'Setting FILE_URL: {server_file_url} for bot {bot_config["TOKEN"]}')
 
+    logger.info(f'Removing webhook for bot {bot_config["TOKEN"]}')
+    bot.remove_webhook()
+
     webhook_url += f"{config['WEBHOOK_HOST']}:{config['WEBHOOK_PORT']}/{bot_config['TOKEN']}/"
     logger.info(f'Setting webhook url: {webhook_url}')
     if server_api_uri != '':
         # Local server:
-        wh_res = bot.set_webhook(url=webhook_url, max_connections=100)
+        wh_res = bot.set_webhook(
+            url=webhook_url, 
+            max_connections=100
+            )
         logger.info(f'Local webhook set: {wh_res}')
     else:
         # Cloud server:
+        with open('webhook_cert.pem', 'r') as cert_file:
+            cert = cert_file.read()
+            logger.info(f'Cert reading success: {cert[:10]}...')
         wh_res = bot.set_webhook(
-            url=webhook_url, 
-            certificate=open('webhook_cert.pem', 'r'),
+            url=webhook_url,
+            certificate=cert,
             allowed_updates=['message', 'callback_query']
         )
         logger.info(f'Cloud webhook set: {wh_res}')
