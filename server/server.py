@@ -17,7 +17,7 @@ logger.setLevel(logging.INFO)
 # logger = logging.getLogger(__name__)
 
 # Initialize FastAPI
-app = FastAPI(lifespan="auto")
+app = FastAPI()
 
 # Initialize bots and set webhooks
 bots = {}
