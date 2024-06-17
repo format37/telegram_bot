@@ -230,7 +230,7 @@ def handle_inline_query(bot, inline_query, bot_config):
 
 
 # Initialize bot
-async def init_bot(bot_config):
+def init_bot(bot_config):
     bot = telebot.TeleBot(bot_config['TOKEN'])
 
     content_types=[
@@ -388,7 +388,7 @@ def main():
     for bot_key, bot_instance in bots_config.items():
         if int(bot_instance['active']):
             logger.info(f'Initializing bot {bot_key}')
-            bots[bot_instance['TOKEN']] = await init_bot(bot_instance)
+            bots[bot_instance['TOKEN']] = init_bot(bot_instance)
             logger.info(f'Bot {bot_key} initialized with webhook')
         else:
             logger.info(f'Bot {bot_key} is inactive')
