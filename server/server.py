@@ -378,7 +378,7 @@ async def handle_request(token: str, request: Request):
         return JSONResponse(content={"status": "error"}, status_code=403)
 
 
-async def main():
+def main():
     logger.info('Initializing bots')
     global bots
     # Load bot configurations
@@ -395,5 +395,6 @@ async def main():
 
 
 @app.on_event("startup")
-async def startup_event():
-    await main()
+def startup_event():
+    logger.info('Starting up')
+    main()
