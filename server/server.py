@@ -13,6 +13,7 @@ import asyncio
 # logging.basicConfig(level=logging.INFO)
 # logger = logging.getLogger(__name__)
 # logger.setLevel(logging.INFO)
+
 logging.config.fileConfig('logging.ini')
 logger = logging.getLogger(__name__)
 
@@ -394,17 +395,17 @@ async def main():
             logger.info(f'Bot {bot_key} is inactive')
 
 
-# @app.on_event("startup")
-# async def startup_event():
-#     logger.info('Starting up')
-#     await main()
-
-# startup
 @app.on_event("startup")
 async def startup_event():
-    logger.info("Application startup event triggered")
+    logger.info('Starting up')
+    await main()
 
-# shutdown
-@app.on_event("shutdown")
-async def shutdown_event():
-    logger.info("Application shutdown event triggered")
+# startup
+# @app.on_event("startup")
+# async def startup_event():
+#     logger.info("Application startup event triggered")
+
+# # shutdown
+# @app.on_event("shutdown")
+# async def shutdown_event():
+#     logger.info("Application shutdown event triggered")
