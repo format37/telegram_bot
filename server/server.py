@@ -401,4 +401,4 @@ async def main():
 
 @app.on_event("startup")
 async def startup_event():
-    logger.info("Application startup")
+    logger.info("Application startup_test")
