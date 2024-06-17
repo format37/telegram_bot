@@ -283,10 +283,7 @@ async def init_bot(bot_config):
     # Read config.json
     with open('config.json') as config_file:
         config = json.load(config_file)
-
-    
-
-    
+ 
     server_api_uri = config['SERVER_API_URI']
     server_file_url = config['SERVER_FILE_URL']
     logger.info(f'Removing webhook for bot {bot_config["TOKEN"]}')
@@ -306,10 +303,16 @@ async def init_bot(bot_config):
     logger.info(f'Setting webhook url: {webhook_url}')
     if server_api_uri != '':
         # Local server:
-        logger.info(f'Local webhook set: {bot.set_webhook(url=webhook_url, max_connections=100)}')
+        wh_res = bot.set_webhook(url=webhook_url, max_connections=100)
+        logger.info(f'Local webhook set: {wh_res}')
     else:
         # Cloud server:
-        logger.info(f'Cloud webhook set: {bot.set_webhook(url=webhook_url)}')
+        wh_res = bot.set_webhook(
+            url=webhook_url, 
+            certificate=open('webhook_cert.pem', 'r'),
+            allowed_updates=['message', 'callback_query']
+        )
+        logger.info(f'Cloud webhook set: {wh_res}')
 
     return bot
 
