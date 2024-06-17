@@ -374,6 +374,7 @@ async def handle_request(token: str, request: Request):
 
 
 async def main():
+    logger.info('Initializing bots')
     global bots
     # Load bot configurations
     with open('bots.json') as bots_file:
@@ -381,6 +382,7 @@ async def main():
 
     for bot_key, bot_instance in bots_config.items():
         if int(bot_instance['active']):
+            logger.info(f'Initializing bot {bot_key}')
             bots[bot_instance['TOKEN']] = await init_bot(bot_instance)
             logger.info(f'Bot {bot_key} initialized with webhook')
         else:
