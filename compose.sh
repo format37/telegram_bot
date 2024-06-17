@@ -8,10 +8,10 @@
 # Cloud server
 # rm -rf ./server/webhook_cert.pem
 # rm -rf ./server/webhook_pkey.pem
-# sudo chmod -R 777 ./server/webhook_cert.pem
-# sudo chmod -R 777 ./server/webhook_pkey.pem
 # cp /etc/letsencrypt/live/service.icecorp.ru/fullchain.pem ./server/webhook_cert.pem
 # cp /etc/letsencrypt/live/service.icecorp.ru/privkey.pem ./server/webhook_pkey.pem
+# sudo chmod -R 777 ./server/webhook_cert.pem
+# sudo chmod -R 777 ./server/webhook_pkey.pem
 
 # Down and up docker-compose
 sudo docker compose down -v
