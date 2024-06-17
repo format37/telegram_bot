@@ -2,7 +2,6 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 import telebot
 import logging
-# import logging.config
 import json
 import requests
 from fastapi import FastAPI, Request, HTTPException
@@ -10,10 +9,6 @@ from starlette.middleware.base import BaseHTTPMiddleware
 import asyncio
 
 # Initialize logging
-# logging.basicConfig(level=logging.INFO)
-# logger = logging.getLogger(__name__)
-# logger.setLevel(logging.INFO)
-
 logging.config.fileConfig('logging.ini')
 logger = logging.getLogger(__name__)
 
@@ -397,15 +392,10 @@ async def main():
 
 @app.on_event("startup")
 async def startup_event():
-    logger.info('Starting up')
+    logger.info('startup event')
     await main()
 
-# startup
-# @app.on_event("startup")
-# async def startup_event():
-#     logger.info("Application startup event triggered")
-
-# # shutdown
-# @app.on_event("shutdown")
-# async def shutdown_event():
-#     logger.info("Application shutdown event triggered")
+# shutdown
+@app.on_event("shutdown")
+async def shutdown_event():
+    logger.info("shutdown event")
