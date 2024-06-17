@@ -81,17 +81,15 @@ python3 logout.py
     "SERVER_FILE_URL": ""
 }
 ```
-2. Replace the server/Dockerfile run line:
+2. Dockerfile: Uncomment the Cloud server section and comment the Local server section
+3. Obtain the cert files using certbot
+4. Copy cert files to the server folder:
 ```
-CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8443", "--log-level", "warning", "--ssl-keyfile=/cert/webhook_pkey.pem", "--ssl-certfile=/cert/webhook_cert.pem"]
-# CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8000", "--log-level", "warning"]
+cp /etc/letsencrypt/live/service.icecorp.ru/fullchain.pem ./server/webhook_cert.pem
+cp /etc/letsencrypt/live/service.icecorp.ru/privkey.pem ./server/webhook_pkey.pem
 ```
-3. Obtain the cert files using certbot and provide folders to cert files in the docker-compose.yml file:
+5. Update cert files permissions
 ```
-volumes:
-      - ./bots.json:/server/bots.json
-      - ./config.json:/server/config.json
-      - ./logging.ini:/server/logging.ini
-      - /etc/letsencrypt/live/service.icecorp.ru/fullchain.pem:/cert/webhook_cert.pem
-      - /etc/letsencrypt/live/service.icecorp.ru/privkey.pem:/cert/webhook_pkey.pem
+chmod -R 777 ./server/webhook_cert.pem
+chmod -R 777 ./server/webhook_pkey.pem
 ```

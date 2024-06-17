@@ -294,19 +294,22 @@ async def init_bot(bot_config):
     if server_api_uri != '':
         # Local server:
         telebot.apihelper.API_URL = server_api_uri
-        # logger.info(f'Setting API_URL: {server_api_uri} for bot {bot_config["TOKEN"]}')
         webhook_url = "http://"
     else:
         # Cloud server:
         webhook_url = "https://"
-        bot.set_webhook(url=webhook_url)
     if server_file_url != '':
         telebot.apihelper.FILE_URL = server_file_url
         logger.info(f'Setting FILE_URL: {server_file_url} for bot {bot_config["TOKEN"]}')
 
     webhook_url += f"{config['WEBHOOK_HOST']}:{config['WEBHOOK_PORT']}/{bot_config['TOKEN']}/"
-    logger.info(f'Setting webhook url: {bot.get_webhook_info()}')
-    logger.info(f'Webhook set: {bot.set_webhook(url=webhook_url, max_connections=100)}')
+    logger.info(f'Setting webhook url: {webhook_url}')
+    if server_api_uri != '':
+        # Local server:
+        logger.info(f'Local webhook set: {bot.set_webhook(url=webhook_url, max_connections=100)}')
+    else:
+        # Cloud server:
+        logger.info(f'Cloud webhook set: {bot.set_webhook(url=webhook_url)}')
 
     return bot
 
