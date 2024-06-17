@@ -5,7 +5,7 @@
 # # Remove all files in id_garden
 # rm -rf ./id_garden/*
 
-# Local server
+# Cloud server
 # rm -rf ./server/webhook_cert.pem
 # rm -rf ./server/webhook_pkey.pem
 # cp /etc/letsencrypt/live/service.icecorp.ru/fullchain.pem ./server/webhook_cert.pem
