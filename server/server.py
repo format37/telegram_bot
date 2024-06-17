@@ -11,10 +11,10 @@ import asyncio
 
 # Initialize logging
 # logging.basicConfig(level=logging.INFO)
-# logger = logging.getLogger(__name__)
-# logger.setLevel(logging.INFO)
-logging.config.fileConfig('logging.ini')
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+# logging.config.fileConfig('logging.ini')
+# logger = logging.getLogger(__name__)
 
 # Initialize FastAPI
 app = FastAPI()
@@ -26,6 +26,7 @@ bots = {}
 # Your routes would go here
 @app.get("/")
 async def read_root():
+    logger.info('Root endpoint called')
     # Return ok, 200
     return JSONResponse(content={"status": "ok"})
 
