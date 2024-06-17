@@ -71,3 +71,27 @@ cd logout
 python3 -m pip install -r requirements.txt
 python3 logout.py
 ```
+## Run with cloud server
+1. Define the config.json file. For example:
+```
+{
+    "WEBHOOK_HOST":"service.icecorp.ru",
+    "WEBHOOK_PORT":"8443",
+    "SERVER_API_URI": "",
+    "SERVER_FILE_URL": ""
+}
+```
+2. Replace the server/Dockerfile run line:
+```
+CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8443", "--log-level", "warning", "--ssl-keyfile=/cert/webhook_pkey.pem", "--ssl-certfile=/cert/webhook_cert.pem"]
+# CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8000", "--log-level", "warning"]
+```
+3. Obtain the cert files using certbot and provide folders to cert files in the docker-compose.yml file:
+```
+volumes:
+      - ./bots.json:/server/bots.json
+      - ./config.json:/server/config.json
+      - ./logging.ini:/server/logging.ini
+      - /etc/letsencrypt/live/service.icecorp.ru/fullchain.pem:/cert/webhook_cert.pem
+      - /etc/letsencrypt/live/service.icecorp.ru/privkey.pem:/cert/webhook_pkey.pem
+```
