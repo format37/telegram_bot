@@ -311,9 +311,13 @@ async def init_bot(bot_config):
         logger.info(f'Local webhook set: {wh_res}')
     else:
         # Cloud server:
-        with open('webhook_cert.pem', 'r') as cert_file:
+        cert_readed = False
+        with open('/cert/webhook_cert.pem', 'r') as cert_file:
             cert = cert_file.read()
+        if cert_readed:
             logger.info(f'Cert reading success: {cert[:10]}...')
+        else:
+            logger.error('Cert reading failed')
         wh_res = bot.set_webhook(
             url=webhook_url,
             certificate=cert,
