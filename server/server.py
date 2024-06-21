@@ -87,7 +87,9 @@ def handle_text_message(bot, message, bot_config):
     message_url = f'{bot_url_prefix}:{BOT_PORT}/message'
     # logger.info(f'### Sending message_url: {message_url}')
     headers = {'Authorization': f'Bearer {bot.token}'}
+    logger.info(f'### Sending message_url: {message_url}')
     result = requests.post(message_url, json=body, headers=headers)
+    logger.info(f'### Received result.code: {result.status_code} result.text: {result.text}')
     
     if result.status_code != 200:
         logger.error(f"handle_text_message: requests.post status code: {result.status_code}, Response: {result.content}")
