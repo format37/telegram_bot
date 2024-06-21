@@ -15,6 +15,7 @@
         "PORT": 7403,
         "TOKEN": "",
         "bot": "",
-        "active": 0
+        "active": 0,
+        "bot_url_prefix": "https://ml.icecorp.ru"
     }
 }

@@ -78,7 +78,13 @@ def handle_text_message(bot, message, bot_config):
     
     BOT_PORT = bot_config['PORT']
 
-    message_url = f'http://localhost:{BOT_PORT}/message'
+    # message_url = f'http://localhost:{BOT_PORT}/message'
+    # Get message_url from bot_config
+    if 'message_url' in bot_config:
+        bot_url_prefix = bot_config['bot_url_prefix']
+    else:
+        bot_url_prefix = 'http://localhost'
+    message_url = f'{bot_url_prefix}:{BOT_PORT}/message'
     # logger.info(f'### Sending message_url: {message_url}')
     headers = {'Authorization': f'Bearer {bot.token}'}
     result = requests.post(message_url, json=body, headers=headers)
