@@ -80,7 +80,7 @@ def handle_text_message(bot, message, bot_config):
 
     # message_url = f'http://localhost:{BOT_PORT}/message'
     # Get message_url from bot_config
-    if 'message_url' in bot_config:
+    if 'message_url' in bot_config.keys():
         bot_url_prefix = bot_config['bot_url_prefix']
     else:
         bot_url_prefix = 'http://localhost'
