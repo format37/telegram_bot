@@ -74,7 +74,7 @@ cd logout
 python3 -m pip install -r requirements.txt
 python3 logout.py
 ```
-## Run with cloud server
+## Run with initial cloud telegram server (Optional)
 1. Define the config.json file. For example:
 ```
 {
