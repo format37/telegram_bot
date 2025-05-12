@@ -2,6 +2,8 @@
 Local server, for a list of telegram bots, with webhooks and FastAPI.  
 ![Structure](assets/structure.png)  
 The benefit of this structure is that it is possible to serve multiple bots without restarting all bots while working with a specific bot.
+### Requirements
+The 8000 TCP port should be opened for inbound connections and not be occupied by anything like Portainer.
 ## Installation
 Use docker image(https://hub.docker.com/r/aiogram/telegram-bot-api)  
 or install  locally:
