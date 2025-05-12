@@ -16,7 +16,8 @@ mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=.. ..
 cmake --build . --target install
-ls -l telegram-bot-api/bin/telegram-bot-api*
+cd ../
+ls -l bin/telegram-bot-api*
 ```
 ## Get API ID and Hash
 1. Go to https://my.telegram.org/auth
