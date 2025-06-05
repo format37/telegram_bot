@@ -58,6 +58,66 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
 
 app.add_middleware(RequestLoggingMiddleware)
 
+def handle_callback_query(bot, callback_query, bot_config):
+    """Handle callback queries and forward them to the bot server"""
+    logger.info(f'🔧 WEBHOOK: Received callback query from {callback_query.message.chat.id}: {callback_query.data}')
+    
+    BOT_PORT = bot_config['PORT']
+    
+    # Get bot_url_prefix from config
+    if 'bot_url_prefix' in bot_config.keys():
+        bot_url_prefix = bot_config['bot_url_prefix']
+    else:
+        bot_url_prefix = 'http://localhost'
+    
+    message_url = f'{bot_url_prefix}:{BOT_PORT}/message'
+    headers = {'Authorization': f'Bearer {bot.token}'}
+    
+    # Create the callback query data structure that matches Telegram's format
+    callback_data = {
+        "update_id": int(time.time()),  # Generate a simple update ID
+        "callback_query": {
+            "id": callback_query.id,
+            "from": {
+                "id": callback_query.from_user.id,
+                "is_bot": callback_query.from_user.is_bot,
+                "first_name": callback_query.from_user.first_name,
+                "username": getattr(callback_query.from_user, 'username', None),
+                "language_code": getattr(callback_query.from_user, 'language_code', None)
+            },
+            "message": {
+                "message_id": callback_query.message.message_id,
+                "from": {
+                    "id": bot.get_me().id,
+                    "is_bot": True,
+                    "first_name": bot.get_me().first_name,
+                    "username": bot.get_me().username
+                },
+                "chat": {
+                    "id": callback_query.message.chat.id,
+                    "first_name": getattr(callback_query.message.chat, 'first_name', None),
+                    "username": getattr(callback_query.message.chat, 'username', None),
+                    "type": callback_query.message.chat.type
+                },
+                "date": callback_query.message.date,
+                "text": getattr(callback_query.message, 'text', ''),
+            },
+            "data": callback_query.data
+        }
+    }
+    
+    logger.info(f'🔧 WEBHOOK: Forwarding callback query to {message_url}')
+    
+    try:
+        result = requests.post(message_url, json=callback_data, headers=headers, timeout=10)
+        logger.info(f'🔧 WEBHOOK: Callback query forward result: {result.status_code}')
+        
+        if result.status_code != 200:
+            logger.error(f"🔧 WEBHOOK: Failed to forward callback query. Status: {result.status_code}, Response: {result.content}")
+    except Exception as e:
+        logger.error(f'🔧 WEBHOOK: Error forwarding callback query: {str(e)}')
+    
+    return JSONResponse(content={"status": "ok"})
 
 # Simple text message handler function
 def handle_text_message(bot, message, bot_config):
@@ -279,11 +339,10 @@ async def init_bot(bot_config):
     def message_handler(message):
         handle_text_message(bot, message, bot_config)
 
-    # callback_query_handler
     @bot.callback_query_handler(func=lambda call: True)
     def callback_query_handler(call):
-        # logger.info(f'Received callback query from {call.message.chat.id}: {call.data}')
-        pass
+        logger.info(f'🔧 WEBHOOK: Callback query handler triggered')
+        handle_callback_query(bot, call, bot_config)
 
     # Inline_query_handler
     @bot.inline_handler(func=lambda query: True)
