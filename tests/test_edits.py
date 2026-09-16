@@ -85,3 +85,14 @@ def test_failed_forward_is_logged_without_the_text(make_bot, posts, caplog):
     errors = [r.getMessage() for r in caplog.records if r.levelno >= logging.ERROR]
     assert any('chat 5001, message 12' in e and 'connection refused' in e for e in errors)
     assert not any('secret words' in r.getMessage() for r in caplog.records)
+
+
+def test_bad_numbers_in_bots_json_do_not_stop_the_relay(make_bot, caplog):
+    caplog.set_level(logging.INFO)
+    bot = make_bot(forward_edits='yes', num_threads=0)
+    assert bot.edited_message_handlers == []
+    assert bot.worker_pool.num_threads == 1
+    assert make_bot(forward_edits=None, num_threads=None).worker_pool.num_threads == 2
+    errors = [r.getMessage() for r in caplog.records if r.levelno >= logging.ERROR]
+    assert any("forward_edits should be a number, not 'yes'" in e for e in errors)
+    assert any('num_threads should be at least 1, not 0' in e for e in errors)

@@ -237,6 +237,21 @@ def handle_text_message(bot, message, bot_config):
     return JSONResponse(content={"status": "ok"})
 
 
+def config_int(bot_config, key, default, minimum=0):
+    """An integer setting from bots.json. A bad value is logged and replaced,
+    so that one typo does not stop every bot at startup."""
+    value = bot_config.get(key, default)
+    try:
+        number = int(value)
+    except (TypeError, ValueError):
+        logger.error(f'bots.json: {key} should be a number, not {value!r}; using {default}')
+        return default
+    if number < minimum:
+        logger.error(f'bots.json: {key} should be at least {minimum}, not {number}; using {minimum}')
+        return minimum
+    return number
+
+
 def passes_group_starters(message, bot_config):
     """False for a group message the bot's group_starters say it does not want.
 
@@ -333,7 +348,7 @@ async def init_bot(bot_config):
     # Worker threads for this bot's updates. A forward holds one until the bot
     # has answered, so a bot that must hear edits while it answers needs more
     # than the default two.
-    bot = telebot.TeleBot(bot_config['TOKEN'], num_threads=int(bot_config.get('num_threads', 2)))
+    bot = telebot.TeleBot(bot_config['TOKEN'], num_threads=config_int(bot_config, 'num_threads', 2, minimum=1))
 
     content_types=[
         'text',
@@ -379,7 +394,7 @@ async def init_bot(bot_config):
     # Without a handler telebot drops edited messages silently. Telegram sends
     # them anyway: the webhook sets no allowed_updates, and the default set
     # includes edited_message (passing a list would replace that set).
-    if int(bot_config.get('forward_edits', 0)):
+    if config_int(bot_config, 'forward_edits', 0):
         @bot.edited_message_handler(content_types=content_types)
         def edited_message_handler(message):
             handle_edited_message(bot, message, bot_config)
