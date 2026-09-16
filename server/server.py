@@ -237,6 +237,39 @@ def handle_text_message(bot, message, bot_config):
     return JSONResponse(content={"status": "ok"})
 
 
+def passes_group_starters(message, bot_config):
+    """False for a group message the bot's group_starters say it does not want.
+
+    Looks at the caption too: an edit may change nothing but a photo's caption.
+    """
+    if message.chat.type == 'private' or 'group_starters' not in bot_config:
+        return True
+    text = message.text or message.caption or ''
+    return any(text.startswith(starter) for starter in bot_config['group_starters'])
+
+
+def handle_edited_message(bot, message, bot_config):
+    """Forward an edited message to the bot's /edited_message; the bot never answers it.
+
+    Only for bots with "forward_edits": 1 in bots.json. The others have no such
+    endpoint and would take an edit for a new message.
+    """
+    if not passes_group_starters(message, bot_config):
+        return
+    bot_url_prefix = bot_config.get('bot_url_prefix', 'http://localhost')
+    url = f"{bot_url_prefix}:{bot_config['PORT']}/edited_message"
+    headers = {'Authorization': f'Bearer {bot.token}'}
+    # Never the text: this log is kept, and the bot has it anyway.
+    where = f'chat {message.chat.id}, message {message.message_id}'
+    try:
+        result = requests.post(url, json=message.json, headers=headers, timeout=10)
+    except Exception as e:
+        logger.error(f'handle_edited_message: {where}: {e}')
+        return
+    if result.status_code != 200:
+        logger.error(f'handle_edited_message: {where}: status code {result.status_code}')
+
+
 def handle_inline_query(bot, inline_query, bot_config):
     # logger.info(f'Received inline query from {inline_query.from_user.id}: {inline_query.query}')
     results = []  # This list should contain one or more objects of types.InlineQueryResult
@@ -297,7 +330,10 @@ def handle_inline_query(bot, inline_query, bot_config):
 
 # Initialize bot
 async def init_bot(bot_config):
-    bot = telebot.TeleBot(bot_config['TOKEN'])
+    # Worker threads for this bot's updates. A forward holds one until the bot
+    # has answered, so a bot that must hear edits while it answers needs more
+    # than the default two.
+    bot = telebot.TeleBot(bot_config['TOKEN'], num_threads=int(bot_config.get('num_threads', 2)))
 
     content_types=[
         'text',
@@ -339,6 +375,14 @@ async def init_bot(bot_config):
     @bot.message_handler(content_types=content_types)
     def message_handler(message):
         handle_text_message(bot, message, bot_config)
+
+    # Without a handler telebot drops edited messages silently. Telegram sends
+    # them anyway: the webhook sets no allowed_updates, and the default set
+    # includes edited_message (passing a list would replace that set).
+    if int(bot_config.get('forward_edits', 0)):
+        @bot.edited_message_handler(content_types=content_types)
+        def edited_message_handler(message):
+            handle_edited_message(bot, message, bot_config)
 
     @bot.callback_query_handler(func=lambda call: True)
     def callback_query_handler(call):

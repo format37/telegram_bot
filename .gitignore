@@ -1,2 +1,5 @@
 webhook_fix.py
 WEBHOOK_FIX_INSTRUCTIONS.md
+__pycache__/
+.pytest_cache/
+.venv/
